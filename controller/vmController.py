@@ -1,4 +1,5 @@
 #!/usr/local/bin/python2.7
+# -*- coding: utf-8 -*-
 
 # VmController类
 # 对单个的虚拟机进行控制
@@ -26,6 +27,16 @@ class VmController(object):
         self.name = ""
         self.vm = VmState()
         self.vmConf = VmConf()
+
+    def startMonitor(self):
+        """
+        #死循环监视自身
+        :return:
+        """
+        #getData()
+        #analyseData()
+        #getPolicy()
+        #executePolicy()
 
     def getProcesses(self):
         pass

@@ -1,4 +1,5 @@
 #!/usr/local/bin/python2.7
+# -*- coding: utf-8 -*-
 
 # VmExecute类
 # 对虚拟机进行策略操作的类

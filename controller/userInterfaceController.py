@@ -1,4 +1,5 @@
 #!/usr/local/bin/python2.7
+# -*- coding: utf-8 -*-
 
 # UserInterfaceController类
 # 负责生成主界面
@@ -16,6 +17,7 @@
 
 import sys
 from PyQt4 import QtGui
+from view.vmGuiAction import VmGuiAction
 
 
 class UserInterfaceController(object):
@@ -27,7 +29,13 @@ class UserInterfaceController(object):
 
     def getVms(self):
         """
-        #从libvmi中获取运行的虚拟机
+        #从libvmi中获取virt-manager中实际添加的虚拟机
+        :return: list:
+        """
+
+    def getVmsConfs(self):
+        """
+        #从文件中读取配置信息
         :return:
         """
 
@@ -36,7 +44,6 @@ class UserInterfaceController(object):
         #当界面更新配置时调用此方法
         :return:
         """
-        pass
 
     def startMonitorVm(self):
         """
@@ -44,24 +51,4 @@ class UserInterfaceController(object):
         #新开线程运行
         :return:
         """
-        pass
-
-    def start(self):
-        """
-        #这里循环显示界面，根据界面的消息响应不同方法
-        :return:
-        """
-        #生成应用和主界面
-        app = QtGui.QApplication(sys.argv)
-        mainwindow = QtGui.QMainWindow()
-
-        #调用view中的对象对界面进行包装
-        #ex = xxx()
-        #ex.setupUi(mainwindow)
-
-        #显示界面
-        mainwindow.show()
-        sys.exit(app.exec_())
-
-
 

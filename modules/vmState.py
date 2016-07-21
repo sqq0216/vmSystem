@@ -1,4 +1,5 @@
 #!/usr/local/bin/python2.7
+# -*- coding: utf-8 -*-
 
 # VmState类
 # 负责保存当前某虚拟机的运行数据

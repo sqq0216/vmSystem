@@ -1,4 +1,5 @@
 #!/usr/local/bin/python2.7
+# -*- coding: utf-8 -*-
 
 # Vmco类
 # 用户配置的信息

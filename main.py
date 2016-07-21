@@ -1,6 +1,7 @@
 #!/usr/local/bin/python2.7
+# -*- coding: utf-8 -*-
 
-#程序入口，指向用户界面控制器以开始
+#程序入口，指向用户界面以开始
 
 """
 @author:    chenkuan
@@ -9,9 +10,32 @@
 @version:   1.0-2016-07-18
 """
 
-from controller.userInterfaceController import UserInterfaceController
+
+import sys
+from PyQt4 import QtGui
+from view.vmGuiAction import VmGuiAction
+
+
+def start(self):
+    """
+    #这里循环显示界面，根据界面的消息响应不同方法
+    :return:None
+    """
+    # 生成应用和主界面
+    app = QtGui.QApplication(sys.argv)
+    mainwindow = QtGui.QMainWindow()
+
+    # 调用view中的对象对界面进行包装
+    ex = VmGuiAction(mainwindow)
+    ex.setupUi()
+    ex.setupExtraUi()
+
+    ex.addAction()
+
+    # 显示界面
+    mainwindow.show()
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
 
-    m = UserInterfaceController()
-    m.start()
+    start()

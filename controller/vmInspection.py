@@ -1,4 +1,5 @@
 #!/usr/local/bin/python2.7
+# -*- coding: utf-8 -*-
 
 # VmInspection类
 # 根据相应的vol指令来获取相应的数据
