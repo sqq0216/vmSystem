@@ -19,49 +19,37 @@
 
 from modules.vmState import VmState
 from modules.vmConf import VmConf
+from modules.vmPolicy import VmPolicy
+
+from vmInspection import VmInspection
+from vmAnalysis import VmAnalysis
+from vmExecution import VmExecute
 
 class VmController(object):
 
     def __init__(self):
 
         self.name = ""
+
         self.vm = VmState()
         self.vmConf = VmConf()
+        self.vmPoli = VmPolicy()
+
+        self.vmInsp = VmInspection()
+        self.vmAnal = VmAnalysis()
+        self.vmExec = VmExecute()
 
     def startMonitor(self):
         """
         #死循环监视自身
         :return:
         """
-        #getData()
-        #analyseData()
-        #getPolicy()
-        #executePolicy()
-
-    def getProcesses(self):
-        pass
-
-    def getPorts(self):
-        pass
-
-    def getNeedData(self):
-        """
-        #根据配置选择性地读取相应策略
-        :return:
-        """
-        pass
-
-    def getPolicy(self):
-        """
-        #根据数据信息生成策略
-        :return:
-        """
-        pass
-
-    def executePolicy(self):
-        """
-        #根据生成的策略执行
-        :return:
-        """
-        pass
-
+        while True:
+            #根据配置获取数据填入vm
+            self.vmInsp.getNeedData(self.vm, self.vmConf)
+            #分析数据
+            self.vmAnal.analyseData(self.vm, self.vmConf)
+            #生成处理策略
+            self.policy = self.vmAnal.getPolicy()
+            #对vm执行相应的策略
+            self.vmExec.execute(self.vm, self.policy)

@@ -13,7 +13,25 @@
 @version:   1.0-2016-07-21
 """
 
+import os
+
 class VmInspection(object):
 
-    def getData(self):
-        pass
+    def getNeedData(self, vm, vmConf):
+        """
+        #根据vmConf中的配置信息得到数据存入vm中
+        :param vm:
+        :param vmConf:
+        :return:
+        """
+        self.name = vmConf.getName()
+        self.systype = vmConf.getSystype()
+        self.profile = self.systype
+        self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
+
+        vm.processes = self.getData("pslist")
+        vm.ports = self.getData("ports")
+        vm.ssdt = self.getData("ssdt")
+
+    def getData(self, plugin):
+        return os.popen(self.command + plugin)

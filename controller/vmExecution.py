@@ -13,5 +13,9 @@
 @version:   1.0-2016-07-21
 """
 
+
+
 class VmExecute(object):
-    pass
+
+    def execute(self, vm, policy):
+        pass
