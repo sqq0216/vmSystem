@@ -44,14 +44,6 @@ class UserInterfaceController(object):
         self.vmsConfs[vmname].getConfFromFile()
         return self.vmsConfs[vmname].getConf()
 
-        # self.vmsConfs = []
-        # for vmname in self.vms:
-        #     #此处添加异常
-        #     f = open(vmname+".json", "r")
-        #     self.vmsConfs.append(json.load(f))
-        #
-        # return self.vmsConfs
-
     def setVmsConfs(self, vmname, **kwargs):
         """
         #当界面更新配置时调用此方法

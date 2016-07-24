@@ -33,7 +33,7 @@ class VmConf(object):
         从类对象中获得全部属性
         :return:
         """
-        return (self.name, self.systype, self.process, self.ports)
+        return [var for var in vars(self).values()]
 
     def setConf(self, **kwargs):
         """
