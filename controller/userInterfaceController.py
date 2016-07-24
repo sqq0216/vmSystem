@@ -16,8 +16,10 @@
 
 import sys
 import json
+import threading
 from PyQt4 import QtGui
 from view.vmGuiAction import VmGuiAction
+from vmController import VmController
 
 
 class UserInterfaceController(object):
@@ -26,6 +28,11 @@ class UserInterfaceController(object):
         self.vms = []
         self.vmsConfs = {}
         self.vmsStates = {}
+
+        # 创建local对象，用来管理各个虚拟机
+        self.localVm = threading.local()
+        # 保存各线程的列表
+        self.threadsVm = []
 
     def getVms(self):
         """
@@ -55,10 +62,22 @@ class UserInterfaceController(object):
         #将配置保存到文件
         self.vmsConfs[vmname].setConfToFile()
 
-    def startMonitorVm(self):
+    def startMonitorVm(self, vmname):
         """
-        #当界面开始监控某虚拟机时调用此
+        #当界面开始监控某虚拟机时调用此方法
         #新开线程运行
         :return:
         """
+        self.threadsVm.append(threading.Thread(target=self.generateSingleController, args=vmname, name="Thread-"+str(vmname)))
+        self.threadsVm[-1].start()
+
+    def generateSingleController(self, vmname):
+        """
+        # 此方法用于生成单个控制器，将一系列参数传入,然后调用类方法开始监控
+        :param vmname:
+        :return:
+        """
+        VmController(vmname, self.vmsConfs[vmname], self.vmsStates[vmname]).startMonitor()
+
+
 

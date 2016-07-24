@@ -27,12 +27,12 @@ from vmExecution import VmExecute
 
 class VmController(object):
 
-    def __init__(self):
+    def __init__(self, name, vmConf, vmState):
 
-        self.name = ""
+        self.name = name
 
-        self.vm = VmState()
-        self.vmConf = VmConf()
+        self.vm = vmState
+        self.vmConf = vmConf
         self.vmPoli = VmPolicy()
 
         self.vmInsp = VmInspection()
