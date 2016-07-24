@@ -23,17 +23,17 @@ def start(self):
     """
     # 生成应用和主界面
     app = QtGui.QApplication(sys.argv)
-    mainwindow = QtGui.QMainWindow()
+    mainWindow = QtGui.QMainWindow()
 
     # 调用view中的对象对界面进行包装
-    ex = VmGuiAction(mainwindow)
+    ex = VmGuiAction(mainWindow)
     ex.setupUi()
-    ex.setupExtraUi()
+    #ex.setupExtraUi()
 
-    ex.addAction()
+    #ex.addAction()
 
     # 显示界面
-    mainwindow.show()
+    mainWindow.show()
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
