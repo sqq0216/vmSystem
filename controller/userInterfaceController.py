@@ -38,16 +38,19 @@ class UserInterfaceController(object):
     def getVmsConfs(self, vmname):
         """
         #从文件中读取某个虚拟机配置信息
-        :return: list:
+        #然后返回其所有属性值
+        :return: tuple:
         """
-        self.vmsConfs[vmname].updateConf()
-        self.vmsConfs = []
-        for vmname in self.vms:
-            #此处添加异常
-            f = open(vmname+".json", "r")
-            self.vmsConfs.append(json.load(f))
+        self.vmsConfs[vmname].getConfFromFile()
+        return self.vmsConfs[vmname].getConf()
 
-        return self.vmsConfs
+        # self.vmsConfs = []
+        # for vmname in self.vms:
+        #     #此处添加异常
+        #     f = open(vmname+".json", "r")
+        #     self.vmsConfs.append(json.load(f))
+        #
+        # return self.vmsConfs
 
     def setVmsConfs(self, vmname, **kwargs):
         """

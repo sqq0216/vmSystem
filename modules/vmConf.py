@@ -12,6 +12,7 @@
 @version:   1.0-2016-07-18
 """
 
+import json
 import vmState
 
 class VmConf(object):
@@ -19,30 +20,54 @@ class VmConf(object):
     This is the class that save the vm information from the GUI
     """
     def __init__(self):
+        self.clearConf()
+
+    def clearConf(self):
         self.name = ""
         self.systype = ""
-        self.process = []   #监控级别应放在process属性里
-        self.ports = []  #监控级别应放在port属性里
+        self.process = []  # 监控级别应放在process属性里
+        self.ports = []  # 监控级别应放在port属性里
 
-    def updateConf(self):
+    def getConf(self):
         """
-        #此方法用于更新当前虚拟机的配置信息信息
-        #可于用户界面更新数据后信号式调用此方法
-        #从文件中读取json数据
+        从类对象中获得全部属性
         :return:
         """
-        pass
+        return (self.name, self.systype, self.process, self.ports)
 
-    def saveConf(self):
+    def setConf(self, **kwargs):
         """
-        #每次在运行中修改配置后都要及时更新到文件中作永久保存
+        将Conf的各属性存入类对象
+        :param kwargs:
         :return:
         """
-        pass
 
-    def readConf(self):
+    def getConfFromFile(self):
         """
-        #每次重新打开程序时都要从文件中读取以前保存
+        # 从文件中读取json数据，读出来是dict
+        # 将类对象中所有属性更新
         :return:
         """
-        pass
+        self.clearConf()
+        try:
+            with open(self.name + ".json", "r") as f:
+                attr_dict = json.load(f)
+                #将attr_dict中的所有属性分配到当前类中
+                for key, value in attr_dict:
+                    if hasattr(self, key):
+                        setattr(self, key, value)
+                    else:
+                        #类中没有此属性？？？不可能
+                        pass
+        except IOError, e:
+            #没有此文件的话不管它，直接清空Conf
+            pass
+
+
+    def setConfToFile(self):
+        """
+        # 将类所有属性序列化到json文件中
+        :return:
+        """
+        with open(self.name + ".json", "w") as f:
+            json.dump(vars(self), f)
