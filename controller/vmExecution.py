@@ -17,5 +17,5 @@
 
 class VmExecute(object):
 
-    def execute(self, vm, policy):
+    def execute(self, vm, policy, history):
         pass

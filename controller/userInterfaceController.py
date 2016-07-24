@@ -17,8 +17,8 @@
 import sys
 import json
 import threading
-from PyQt4 import QtGui
-from view.vmGuiAction import VmGuiAction
+#from PyQt4 import QtGui
+#from view.vmGuiAction import VmGuiAction
 from vmController import VmController
 
 
@@ -77,7 +77,10 @@ class UserInterfaceController(object):
         :param vmname:
         :return:
         """
-        VmController(vmname, self.vmsConfs[vmname], self.vmsStates[vmname]).startMonitor()
+        #各个controller存在于各个线程内，互不干扰
+        self.localVm.controller = VmController(vmname, self.vmsConfs[vmname], self.vmsStates[vmname])
+        #启动该线程对应的控制器
+        self.localVm.controller.startMonitor()
 
 
 

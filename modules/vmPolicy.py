@@ -22,6 +22,11 @@ class VmPolicy(object):
         self.clearPolicy()
 
     def clearPolicy(self):
+        self.level = 0
+
         self.shouldRestartVm = False
         self.shouldRestoreVm = False
         self.shouldRestartProcesses = []
+
+    def setLevel(self, level):
+        self.level = level

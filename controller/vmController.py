@@ -20,6 +20,7 @@
 from modules.vmState import VmState
 from modules.vmConf import VmConf
 from modules.vmPolicy import VmPolicy
+from modules.vmHistory import VmHistory
 
 from vmInspection import VmInspection
 from vmAnalysis import VmAnalysis
@@ -34,6 +35,7 @@ class VmController(object):
         self.vm = vmState
         self.vmConf = vmConf
         self.vmPoli = VmPolicy()
+        self.vmHist = VmHistory()
 
         self.vmInsp = VmInspection()
         self.vmAnal = VmAnalysis()
@@ -46,10 +48,11 @@ class VmController(object):
         """
         while True:
             #根据配置获取数据填入vm
-            self.vmInsp.getNeedData(self.vm, self.vmConf)
+            self.vmInsp.getNeedData(self.name, self.vm, self.vmConf)
             #分析数据
             self.vmAnal.analyseData(self.vm, self.vmConf)
             #生成处理策略
             self.policy = self.vmAnal.getPolicy()
-            #对vm执行相应的策略
-            self.vmExec.execute(self.vm, self.policy)
+            #根据历史操作和策略对vm执行相应的操作，并记录在历史操作中
+            self.vmExec.execute(self.vm, self.vmHist, self.policy)
+

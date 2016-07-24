@@ -1,7 +1,7 @@
 #!/usr/local/bin/python2.7
 # -*- coding: utf-8 -*-
 
-# Vmco类
+# VmConf类
 # 用户配置的信息
 
 
@@ -25,8 +25,12 @@ class VmConf(object):
     def clearConf(self):
         self.name = ""
         self.systype = ""
-        self.process = []  # 监控级别应放在process属性里
-        self.ports = []  # 监控级别应放在port属性里
+
+        self.processes = {}  # 监控级别应放在process属性里, str:int，进程名：处理等级
+        self.ports = {}  # 监控级别应放在port属性里
+
+        self.checkRootkit = False
+        #self.ssdt = []
 
     def getConf(self):
         """

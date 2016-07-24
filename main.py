@@ -16,7 +16,7 @@ from PyQt4 import QtGui
 from view.vmGuiAction import VmGuiAction
 
 
-def start(self):
+def start():
     """
     #这里循环显示界面，根据界面的消息响应不同方法
     :return:None
