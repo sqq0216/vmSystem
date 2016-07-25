@@ -54,5 +54,5 @@ class VmController(object):
             #生成处理策略
             self.policy = self.vmAnal.getPolicy()
             #根据历史操作和策略对vm执行相应的操作，并记录在历史操作中
-            self.vmExec.execute(self.vm, self.vmHist, self.policy)
+            self.vmExec.execute(self.name, self.vm, self.vmHist, self.policy)
 

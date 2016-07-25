@@ -23,13 +23,13 @@ class VmConf(object):
         self.clearConf()
 
     def clearConf(self):
-        self.name = ""
-        self.systype = ""
+        self.__name = ""
+        self.__systype = ""
 
-        self.processes = {}  # 监控级别应放在process属性里, str:int，进程名：处理等级
-        self.ports = {}  # 监控级别应放在port属性里
+        self.__processes = {}  # 监控级别应放在process属性里, str:int，进程名：处理等级
+        self.__ports = {}  # 监控级别应放在port属性里
 
-        self.checkRootkit = False
+        self.__checkRootkit = False
         #self.ssdt = []
 
     def getConf(self):
@@ -54,7 +54,7 @@ class VmConf(object):
         """
         self.clearConf()
         try:
-            with open(self.name + ".json", "r") as f:
+            with open(self.__name + ".json", "r") as f:
                 attr_dict = json.load(f)
                 #将attr_dict中的所有属性分配到当前类中
                 for key, value in attr_dict:
@@ -73,5 +73,40 @@ class VmConf(object):
         # 将类所有属性序列化到json文件中
         :return:
         """
-        with open(self.name + ".json", "w") as f:
+        with open(self.__name + ".json", "w") as f:
             json.dump(vars(self), f)
+
+    @property
+    def name(self):
+        return self.__name
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
+    @property
+    def systype(self):
+        return self.__systype
+    @systype.setter
+    def systype(self, systype):
+        self.__systype = systype
+
+    @property
+    def processes(self):
+        return self.__processes
+    @processes.setter
+    def processes(self, processes):
+        self.__processes = processes
+
+    @property
+    def ports(self):
+        return self.__ports
+    @ports.setter
+    def ports(self, ports):
+        self.__ports = ports
+
+    @property
+    def checkRootkit(self):
+        return self.__checkRootkit
+    @checkRootkit.setter
+    def checkRootkit(self, checkRootkit):
+        self.__checkRootkit = checkRootkit

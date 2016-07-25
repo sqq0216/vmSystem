@@ -14,4 +14,11 @@
 """
 
 class VmHistory(object):
-    pass
+
+    def __init__(self):
+        self.clearHistory()
+
+    def clearHistory(self):
+        self.processesRestartTimes = {}
+        self.vmRestartTimes = 0
+        self.vmRestoreTimes = 0

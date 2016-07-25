@@ -71,4 +71,4 @@ class VmAnalysis(object):
         """
 
     def getPolicy(self):
-        return self.vmPolicy
+        return self.vmPoli

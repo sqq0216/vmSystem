@@ -22,6 +22,13 @@ class VmPolicy(object):
         self.clearPolicy()
 
     def clearPolicy(self):
+        """
+        # level=0,不执行操作
+        # level=1,最高为重启进程
+        # level=2,最高为重启虚拟机
+        # level=3,最高为恢复虚拟机
+        :return:
+        """
         self.level = 0
 
         self.shouldRestartVm = False
@@ -29,4 +36,10 @@ class VmPolicy(object):
         self.shouldRestartProcesses = []
 
     def setLevel(self, level):
-        self.level = level
+        """
+        # 仅当传入的执行等级更高时才更新
+        :param level:
+        :return:
+        """
+        if level > self.level:
+            self.level = level
