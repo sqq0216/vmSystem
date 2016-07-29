@@ -42,7 +42,7 @@ class VmGuiAction(Ui_mainWindow):
         # 获取运行虚拟机列表
         self.vms = self.uiController.getVms()
 
-    def setupUi(self):
+    def setup(self):
         """
         #对界面静态元素可通过调用父类方法添加
         #对需要动态添加的部分在此方法实现
@@ -98,7 +98,7 @@ class VmGuiAction(Ui_mainWindow):
         :param MainWindow:
         :return:
         """
-        QtCore.QObject.connect(self.treeWidget, QtCore.SIGNAL(_fromUtf8("itemActivated(QTreeWidgetItem*,int)")),self.treeItemSelect)
+        QtCore.QObject.connect(self.treeWidget, QtCore.SIGNAL(_fromUtf8("itemClicked(QTreeWidgetItem*,int)")),self.treeItemSelect)
 
     def treeItemSelect(self, item, index):
         """

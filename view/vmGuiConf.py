@@ -32,6 +32,7 @@ class Ui_Form(object):
         self.label_vmname.setObjectName(_fromUtf8("label_vmname"))
         self.gridLayout.addWidget(self.label_vmname, 1, 0, 1, 1)
         self.lineEdit_vmname = QtGui.QLineEdit(Form)
+        self.lineEdit_vmname.setReadOnly(True)
         self.lineEdit_vmname.setObjectName(_fromUtf8("lineEdit_vmname"))
         self.gridLayout.addWidget(self.lineEdit_vmname, 1, 1, 1, 1)
         self.lineEdit_2 = QtGui.QLineEdit(Form)

@@ -40,6 +40,7 @@ class UserInterfaceController(object):
         :return: list:
         """
         self.vms = ["win1", "win2", "win3"]
+        #self.vms = []
         return self.vms
 
     def getVmsConfs(self, vmname):

@@ -27,7 +27,7 @@ def start():
 
     # 调用view中的对象对界面进行包装
     ex = VmGuiAction(mainWindow)
-    ex.setupUi()
+    ex.setup()
     #ex.setupExtraUi()
 
     #ex.addAction()
