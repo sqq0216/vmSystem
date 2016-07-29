@@ -14,10 +14,16 @@
 @version:   1.0-2016-07-21
 """
 
-from PyQt4 import QtGui
+from PyQt4 import QtCore,QtGui
 from controller.userInterfaceController import UserInterfaceController
 from vmGui import Ui_mainWindow
 from vmGuiConfAction import VmGuiConfAction
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
 
 class VmGuiAction(Ui_mainWindow):
 
@@ -30,8 +36,8 @@ class VmGuiAction(Ui_mainWindow):
         self.childWindows = []
         self.uiController = UserInterfaceController()
 
-        #虚拟机树列表
-        self.itemList = []
+        #虚拟机树字典，item:index
+        self.itemList = {}
 
         # 获取运行虚拟机列表
         self.vms = self.uiController.getVms()
@@ -50,6 +56,9 @@ class VmGuiAction(Ui_mainWindow):
 
         #调用函数添加子界面
         self.addChildWindow()
+
+        #添加事件响应
+        self.addAction()
 
 
     def addChildWindow(self):
@@ -77,10 +86,10 @@ class VmGuiAction(Ui_mainWindow):
         # 动态添加到treeWidget上
         :return:
         """
-        for name in self.vms:
+        for i, name in enumerate(self.vms):
             item = QtGui.QTreeWidgetItem(self.treeWidget)
             item.setText(0, name)
-            self.itemList.append(item)
+            self.itemList[item] = i
 
 
     def addAction(self):
@@ -89,4 +98,14 @@ class VmGuiAction(Ui_mainWindow):
         :param MainWindow:
         :return:
         """
-        pass
+        QtCore.QObject.connect(self.treeWidget, QtCore.SIGNAL(_fromUtf8("itemActivated(QTreeWidgetItem*,int)")),self.treeItemSelect)
+
+    def treeItemSelect(self, item, index):
+        """
+        # 承接treeWidget的项选择事件
+        # 使stackedWidget切换到相应的页面
+        :param item:
+        :param index:
+        :return:
+        """
+        self.stackedWidget.setCurrentIndex(self.itemList[item])
