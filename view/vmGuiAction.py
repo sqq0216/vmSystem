@@ -14,11 +14,12 @@
 @version:   1.0-2016-07-21
 """
 
+from PyQt4 import QtGui
 from controller.userInterfaceController import UserInterfaceController
-from vmGui import Ui_MainWindow
+from vmGui import Ui_mainWindow
+from vmGuiConfAction import VmGuiConfAction
 
-
-class VmGuiAction(Ui_MainWindow):
+class VmGuiAction(Ui_mainWindow):
 
     def __init__(self, MainWindow):
         """
@@ -26,7 +27,14 @@ class VmGuiAction(Ui_MainWindow):
         :param MainWindow:
         """
         self.mainWindow = MainWindow
+        self.childWindows = []
         self.uiController = UserInterfaceController()
+
+        #虚拟机树列表
+        self.itemList = []
+
+        # 获取运行虚拟机列表
+        self.vms = self.uiController.getVms()
 
     def setupUi(self):
         """
@@ -36,6 +44,43 @@ class VmGuiAction(Ui_MainWindow):
         :return:
         """
         super(VmGuiAction, self).setupUi(self.mainWindow)
+
+        # 调用函数动态显示treeWidget
+        self.addTreeItem()
+
+        #调用函数添加子界面
+        self.addChildWindow()
+
+
+    def addChildWindow(self):
+        """
+        # 从控制器中获取运行虚拟机的列表
+        # 维护一个子界面的列表，并依次添加到主界面中
+        :return:
+        """
+        # 生成子界面包装器
+        childWndGenerator = VmGuiConfAction()
+        #生成子界面列表，对每个子界面进行包装，并将其显示出来
+        for name in self.vms:
+            childWnd = QtGui.QWidget()
+            self.childWindows.append(childWnd)
+            #把虚拟机名字也传入了
+            childWndGenerator.setupUi(childWnd)
+            childWndGenerator.setupName(childWnd, name)
+            self.stackedWidget.insertWidget(-1, childWnd)
+
+        self.stackedWidget.setCurrentIndex(0)
+
+    def addTreeItem(self):
+        """
+        # 调用函数获取虚拟机列表
+        # 动态添加到treeWidget上
+        :return:
+        """
+        for name in self.vms:
+            item = QtGui.QTreeWidgetItem(self.treeWidget)
+            item.setText(0, name)
+            self.itemList.append(item)
 
 
     def addAction(self):

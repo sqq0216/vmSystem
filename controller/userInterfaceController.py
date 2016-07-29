@@ -39,7 +39,7 @@ class UserInterfaceController(object):
         #从libvmi中获取virt-manager中实际添加的虚拟机列表
         :return: list:
         """
-        self.vms = []
+        self.vms = ["win1", "win2", "win3"]
         return self.vms
 
     def getVmsConfs(self, vmname):

@@ -61,31 +61,6 @@
         <string>虚拟机列表</string>
        </property>
       </column>
-      <item>
-       <property name="text">
-        <string>1</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>3</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>4</string>
-        </property>
-        <item>
-         <property name="text">
-          <string>555555</string>
-         </property>
-        </item>
-       </item>
-      </item>
      </widget>
     </item>
     <item>
@@ -94,10 +69,8 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>-1</number>
       </property>
-      <widget class="QWidget" name="page"/>
-      <widget class="QWidget" name="page_2"/>
      </widget>
     </item>
    </layout>
