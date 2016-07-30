@@ -22,4 +22,4 @@ class VmGuiConfAction(Ui_Form):
         super(VmGuiConfAction, self).setupUi(Form)
 
     def setupName(self, Form, name):
-        self.lineEdit_vmname.setText(name)
+        self.label_vmname.setText(name)

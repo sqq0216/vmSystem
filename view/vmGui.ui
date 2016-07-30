@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>713</width>
-    <height>574</height>
+    <width>770</width>
+    <height>613</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -47,6 +47,18 @@
     </property>
     <item>
      <widget class="QTreeWidget" name="treeWidget">
+      <property name="minimumSize">
+       <size>
+        <width>104</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>104</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="rootIsDecorated">
        <bool>false</bool>
       </property>
@@ -80,7 +92,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>713</width>
+     <width>770</width>
      <height>23</height>
     </rect>
    </property>
