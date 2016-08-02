@@ -14,6 +14,7 @@
 
 import json
 import vmState
+from vmPolicy import VmPolicy
 
 class VmConf(object):
     """
@@ -26,10 +27,15 @@ class VmConf(object):
         self.__name = ""
         self.__systype = ""
 
+        self.__checkRootkit = False
+        self.__rootkitPolicy = VmPolicy()
+
+        self.__ip = ""
+
         self.__processes = {}  # 监控级别应放在process属性里, str:int，进程名：处理等级
         self.__ports = {}  # 监控级别应放在port属性里
 
-        self.__checkRootkit = False
+
         #self.ssdt = []
 
     def getConf(self):

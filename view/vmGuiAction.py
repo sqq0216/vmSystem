@@ -42,6 +42,9 @@ class VmGuiAction(Ui_mainWindow):
         # 获取运行虚拟机列表
         self.vms = self.uiController.getVms()
 
+        #获取虚拟机类型列表
+        self.vmTypes = self.uiController.getVmtypes()
+
     def setup(self):
         """
         #对界面静态元素可通过调用父类方法添加
@@ -73,9 +76,12 @@ class VmGuiAction(Ui_mainWindow):
         for name in self.vms:
             childWnd = QtGui.QWidget()
             self.childWindows.append(childWnd)
-            #把虚拟机名字也传入了
+
             childWndGenerator.setupUi(childWnd)
-            childWndGenerator.setupName(childWnd, name)
+            # 把虚拟机名字传入
+            childWndGenerator.setupName(name)
+            # 把虚拟机类型列表传入
+            childWndGenerator.setupTypes(self.vmTypes)
             self.stackedWidget.insertWidget(-1, childWnd)
 
         self.stackedWidget.setCurrentIndex(0)

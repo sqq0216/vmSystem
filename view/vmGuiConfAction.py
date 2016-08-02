@@ -13,7 +13,7 @@
 @contact:   chen1511@foxmail.com
 @version:   1.0-2016-07-29
 """
-
+from PyQt4 import QtGui
 from vmGuiConf import Ui_Form
 
 class VmGuiConfAction(Ui_Form):
@@ -21,5 +21,8 @@ class VmGuiConfAction(Ui_Form):
     def setupUi(self, Form):
         super(VmGuiConfAction, self).setupUi(Form)
 
-    def setupName(self, Form, name):
+    def setupName(self, name):
         self.label_vmname.setText(name)
+
+    def setupTypes(self, types):
+        self.comboBox_systype.addItems(types)

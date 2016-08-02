@@ -43,6 +43,14 @@ class UserInterfaceController(object):
         #self.vms = []
         return self.vms
 
+    def getVmtypes(self):
+        """
+        # 从volatility中获取可用的虚拟机类型
+        :return:
+        """
+        self.vmtypes = ["CentOS65x64", "WinXPSP3x86", "Win7SP1x64"]
+        return self.vmtypes
+
     def getVmsConfs(self, vmname):
         """
         #从文件中读取某个虚拟机配置信息
