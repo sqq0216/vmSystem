@@ -13,9 +13,9 @@
 @contact:   chen1511@foxmail.com
 @version:   1.0-2016-07-21
 """
-import sys
-reload(sys)
-sys.setdefaultencoding( "utf-8" )
+#import sys
+#reload(sys)
+#sys.setdefaultencoding( "utf-8" )
 
 from PyQt4 import QtCore,QtGui
 from controller.userInterfaceController import UserInterfaceController
@@ -45,7 +45,7 @@ class VmGuiAction(Ui_mainWindow):
         self.itemList = {}
 
         # 获取运行虚拟机列表
-        self.vms = self.uiController.getVms()
+        self.vms = self.uiController.vms
 
         #获取虚拟机类型列表
         self.vmTypes = self.uiController.getVmtypes()
@@ -92,11 +92,29 @@ class VmGuiAction(Ui_mainWindow):
         """
         # 承接treeWidget的项选择事件
         # 使stackedWidget切换到相应的页面
+        # 从文件载入该页的配置
         :param item:
         :param index:
         :return:
         """
-        self.stackedWidget.setCurrentIndex(self.itemList[item])
+        i = self.itemList[item]
+        self.stackedWidget.setCurrentIndex(i)
+        ##################################################
+        confs = self.uiController.getVmsConfs(self.vms[i])
+        # print confs
+        childWndGen = self.childWindowsGens[i]
+
+        # 根据读取的sysType来定位到comboBox中
+        try:
+            postion = self.vmTypes.index(confs['sysType'])
+        except ValueError:
+            postion = 0
+        childWndGen.comboBox_systype.setCurrentIndex(postion)
+
+        #根据读取的isCheckRootkit来定位到checkBox中
+        childWndGen.checkBox_rootkit.setChecked(confs['isCheckRootkit'])
+
+        #其他项.....
 
     def addChildWindow(self):
         """
@@ -132,14 +150,17 @@ class VmGuiAction(Ui_mainWindow):
     def save(self):
         index = self.stackedWidget.currentIndex()
         childWndGen = self.childWindowsGens[index]
+
         # 遍历进程监控设置部分，取出所有设置
         psMonitor = []
         items = QtGui.QTreeWidgetItemIterator(childWndGen.treeWidget_processes)
         item = items.value()
         while item:
             items += 1
-            psMonitor.append((str(item.text(0)), str(item.text(1)), str(item.text(2)), str(item.text(3))))
+            psMonitor.append((unicode(item.text(0)), unicode(item.text(1)), unicode(item.text(2)), unicode(item.text(3))))
             item = items.value()
+        # 转码，使得可以正常print出中文, 此句仅供调试
+        print repr(psMonitor).decode('unicode-escape')
 
         # 遍历端口监控设置部分，取出所有设置
         ptMonitor = []
@@ -147,19 +168,26 @@ class VmGuiAction(Ui_mainWindow):
         item = items.value()
         while item:
             items += 1
-            ptMonitor.append((str(item.text(0)), str(item.text(1)), str(item.text(2))))
+            ptMonitor.append((unicode(item.text(0)), unicode(item.text(1)), unicode(item.text(2))))
             item = items.value()
+        # 转码，使得可以正常print出中文，此句仅供调试
+        print repr(ptMonitor).decode('unicode-escape')
 
+
+        # 获取配置后发给控制器令其保存至文件
         self.uiController.setVmsConfs(self.vms[index],
-                                      sysType = str(childWndGen.comboBox_systype.currentText()),
-                                      isCheckBootkit = childWndGen.checkBox_rootkit.isChecked(),
-                                      rootkitPolicy = str(childWndGen.comboBox_rootkit_policy.currentText()),
-                                      ip = (str(childWndGen.spinBox_ip1.text()) + '.' + str(childWndGen.spinBox_ip2.text()) + '.' + str(childWndGen.spinBox_ip3.text()) + '.' + str(childWndGen.spinBox_ip4.text())),
+                                      sysType = unicode(childWndGen.comboBox_systype.currentText()),
+                                      isCheckRootkit = childWndGen.checkBox_rootkit.isChecked(),
+                                      rootkitPolicy = unicode(childWndGen.comboBox_rootkit_policy.currentText()),
+                                      ip = (unicode(childWndGen.spinBox_ip1.text()) + u'.' + unicode(childWndGen.spinBox_ip2.text()) + u'.' + unicode(childWndGen.spinBox_ip3.text()) + u'.' + unicode(childWndGen.spinBox_ip4.text())),
                                       processesMonitor = psMonitor,
                                       portsMonitor = ptMonitor)
 
-
     def clear(self):
+        """
+        # 清除子界面上的所有输入配置
+        :return:
+        """
         index = self.stackedWidget.currentIndex()
         childWndGen = self.childWindowsGens[index]
         childWndGen.comboBox_systype.setCurrentIndex(0)

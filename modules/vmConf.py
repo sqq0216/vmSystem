@@ -12,28 +12,35 @@
 @version:   1.0-2016-07-18
 """
 
-import json
+#import json
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 import vmState
 from vmPolicy import VmPolicy
+
 
 class VmConf(object):
     """
     This is the class that save the vm information from the GUI
     """
-    def __init__(self):
+    def __init__(self, name):
         self.clearConf()
+        self.__name = name
 
     def clearConf(self):
-        self.__name = ""
+        #self.__name = ""
         self.__systype = ""
 
         self.__checkRootkit = False
         self.__rootkitPolicy = VmPolicy()
 
-        self.__ip = ""
+        self.__ip = (0,0,0,0)
 
-        self.__processes = {}  # 监控级别应放在process属性里, str:int，进程名：处理等级
-        self.__ports = {}  # 监控级别应放在port属性里
+        self.__processes = []  # 监控进程列表，每个列表项是name,isneed,policy,path
+        self.__ports = [] # 监控端口列表，每个列表项是name,isneed,policy
 
 
         #self.ssdt = []
@@ -43,14 +50,35 @@ class VmConf(object):
         从类对象中获得全部属性
         :return:
         """
-        return [var for var in vars(self).values()]
+        return {"name":self.__name,
+                "sysType":self.__systype,
+                "isCheckRootkit":self.__checkRootkit,
+                "rootkitPolicy":self.__rootkitPolicy.toString(),
+                "ip":self.__ip,
+                "processesMonitor":self.__processes,
+                "portsMonitor":self.__ports}
+        #return vars(self)
+        #return [var for var in vars(self).values()]
 
-    def setConf(self, **kwargs):
+    def setConf(self, kwargs):
         """
         将Conf的各属性存入类对象
         :param kwargs:
         :return:
         """
+        self.__systype = kwargs["sysType"]
+        self.__checkRootkit = kwargs["isCheckRootkit"]
+        self.__rootkitPolicy.setPolicy(kwargs["rootkitPolicy"])
+        self.__ip = kwargs["ip"]
+        for ps,isneed,policy,path in kwargs['processesMonitor']:
+            self.__processes.append((ps,
+                                     True if isneed == u"需要" else False,
+                                     VmPolicy(policy),
+                                     path))
+        for pt,isneed,policy in kwargs['portsMonitor']:
+            self.__ports.append((pt,
+                                 True if isneed == u"需要" else False,
+                                 VmPolicy(policy)))
 
     def getConfFromFile(self):
         """
@@ -79,8 +107,9 @@ class VmConf(object):
         # 将类所有属性序列化到json文件中
         :return:
         """
-        with open(self.__name + ".json", "w") as f:
-            json.dump(vars(self), f)
+        print self.__name
+        with open(self.__name + ".vmconf", "w") as f:
+            pickle.dump(self, f)
 
     @property
     def name(self):

@@ -21,13 +21,20 @@ import threading
 #from view.vmGuiAction import VmGuiAction
 from vmController import VmController
 
+from modules.vmConf import VmConf
+from modules.vmState import VmState
+
 
 class UserInterfaceController(object):
 
     def __init__(self):
-        self.vms = []
+        #self.vms = []
+        self.getVms()
         self.vmsConfs = {}
         self.vmsStates = {}
+        for vm in self.vms:
+            self.vmsConfs[vm] = VmConf(vm)
+            #.vmsStates[vm] = VmState(vm)
 
         # 创建local对象，用来管理各个虚拟机
         self.localVm = threading.local()
@@ -67,8 +74,8 @@ class UserInterfaceController(object):
         :return:
         """
         #将配置信息更新
-        #print kwargs
         print vmname
+        print repr(kwargs).decode('unicode-escape')
         self.vmsConfs[vmname].setConf(kwargs)
         #将配置保存到文件
         self.vmsConfs[vmname].setConfToFile()
