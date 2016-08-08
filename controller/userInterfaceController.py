@@ -67,6 +67,8 @@ class UserInterfaceController(object):
         :return:
         """
         #将配置信息更新
+        #print kwargs
+        print vmname
         self.vmsConfs[vmname].setConf(kwargs)
         #将配置保存到文件
         self.vmsConfs[vmname].setConfToFile()
@@ -92,4 +94,5 @@ class UserInterfaceController(object):
         self.localVm.controller.startMonitor()
 
 
-
+    def test(self):
+        print "uitest"

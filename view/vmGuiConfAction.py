@@ -15,6 +15,7 @@
 """
 from PyQt4 import QtGui, QtCore
 from vmGuiConf import Ui_Form
+from controller.userInterfaceController import UserInterfaceController
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -22,22 +23,34 @@ except AttributeError:
     def _fromUtf8(s):
         return s
 
+
+
+
 class VmGuiConfAction(Ui_Form):
+    def __init__(self):
+        self.uiController = UserInterfaceController()
 
     def setupUi(self, Form):
         super(VmGuiConfAction, self).setupUi(Form)
         # 添加子界面上的消息响应
         self.addAction()
 
+    def setupController(self, uiController):
+        self.uiController = uiController
+
     def addAction(self):
+        QtCore.QObject.connect(self.pushButton_save, QtCore.SIGNAL(_fromUtf8("clicked()")),self.pushButton_clear.hide)
         # 保存按钮
-        QtCore.QObject.connect(self.pushButton_save, QtCore.SIGNAL(_fromUtf8("clicked()")), self.save)
+        #QtCore.QObject.connect(self.pushButton_save, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), self.save)
         # 清空按钮
-        QtCore.QObject.connect(self.pushButton_clear, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clear)
+        QtCore.QObject.connect(self.pushButton_clear, QtCore.SIGNAL(_fromUtf8("clicked()")), self.uiController.test)
         # 执行按钮
         QtCore.QObject.connect(self.pushButton_execute, QtCore.SIGNAL(_fromUtf8("clicked()")), self.execute)
         # 中断按钮
         QtCore.QObject.connect(self.pushButton_break, QtCore.SIGNAL(_fromUtf8("clicked()")), self.break_)
+
+    def test(self):
+        print "test"
 
     def save(self):
         """
@@ -45,7 +58,11 @@ class VmGuiConfAction(Ui_Form):
         # 将该页上配置保存
         :return:
         """
-        processesMonitor =
+        print "save"
+        processesMonitor = self.treeWidget_processes.items
+        QtGui.Qtree
+        print processesMonitor
+        # QtGui.QTreeWidget.selectedItems()
         self.uiController.setVmsConfs(self.name,
                                       sysType = self.comboBox_systype.currentText(),
                                       isCheckRootkit = self.checkBox_rootkit.isChecked(),
@@ -59,6 +76,7 @@ class VmGuiConfAction(Ui_Form):
         # 将该页上配置清空，并清空对应的配置文件
         :return:
         """
+        print "clear"
 
     def execute(self):
         """
@@ -81,5 +99,3 @@ class VmGuiConfAction(Ui_Form):
     def setupTypes(self, types):
         self.comboBox_systype.addItems(types)
 
-    def setupController(self, uiController):
-        self.uiController = uiController

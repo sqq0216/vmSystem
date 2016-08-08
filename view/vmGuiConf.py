@@ -166,6 +166,7 @@ class Ui_Form(object):
         self.gridLayout.addWidget(self.groupBox_2, 2, 0, 1, 11)
 
         self.retranslateUi(Form)
+
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):

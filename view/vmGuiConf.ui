@@ -466,5 +466,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_save</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>pushButton_clear</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>218</x>
+     <y>555</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>576</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>
