@@ -88,18 +88,37 @@ class VmConf(object):
         """
         self.clearConf()
         try:
-            with open(self.__name + ".json", "r") as f:
-                attr_dict = json.load(f)
-                #将attr_dict中的所有属性分配到当前类中
-                for key, value in attr_dict:
-                    if hasattr(self, key):
-                        setattr(self, key, value)
-                    else:
-                        #类中没有此属性？？？不可能
-                        pass
+            with open(self.__name + ".vmconf", "r") as f:
+                conf = pickle.load(f)
+                print conf
+                print conf.systype
+                print conf.checkRootkit
+                print conf.rootkitPolicy
+                print conf.rootkitPolicy.level
+                print conf.processes
+                print conf.ports
+                self.__systype = conf.__systype
+                self.__checkRootkit = conf.__checkRootkit
+                self.__rootkitPolicy = conf.__rootkitPolicy
+                self.__processes = conf.__processes
+                self.__ports = conf.__ports
+
         except IOError, e:
-            #没有此文件的话不管它，直接清空Conf
             pass
+
+        # try:
+        #     with open(self.__name + ".vmconf", "r") as f:
+        #         attr_dict = json.load(f)
+        #         #将attr_dict中的所有属性分配到当前类中
+        #         for key, value in attr_dict:
+        #             if hasattr(self, key):
+        #                 setattr(self, key, value)
+        #             else:
+        #                 #类中没有此属性？？？不可能
+        #                 pass
+        # except IOError, e:
+        #     #没有此文件的话不管它，直接清空Conf
+        #     pass
 
 
     def setConfToFile(self):
@@ -107,7 +126,6 @@ class VmConf(object):
         # 将类所有属性序列化到json文件中
         :return:
         """
-        print self.__name
         with open(self.__name + ".vmconf", "w") as f:
             pickle.dump(self, f)
 
@@ -145,3 +163,10 @@ class VmConf(object):
     @checkRootkit.setter
     def checkRootkit(self, checkRootkit):
         self.__checkRootkit = checkRootkit
+
+    @property
+    def rootkitPolicy(self):
+        return self.__rootkitPolicy
+    @rootkitPolicy.setter
+    def rootkitPolicy(self, rootkitPolicy):
+        self.__rootkitPolicy = rootkitPolicy

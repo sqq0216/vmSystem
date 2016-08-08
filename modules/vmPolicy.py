@@ -20,6 +20,8 @@ class VmPolicy(object):
         #self.shouldRestoreVm = False
         #self.shouldRestartProcesses = []
         self.clearPolicy()
+        self.policyList = [u"", u"恢复虚拟机", u"重启虚拟机", u"重启进程", u"关闭进程", u"打开进程",
+                           u"关闭端口", u"告警"]
 
     def clearPolicy(self):
         """
@@ -45,24 +47,7 @@ class VmPolicy(object):
             self.level = level
 
     def toString(self):
-        if self.level == 0:
-            return u""
-        elif self.level == 1:
-            return u"恢复虚拟机"
-        elif self.level == 2:
-            return u"重启虚拟机"
-        elif self.level == 3:
-            return u"重启进程"
-        elif self.level == 4:
-            return u"关闭进程"
-        elif self.level == 5:
-            return u"打开进程"
-        elif self.level == 6:
-            return u"关闭端口"
-        elif self.level == 7:
-            return u"告警"
-        else:
-            return u""
+        return self.policyList[self.level]
 
     def setPolicy(self, policy):
-        pass
+        self.level =  self.policyList.index(policy)
