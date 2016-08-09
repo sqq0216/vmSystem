@@ -28,11 +28,11 @@ from vmExecution import VmExecute
 
 class VmController(object):
 
-    def __init__(self, name, vmConf, vmState):
+    def __init__(self, name, vmConf):
 
         self.name = name
 
-        self.vm = vmState
+        self.vm = VmState()
         self.vmConf = vmConf
         self.vmPoli = VmPolicy()
         self.vmHist = VmHistory()

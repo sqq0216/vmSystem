@@ -17,6 +17,12 @@
 import sys
 import json
 import threading
+import logging
+
+logging.basicConfig(level=logging.DEBUG,
+                format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                datefmt='%a, %d %b %Y %H:%M:%S',)
+
 #from PyQt4 import QtGui
 #from view.vmGuiAction import VmGuiAction
 from vmController import VmController
@@ -40,6 +46,8 @@ class UserInterfaceController(object):
         self.localVm = threading.local()
         # 保存各线程的列表
         self.threadsVm = []
+        # 保存各线程名称的列表
+        self.threadsName = []
 
     def getVms(self):
         """
@@ -90,8 +98,16 @@ class UserInterfaceController(object):
         #新开线程运行
         :return:
         """
-        self.threadsVm.append(threading.Thread(target=self.generateSingleController, args=vmname, name="Thread-"+str(vmname)))
-        self.threadsVm[-1].start()
+        if str(vmname) not in self.threadsName:
+            self.threadsVm.append(threading.Thread(target=self.generateSingleController, args=(vmname,), name="Thread-"+str(vmname)))
+            self.threadsName.append(vmname)
+            self.threadsVm[-1].start()
+        else:
+            logging.warning("Thread-"+str(vmname)+" already run")
+        logging.info("threadsVm:")
+        logging.info(self.threadsVm)
+        logging.info(self.threadsName)
+
 
     def generateSingleController(self, vmname):
         """
@@ -100,10 +116,7 @@ class UserInterfaceController(object):
         :return:
         """
         #各个controller存在于各个线程内，互不干扰
-        self.localVm.controller = VmController(vmname, self.vmsConfs[vmname], self.vmsStates[vmname])
+        self.localVm.name = vmname
+        self.localVm.controller = VmController(vmname, self.vmsConfs[vmname])
         #启动该线程对应的控制器
-        self.localVm.controller.startMonitor()
-
-
-    def test(self):
-        print "uitest"
+        #self.localVm.controller.startMonitor()

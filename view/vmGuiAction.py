@@ -126,6 +126,7 @@ class VmGuiAction(Ui_mainWindow):
             # 对子界面上按钮加入消息响应
             QtCore.QObject.connect(childWndGenerator.pushButton_save, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), self.save)
             QtCore.QObject.connect(childWndGenerator.pushButton_clear, QtCore.SIGNAL(_fromUtf8("clicked(bool)")),self.clear)
+            QtCore.QObject.connect(childWndGenerator.pushButton_execute, QtCore.SIGNAL(_fromUtf8("clicked(bool)")),self.execute)
 
             # 把子界面插入到stackedWidget中
             self.stackedWidget.insertWidget(-1, childWnd)
@@ -135,10 +136,10 @@ class VmGuiAction(Ui_mainWindow):
 
         self.stackedWidget.setCurrentIndex(0)
 
-    def load(self, i):
-        confs = self.uiController.getVmsConfs(self.vms[i])
+    def load(self, index):
+        confs = self.uiController.getVmsConfs(self.vms[index])
         print repr(confs).decode("unicode-escape")
-        childWndGen = self.childWindowsGens[i]
+        childWndGen = self.childWindowsGens[index]
 
         # 先清空一下当前页的配置
         self.clear()
@@ -230,3 +231,12 @@ class VmGuiAction(Ui_mainWindow):
         childWndGen.spinBox_ip4.setValue(0)
         childWndGen.treeWidget_processes.clear()
         childWndGen.treeWidget_ports.clear()
+
+    def execute(self):
+        """
+        # 执行该虚拟机监控，执行前需保存
+        :return:
+        """
+        self.save()
+        index = self.stackedWidget.currentIndex()
+        self.uiController.startMonitorVm(self.vms[index])
