@@ -15,13 +15,14 @@
 
 class VmPolicy(object):
 
-    def __init__(self, extrapol = ""):
+    def __init__(self, initpol = u""):
         #self.shouldRestartVm = False
         #self.shouldRestoreVm = False
         #self.shouldRestartProcesses = []
         self.clearPolicy()
         self.policyList = [u"", u"恢复虚拟机", u"重启虚拟机", u"重启进程", u"关闭进程", u"打开进程",
                            u"关闭端口", u"告警"]
+        self.setPolicy(initpol)
 
     def clearPolicy(self):
         """
@@ -50,4 +51,8 @@ class VmPolicy(object):
         return self.policyList[self.level]
 
     def setPolicy(self, policy):
-        self.level =  self.policyList.index(policy)
+        try:
+            self.level =  self.policyList.index(policy)
+        except ValueError:
+            print repr(policy).decode("unicode-escape")
+            self.level = 0

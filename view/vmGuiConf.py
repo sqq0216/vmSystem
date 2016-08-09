@@ -166,7 +166,6 @@ class Ui_Form(object):
         self.gridLayout.addWidget(self.groupBox_2, 2, 0, 1, 11)
 
         self.retranslateUi(Form)
-
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -214,7 +213,7 @@ class Ui_Form(object):
         self.treeWidget_ports.setSortingEnabled(False)
         self.treeWidget_ports.topLevelItem(0).setText(0, _translate("Form", "8080", None))
         self.treeWidget_ports.topLevelItem(0).setText(1, _translate("Form", "需要", None))
-        self.treeWidget_ports.topLevelItem(0).setText(2, _translate("Form", "报警", None))
+        self.treeWidget_ports.topLevelItem(0).setText(2, _translate("Form", "告警", None))
         self.treeWidget_ports.topLevelItem(1).setText(0, _translate("Form", "8999", None))
         self.treeWidget_ports.topLevelItem(1).setText(1, _translate("Form", "禁止", None))
         self.treeWidget_ports.topLevelItem(1).setText(2, _translate("Form", "关闭端口", None))

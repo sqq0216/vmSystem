@@ -417,7 +417,7 @@
              <string>需要</string>
             </property>
             <property name="text">
-             <string>报警</string>
+             <string>告警</string>
             </property>
            </item>
            <item>
@@ -449,38 +449,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButton_save</sender>
-   <signal>clicked()</signal>
-   <receiver>Form</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>181</x>
-     <y>567</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>112</x>
-     <y>586</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_save</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>pushButton_clear</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>218</x>
-     <y>555</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>298</x>
-     <y>576</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

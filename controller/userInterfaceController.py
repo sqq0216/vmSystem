@@ -74,8 +74,8 @@ class UserInterfaceController(object):
         :return:
         """
         #将配置信息更新
-        print vmname
-        print repr(kwargs).decode('unicode-escape')
+        #print vmname
+        #print repr(kwargs).decode('unicode-escape')
         self.vmsConfs[vmname].setConf(kwargs)
         #将配置保存到文件
         self.vmsConfs[vmname].setConfToFile()

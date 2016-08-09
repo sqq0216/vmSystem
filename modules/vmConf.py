@@ -32,12 +32,12 @@ class VmConf(object):
 
     def clearConf(self):
         #self.__name = ""
-        self.__systype = ""
+        self.__systype = u""
 
         self.__checkRootkit = False
         self.__rootkitPolicy = VmPolicy()
 
-        self.__ip = (0,0,0,0)
+        self.__ip = u'0.0.0.0'
 
         self.__processes = []  # 监控进程列表，每个列表项是name,isneed,policy,path
         self.__ports = [] # 监控端口列表，每个列表项是name,isneed,policy
@@ -47,18 +47,32 @@ class VmConf(object):
 
     def getConf(self):
         """
-        从类对象中获得全部属性
+        # 从类对象中获得全部属性
         :return:
         """
-        return {"name":self.__name,
-                "sysType":self.__systype,
-                "isCheckRootkit":self.__checkRootkit,
-                "rootkitPolicy":self.__rootkitPolicy.toString(),
-                "ip":self.__ip,
-                "processesMonitor":self.__processes,
-                "portsMonitor":self.__ports}
-        #return vars(self)
-        #return [var for var in vars(self).values()]
+        confdict = {"name":self.__name,
+                    "sysType":self.__systype,
+                    "isCheckRootkit":self.__checkRootkit,
+                    "rootkitPolicy":self.__rootkitPolicy.toString(),
+                    "ip":self.__ip}
+        # 把processesMonitor属性还原出来
+        psMonitor = []
+        for ps, isneed, policy, path in self.__processes:
+            psMonitor.append((ps,
+                             u"需要" if isneed else u"禁止",
+                             policy.toString(),
+                             path))
+        confdict["processesMonitor"] = psMonitor
+        # 把portsMonitor属性还原出来
+        ptMonitor = []
+        for pt, isneed, policy in self.__ports:
+            ptMonitor.append((pt,
+                              u"需要" if isneed else u"禁止",
+                              policy.toString()
+                              ))
+        confdict["portsMonitor"] = ptMonitor
+        # 返回用户界面显示的所有数据
+        return confdict
 
     def setConf(self, kwargs):
         """
@@ -86,25 +100,20 @@ class VmConf(object):
         # 将类对象中所有属性更新
         :return:
         """
-        self.clearConf()
+        #self.clearConf()
         try:
             with open(self.__name + ".vmconf", "r") as f:
                 conf = pickle.load(f)
-                print conf
-                print conf.systype
-                print conf.checkRootkit
-                print conf.rootkitPolicy
-                print conf.rootkitPolicy.level
-                print conf.processes
-                print conf.ports
                 self.__systype = conf.__systype
                 self.__checkRootkit = conf.__checkRootkit
                 self.__rootkitPolicy = conf.__rootkitPolicy
+                self.__ip = conf.__ip
                 self.__processes = conf.__processes
                 self.__ports = conf.__ports
 
         except IOError, e:
-            pass
+            print str(self.__name) + ".vmconf not found"
+            self.clearConf()
 
         # try:
         #     with open(self.__name + ".vmconf", "r") as f:
