@@ -184,7 +184,7 @@ class VmGuiAction(Ui_mainWindow):
             psMonitor.append((unicode(item.text(0)), unicode(item.text(1)), unicode(item.text(2)), unicode(item.text(3))))
             item = items.value()
         # 转码，使得可以正常print出中文, 此句仅供调试
-        print repr(psMonitor).decode('unicode-escape')
+        #print repr(psMonitor).decode('unicode-escape')
 
         # 遍历端口监控设置部分，取出所有设置
         ptMonitor = []
@@ -195,7 +195,7 @@ class VmGuiAction(Ui_mainWindow):
             ptMonitor.append((unicode(item.text(0)), unicode(item.text(1)), unicode(item.text(2))))
             item = items.value()
         # 转码，使得可以正常print出中文，此句仅供调试
-        print repr(ptMonitor).decode('unicode-escape')
+        #print repr(ptMonitor).decode('unicode-escape')
 
 
         # 获取配置后发给控制器令其保存至文件

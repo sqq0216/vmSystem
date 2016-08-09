@@ -56,3 +56,10 @@ class VmPolicy(object):
         except ValueError:
             print repr(policy).decode("unicode-escape")
             self.level = 0
+
+    def __str__(self):
+        return self.policyList[self.level].encode("utf-8")
+        #return repr(self.policyList[self.level]).decode("unicode-escape")
+
+    def __unicode__(self):
+        return self.policyList[self.level]

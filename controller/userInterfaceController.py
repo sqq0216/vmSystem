@@ -73,10 +73,14 @@ class UserInterfaceController(object):
         #利用关键字参数传入所有configure属性
         :return:
         """
-        #将配置信息更新
-        #print vmname
-        #print repr(kwargs).decode('unicode-escape')
+        print "function userInterfaceController.py setVmsConfs():"
+        print "vmname:" + str(vmname) + "  ",
+        print repr(kwargs).decode('unicode-escape')
+
+        # 将配置信息更新
         self.vmsConfs[vmname].setConf(kwargs)
+        print "vmsConfs[vmname]:",
+        print unicode(self.vmsConfs[vmname])
         #将配置保存到文件
         self.vmsConfs[vmname].setConfToFile()
 

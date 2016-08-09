@@ -129,7 +129,6 @@ class VmConf(object):
         #     #没有此文件的话不管它，直接清空Conf
         #     pass
 
-
     def setConfToFile(self):
         """
         # 将类所有属性序列化到json文件中
@@ -137,6 +136,31 @@ class VmConf(object):
         """
         with open(self.__name + ".vmconf", "w") as f:
             pickle.dump(self, f)
+
+    def __str__(self):
+        """
+        # 输出类中全部内容
+        :return:
+        """
+        dict  = {u"name":self.__name,
+                u"sysType":self.__systype,
+                u"isCheckRootkit":self.__checkRootkit,
+                u"rootkitPolicy":unicode(self.__rootkitPolicy),
+                u"ip":self.__ip,
+                u"processesMonitor":[],
+                u"portsMonitor":[]}
+        for ps,isneed,policy,path in self.__processes:
+            dict[u"processesMonitor"].append((ps, isneed, unicode(policy), path))
+        for pt,isneed,policy in self.__ports:
+            dict[u"portsMonitor"].append((pt, isneed, unicode(policy)))
+        return str(dict)
+
+    def __unicode__(self):
+        """
+        # 以中文可见的方式输出conf内容
+        :return:
+        """
+        return self.__str__().decode("unicode-escape")
 
     @property
     def name(self):
