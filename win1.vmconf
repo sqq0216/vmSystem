@@ -11,7 +11,7 @@ NtRp4
 (dp5
 S'_VmConf__checkRootkit'
 p6
-I00
+I01
 sS'_VmConf__processes'
 p7
 (lp8
@@ -96,7 +96,7 @@ S'win1'
 p38
 sS'_VmConf__ip'
 p39
-V0.0.0.0
+V2.3.4.5
 p40
 sS'_VmConf__rootkitPolicy'
 p41
@@ -122,7 +122,7 @@ I00
 sg25
 I00
 sg26
-I2
+I1
 sbsS'_VmConf__ports'
 p46
 (lp47

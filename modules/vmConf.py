@@ -80,6 +80,7 @@ class VmConf(object):
         :param kwargs:
         :return:
         """
+        self.clearConf()
         self.__systype = kwargs["sysType"]
         self.__checkRootkit = kwargs["isCheckRootkit"]
         self.__rootkitPolicy.setPolicy(kwargs["rootkitPolicy"])

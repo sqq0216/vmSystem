@@ -99,46 +99,7 @@ class VmGuiAction(Ui_mainWindow):
         """
         i = self.itemList[item]
         self.stackedWidget.setCurrentIndex(i)
-        ##################################################
-        confs = self.uiController.getVmsConfs(self.vms[i])
-        print repr(confs).decode("unicode-escape")
-        childWndGen = self.childWindowsGens[i]
-
-        # 先清空一下当前页的配置
-        self.clear()
-
-        # 根据读取的sysType来定位到comboBox中
-        postion = childWndGen.comboBox_systype.findText(confs["sysType"])
-        childWndGen.comboBox_systype.setCurrentIndex(postion)
-
-        #根据读取的isCheckRootkit来定位到checkBox中
-        childWndGen.checkBox_rootkit.setChecked(confs['isCheckRootkit'])
-
-        #根据读取的rootkitPolicy来定位到comboBox中
-        postion = childWndGen.comboBox_rootkit_policy.findText(confs["rootkitPolicy"])
-        childWndGen.comboBox_rootkit_policy.setCurrentIndex(postion)
-
-        #根据读取的ip来填入spinbox中
-        ip = confs["ip"].split('.')
-        childWndGen.spinBox_ip1.setValue(int(ip[0]))
-        childWndGen.spinBox_ip2.setValue(int(ip[1]))
-        childWndGen.spinBox_ip3.setValue(int(ip[2]))
-        childWndGen.spinBox_ip4.setValue(int(ip[3]))
-
-        #根据读取的processesMonitor来填入treeWidget中
-        for ps, isneed, policy, path in confs["processesMonitor"]:
-            item = QtGui.QTreeWidgetItem(childWndGen.treeWidget_processes)
-            item.setText(0, ps)
-            item.setText(1, isneed)
-            item.setText(2, policy)
-            item.setText(3, path)
-
-        #根据读取的portsMonitor来填入treeWidget中
-        for pt, isneed, policy in confs["portsMonitor"]:
-            item = QtGui.QTreeWidgetItem(childWndGen.treeWidget_ports)
-            item.setText(0, pt)
-            item.setText(1, isneed)
-            item.setText(2, policy)
+        self.load(i)
 
     def addChildWindow(self):
         """
@@ -169,7 +130,51 @@ class VmGuiAction(Ui_mainWindow):
             # 把子界面插入到stackedWidget中
             self.stackedWidget.insertWidget(-1, childWnd)
 
+            #默认载入页面1
+            self.load(0)
+
         self.stackedWidget.setCurrentIndex(0)
+
+    def load(self, i):
+        confs = self.uiController.getVmsConfs(self.vms[i])
+        print repr(confs).decode("unicode-escape")
+        childWndGen = self.childWindowsGens[i]
+
+        # 先清空一下当前页的配置
+        self.clear()
+
+        # 根据读取的sysType来定位到comboBox中
+        postion = childWndGen.comboBox_systype.findText(confs["sysType"])
+        childWndGen.comboBox_systype.setCurrentIndex(postion)
+
+        # 根据读取的isCheckRootkit来定位到checkBox中
+        childWndGen.checkBox_rootkit.setChecked(confs['isCheckRootkit'])
+
+        # 根据读取的rootkitPolicy来定位到comboBox中
+        postion = childWndGen.comboBox_rootkit_policy.findText(confs["rootkitPolicy"])
+        childWndGen.comboBox_rootkit_policy.setCurrentIndex(postion)
+
+        # 根据读取的ip来填入spinbox中
+        ip = confs["ip"].split('.')
+        childWndGen.spinBox_ip1.setValue(int(ip[0]))
+        childWndGen.spinBox_ip2.setValue(int(ip[1]))
+        childWndGen.spinBox_ip3.setValue(int(ip[2]))
+        childWndGen.spinBox_ip4.setValue(int(ip[3]))
+
+        # 根据读取的processesMonitor来填入treeWidget中
+        for ps, isneed, policy, path in confs["processesMonitor"]:
+            item = QtGui.QTreeWidgetItem(childWndGen.treeWidget_processes)
+            item.setText(0, ps)
+            item.setText(1, isneed)
+            item.setText(2, policy)
+            item.setText(3, path)
+
+        # 根据读取的portsMonitor来填入treeWidget中
+        for pt, isneed, policy in confs["portsMonitor"]:
+            item = QtGui.QTreeWidgetItem(childWndGen.treeWidget_ports)
+            item.setText(0, pt)
+            item.setText(1, isneed)
+            item.setText(2, policy)
 
     def save(self):
         index = self.stackedWidget.currentIndex()
@@ -184,7 +189,8 @@ class VmGuiAction(Ui_mainWindow):
             psMonitor.append((unicode(item.text(0)), unicode(item.text(1)), unicode(item.text(2)), unicode(item.text(3))))
             item = items.value()
         # 转码，使得可以正常print出中文, 此句仅供调试
-        #print repr(psMonitor).decode('unicode-escape')
+        print "psMonitor:",
+        print repr(psMonitor).decode('unicode-escape')
 
         # 遍历端口监控设置部分，取出所有设置
         ptMonitor = []
@@ -195,7 +201,8 @@ class VmGuiAction(Ui_mainWindow):
             ptMonitor.append((unicode(item.text(0)), unicode(item.text(1)), unicode(item.text(2))))
             item = items.value()
         # 转码，使得可以正常print出中文，此句仅供调试
-        #print repr(ptMonitor).decode('unicode-escape')
+        print "ptMonitor:",
+        print repr(ptMonitor).decode('unicode-escape')
 
 
         # 获取配置后发给控制器令其保存至文件
