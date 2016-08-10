@@ -27,6 +27,8 @@ from vmController import VmController
 from modules.vmConf import VmConf
 from modules.vmState import VmState
 
+# 执行与中断命令读写锁
+breakLock = threading.Lock()
 
 class UserInterfaceController(object):
 
@@ -42,9 +44,18 @@ class UserInterfaceController(object):
         # 创建local对象，用来管理各个虚拟机
         self.localVm = threading.local()
         # 保存各线程的列表
-        self.threadsVm = []
+        self.threadsVm = {}
         # 保存各线程名称的列表
-        self.threadsName = []
+        #self.threadsName = []
+
+        # 全局执行与中断命令判断表
+        global ebList,breakLock
+        # 初始化命令表
+        breakLock.acquire()
+        ebList = {}
+        for vm in self.vms:
+            ebList[vm] = False
+        breakLock.release()
 
     def getVms(self):
         """
@@ -89,14 +100,14 @@ class UserInterfaceController(object):
         #新开线程运行
         :return:
         """
-        if str(vmname) not in self.threadsName:
-            self.threadsVm.append(threading.Thread(target=self.generateSingleController, args=(vmname,), name="Thread-"+str(vmname)))
-            self.threadsName.append(vmname)
-            self.threadsVm[-1].start()
+        if vmname not in self.threadsVm.keys() or (vmname in self.threadsVm.keys() and not self.threadsVm[vmname].isAlive()):
+            # 如果没有此线程或者有此线程但线程已死亡
+            self.threadsVm[vmname] = threading.Thread(target=self.generateSingleController, args=(vmname,), name="Thread-"+str(vmname))
+            self.threadsVm[vmname].start()
         else:
+            # 如果此线程已有并存活着
             logger.warning(u"虚拟机" + unicode(vmname) + u"已经处于监控状态")
-        logger.debug(u"已有虚拟机监控列表：名称:" + unicode(self.threadsName) + u" 线程:" + unicode(self.threadsVm))
-
+        logger.debug(u"已有虚拟机监控列表：名称:线程:" + unicode(self.threadsVm))
 
     def generateSingleController(self, vmname):
         """
@@ -116,5 +127,14 @@ class UserInterfaceController(object):
         :param vmname:
         :return:
         """
-        #调用
-        #self.localVm.controller.stopMonitor()
+        # 如果此线程存活中，发出命令关闭他
+        if self.threadsVm[vmname].isAlive():
+            # 更改全局执行与中断命令判断表，迫使子线程结束
+            global ebList, breakLock
+            breakLock.acquire()
+            ebList[vmname] = False
+            breakLock.release()
+            logger.info(u"等待对虚拟机" + vmname + u"的监控结束")
+        else:
+            logger.warning(u"对虚拟机" + vmname + u"的监控未在进行")
+        logger.debug(u"线程" + unicode(self.threadsVm[vmname]) + u"状态：" + (u"存活" if self.threadsVm[vmname].isAlive() else u"死亡"))

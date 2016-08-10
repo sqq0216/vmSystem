@@ -51,7 +51,7 @@ class VmController(object):
         :return:
         """
         logger.info(u"开始监控虚拟机" + unicode(self.name))
-        time.sleep(10)
+        time.sleep(5)
         logger.debug(u"虚拟机" + unicode(self.name) + u"监控完毕")
         return
         while True:
