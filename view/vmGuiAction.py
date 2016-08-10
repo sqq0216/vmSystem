@@ -131,6 +131,7 @@ class VmGuiAction(Ui_mainWindow):
             QtCore.QObject.connect(childWndGenerator.pushButton_save, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), self.save)
             QtCore.QObject.connect(childWndGenerator.pushButton_clear, QtCore.SIGNAL(_fromUtf8("clicked(bool)")),self.clear)
             QtCore.QObject.connect(childWndGenerator.pushButton_execute, QtCore.SIGNAL(_fromUtf8("clicked(bool)")),self.execute)
+            QtCore.QObject.connect(childWndGenerator.pushButton_break, QtCore.SIGNAL(_fromUtf8("clicked(bool)")),self.break_)
 
             # 把子界面插入到stackedWidget中
             self.stackedWidget.insertWidget(-1, childWnd)
@@ -238,3 +239,11 @@ class VmGuiAction(Ui_mainWindow):
         self.save()
         index = self.stackedWidget.currentIndex()
         self.uiController.startMonitorVm(self.vms[index])
+
+    def break_(self):
+        """
+        # 命令对该虚拟机的监控停止
+        :return:
+        """
+        index = self.stackedWidget.currentIndex()
+        self.uiController.stopMonitorVm(self.vms[index])

@@ -93,7 +93,6 @@ class UserInterfaceController(object):
             self.threadsVm.append(threading.Thread(target=self.generateSingleController, args=(vmname,), name="Thread-"+str(vmname)))
             self.threadsName.append(vmname)
             self.threadsVm[-1].start()
-            logger.info(u"开始监控虚拟机" + unicode(vmname))
         else:
             logger.warning(u"虚拟机" + unicode(vmname) + u"已经处于监控状态")
         logger.debug(u"已有虚拟机监控列表：名称:" + unicode(self.threadsName) + u" 线程:" + unicode(self.threadsVm))
@@ -109,4 +108,13 @@ class UserInterfaceController(object):
         self.localVm.name = vmname
         self.localVm.controller = VmController(vmname, self.vmsConfs[vmname])
         #启动该线程对应的控制器
-        #self.localVm.controller.startMonitor()
+        self.localVm.controller.startMonitor()
+
+    def stopMonitorVm(self, vmname):
+        """
+        # 当界面发出停止该虚拟机指令时调用
+        :param vmname:
+        :return:
+        """
+        #调用
+        #self.localVm.controller.stopMonitor()

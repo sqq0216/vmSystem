@@ -17,6 +17,10 @@
 @version:   1.0-2016-07-21
 """
 
+import time
+import logging
+logger = logging.getLogger()
+
 from modules.vmState import VmState
 from modules.vmConf import VmConf
 from modules.vmPolicy import VmPolicy
@@ -46,6 +50,10 @@ class VmController(object):
         #死循环监视自身
         :return:
         """
+        logger.info(u"开始监控虚拟机" + unicode(self.name))
+        time.sleep(10)
+        logger.debug(u"虚拟机" + unicode(self.name) + u"监控完毕")
+        return
         while True:
             #根据配置获取数据填入vm
             self.vmInsp.getNeedData(self.name, self.vm, self.vmConf)
