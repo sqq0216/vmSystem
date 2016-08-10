@@ -21,6 +21,7 @@ import time
 import logging
 logger = logging.getLogger()
 
+import threadCmd as ThreadCmd
 from modules.vmState import VmState
 from modules.vmConf import VmConf
 from modules.vmPolicy import VmPolicy
@@ -51,8 +52,33 @@ class VmController(object):
         :return:
         """
         logger.info(u"开始监控虚拟机" + unicode(self.name))
-        time.sleep(5)
-        logger.debug(u"虚拟机" + unicode(self.name) + u"监控完毕")
+        breakLock = ThreadCmd.getBreakLock()
+        while True:
+            breakLock.acquire()
+            ebList = ThreadCmd.getEBList()
+            if not ebList[self.name]:
+                # 没有通知关闭线程，立刻释放锁
+                breakLock.release()
+                time.sleep(4)
+            else:
+                # 如果通知关闭线程，更改通知量，释放锁后跳出循环
+                ebList[self.name] = False
+                breakLock.release()
+                break
+
+            breakLock.acquire()
+            ebList = ThreadCmd.getEBList()
+            if not ebList[self.name]:
+                # 没有通知关闭线程，立刻释放锁
+                breakLock.release()
+                time.sleep(6)
+            else:
+                # 如果通知关闭线程，释放锁后跳出循环
+                ebList[self.name] = False
+                breakLock.release()
+                break
+
+        logger.info(u"虚拟机" + unicode(self.name) + u"监控完毕")
         return
         while True:
             #根据配置获取数据填入vm

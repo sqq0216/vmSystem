@@ -20,15 +20,15 @@ import threading
 import logging
 logger = logging.getLogger()
 
+import threadCmd as ThreadCmd
 #from PyQt4 import QtGui
 #from view.vmGuiAction import VmGuiAction
 from vmController import VmController
 
+
 from modules.vmConf import VmConf
 from modules.vmState import VmState
 
-# 执行与中断命令读写锁
-breakLock = threading.Lock()
 
 class UserInterfaceController(object):
 
@@ -48,11 +48,11 @@ class UserInterfaceController(object):
         # 保存各线程名称的列表
         #self.threadsName = []
 
-        # 全局执行与中断命令判断表
-        global ebList,breakLock
+        # 获得读写锁
+        breakLock = ThreadCmd.getBreakLock()
         # 初始化命令表
         breakLock.acquire()
-        ebList = {}
+        ebList = ThreadCmd.getEBList()
         for vm in self.vms:
             ebList[vm] = False
         breakLock.release()
@@ -103,6 +103,8 @@ class UserInterfaceController(object):
         if vmname not in self.threadsVm.keys() or (vmname in self.threadsVm.keys() and not self.threadsVm[vmname].isAlive()):
             # 如果没有此线程或者有此线程但线程已死亡
             self.threadsVm[vmname] = threading.Thread(target=self.generateSingleController, args=(vmname,), name="Thread-"+str(vmname))
+            # 暂时将子线程设置为随主线程关闭而关闭，之后可更改为主线程发关闭信号给子线程
+            self.threadsVm[vmname].setDaemon(True)
             self.threadsVm[vmname].start()
         else:
             # 如果此线程已有并存活着
@@ -115,7 +117,7 @@ class UserInterfaceController(object):
         :param vmname:
         :return:
         """
-        #各个controller存在于各个线程内，互不干扰
+        # 各个controller存在于各个线程内，互不干扰
         self.localVm.name = vmname
         self.localVm.controller = VmController(vmname, self.vmsConfs[vmname])
         #启动该线程对应的控制器
@@ -130,9 +132,10 @@ class UserInterfaceController(object):
         # 如果此线程存活中，发出命令关闭他
         if self.threadsVm[vmname].isAlive():
             # 更改全局执行与中断命令判断表，迫使子线程结束
-            global ebList, breakLock
+            breakLock = ThreadCmd.getBreakLock()
             breakLock.acquire()
-            ebList[vmname] = False
+            ebList = ThreadCmd.getEBList()
+            ebList[vmname] = True
             breakLock.release()
             logger.info(u"等待对虚拟机" + vmname + u"的监控结束")
         else:

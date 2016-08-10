@@ -21,7 +21,7 @@ def initLogger():
     # 配置logging，用于全局日志记录
     :return:
     """
-    logging.basicConfig(level=logging.DEBUG,
+    logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s %(filename)s[func:%(funcName)s() line:%(lineno)d] %(threadName)s-%(levelname)s: %(message)s',
                         datefmt='%Y/%m/%d %X', )
     logger = logging.getLogger()
