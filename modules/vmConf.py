@@ -18,6 +18,9 @@ try:
 except ImportError:
     import pickle
 
+import logging
+logger = logging.getLogger()
+
 import vmState
 from vmPolicy import VmPolicy
 
@@ -95,6 +98,9 @@ class VmConf(object):
                                  True if isneed == u"需要" else False,
                                  VmPolicy(policy)))
 
+        logger.debug(unicode(self.__name) + u"配置信息保存到VmConf类中")
+        logger.debug(u"当前配置:" + self.__unicode__())
+
     def getConfFromFile(self):
         """
         # 从文件中读取json数据，读出来是dict
@@ -111,24 +117,12 @@ class VmConf(object):
                 self.__ip = conf.__ip
                 self.__processes = conf.__processes
                 self.__ports = conf.__ports
+                logger.info(u"从配置文件" + unicode(self.__name) + u".vmconf中读取配置")
+                logger.debug(u"读取出的配置：" + self.__unicode__())
 
         except IOError, e:
-            print str(self.__name) + ".vmconf not found"
+            logger.warning(u"配置文件" + unicode(self.__name) + u".vmconf不存在")
             self.clearConf()
-
-        # try:
-        #     with open(self.__name + ".vmconf", "r") as f:
-        #         attr_dict = json.load(f)
-        #         #将attr_dict中的所有属性分配到当前类中
-        #         for key, value in attr_dict:
-        #             if hasattr(self, key):
-        #                 setattr(self, key, value)
-        #             else:
-        #                 #类中没有此属性？？？不可能
-        #                 pass
-        # except IOError, e:
-        #     #没有此文件的话不管它，直接清空Conf
-        #     pass
 
     def setConfToFile(self):
         """
@@ -137,6 +131,7 @@ class VmConf(object):
         """
         with open(self.__name + ".vmconf", "w") as f:
             pickle.dump(self, f)
+        logger.info(u"虚拟机" + unicode(self.__name) + u"配置信息保存到文件中")
 
     def __str__(self):
         """

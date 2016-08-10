@@ -17,6 +17,9 @@
 #reload(sys)
 #sys.setdefaultencoding( "utf-8" )
 
+import logging
+logger = logging.getLogger()
+
 from PyQt4 import QtCore,QtGui
 from controller.userInterfaceController import UserInterfaceController
 from vmGui import Ui_mainWindow
@@ -99,6 +102,7 @@ class VmGuiAction(Ui_mainWindow):
         """
         i = self.itemList[item]
         self.stackedWidget.setCurrentIndex(i)
+        logger.debug(u"选择虚拟机列表时手动调用load函数")
         self.load(i)
 
     def addChildWindow(self):
@@ -131,14 +135,13 @@ class VmGuiAction(Ui_mainWindow):
             # 把子界面插入到stackedWidget中
             self.stackedWidget.insertWidget(-1, childWnd)
 
-            #默认载入页面1
-            self.load(0)
+        #默认载入页面1
+        self.load(0)
 
         self.stackedWidget.setCurrentIndex(0)
 
     def load(self, index):
         confs = self.uiController.getVmsConfs(self.vms[index])
-        print repr(confs).decode("unicode-escape")
         childWndGen = self.childWindowsGens[index]
 
         # 先清空一下当前页的配置
@@ -189,9 +192,6 @@ class VmGuiAction(Ui_mainWindow):
             items += 1
             psMonitor.append((unicode(item.text(0)), unicode(item.text(1)), unicode(item.text(2)), unicode(item.text(3))))
             item = items.value()
-        # 转码，使得可以正常print出中文, 此句仅供调试
-        print "psMonitor:",
-        print repr(psMonitor).decode('unicode-escape')
 
         # 遍历端口监控设置部分，取出所有设置
         ptMonitor = []
@@ -201,10 +201,8 @@ class VmGuiAction(Ui_mainWindow):
             items += 1
             ptMonitor.append((unicode(item.text(0)), unicode(item.text(1)), unicode(item.text(2))))
             item = items.value()
-        # 转码，使得可以正常print出中文，此句仅供调试
-        print "ptMonitor:",
-        print repr(ptMonitor).decode('unicode-escape')
 
+        logger.debug(u"从界面获取的设置： psMonitor:" + repr(psMonitor).decode("unicode-escape") + u" ptMonitor:" + repr(ptMonitor).decode("unicode-escape"))
 
         # 获取配置后发给控制器令其保存至文件
         self.uiController.setVmsConfs(self.vms[index],

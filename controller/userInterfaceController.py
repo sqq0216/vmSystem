@@ -18,10 +18,7 @@ import sys
 import json
 import threading
 import logging
-
-logging.basicConfig(level=logging.DEBUG,
-                format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
-                datefmt='%a, %d %b %Y %H:%M:%S',)
+logger = logging.getLogger()
 
 #from PyQt4 import QtGui
 #from view.vmGuiAction import VmGuiAction
@@ -81,14 +78,8 @@ class UserInterfaceController(object):
         #利用关键字参数传入所有configure属性
         :return:
         """
-        print "function userInterfaceController.py setVmsConfs():"
-        print "vmname:" + str(vmname) + "  ",
-        print repr(kwargs).decode('unicode-escape')
-
         # 将配置信息更新
         self.vmsConfs[vmname].setConf(kwargs)
-        print "vmsConfs[vmname]:",
-        print unicode(self.vmsConfs[vmname])
         #将配置保存到文件
         self.vmsConfs[vmname].setConfToFile()
 
@@ -102,11 +93,10 @@ class UserInterfaceController(object):
             self.threadsVm.append(threading.Thread(target=self.generateSingleController, args=(vmname,), name="Thread-"+str(vmname)))
             self.threadsName.append(vmname)
             self.threadsVm[-1].start()
+            logger.info(u"开始监控虚拟机" + unicode(vmname))
         else:
-            logging.warning("Thread-"+str(vmname)+" already run")
-        logging.info("threadsVm:")
-        logging.info(self.threadsVm)
-        logging.info(self.threadsName)
+            logger.warning(u"虚拟机" + unicode(vmname) + u"已经处于监控状态")
+        logger.debug(u"已有虚拟机监控列表：名称:" + unicode(self.threadsName) + u" 线程:" + unicode(self.threadsVm))
 
 
     def generateSingleController(self, vmname):

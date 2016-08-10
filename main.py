@@ -12,8 +12,20 @@
 
 
 import sys
+import logging
 from PyQt4 import QtGui
 from view.vmGuiAction import VmGuiAction
+
+def initLogger():
+    """
+    # 配置logging，用于全局日志记录
+    :return:
+    """
+    logging.basicConfig(level=logging.DEBUG,
+                        format='%(asctime)s %(filename)s[func:%(funcName)s() line:%(lineno)d] %(threadName)s-%(levelname)s: %(message)s',
+                        datefmt='%Y/%m/%d %X', )
+    logger = logging.getLogger()
+    logger.info(u"配置日志系统")
 
 
 def start():
@@ -35,4 +47,5 @@ def start():
 
 if __name__ == "__main__":
 
+    initLogger()
     start()
