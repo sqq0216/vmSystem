@@ -14,14 +14,13 @@
 
 class VmState(object):
 
-    def __init__(self):
+    def __init__(self, name):
 
-        self.name = ""
-        self.systype = ""
+        self.__name = name
 
-        self.processes = []
-        self.ports = []
-        self.ssdt = []
+        self.__processes = [] # 虚拟机当前的进程列表
+        self.__ports = []
+        self.__ssdt = []
 
         self.machineStatus = False  #开关机状态
 

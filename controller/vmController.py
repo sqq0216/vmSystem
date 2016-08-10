@@ -37,8 +37,9 @@ class VmController(object):
 
         self.name = name
 
-        self.vm = VmState()
+        self.vm = VmState(name)
         self.vmConf = vmConf
+
         self.vmPoli = VmPolicy()
         self.vmHist = VmHistory()
 
