@@ -24,3 +24,23 @@ class VmState(object):
 
         self.machineStatus = False  #开关机状态
 
+    @property
+    def processes(self):
+        return self.__processes
+    @processes.setter
+    def processes(self, processes):
+        self.__processes = processes
+
+    @property
+    def ports(self):
+        return self.__ports
+    @ports.setter
+    def ports(self, ports):
+        self.__ports = ports
+
+    @property
+    def ssdt(self):
+        return self.__ssdt
+    @ssdt.setter
+    def ssdt(self, ssdt):
+        self.__ssdt = ssdt
