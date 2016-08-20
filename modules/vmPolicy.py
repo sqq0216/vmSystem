@@ -13,6 +13,9 @@
 @version:   1.0-2016-07-21
 """
 
+import logging
+logger = logging.getLogger()
+
 class VmPolicy(object):
 
     def __init__(self, initpol = u""):
@@ -20,7 +23,7 @@ class VmPolicy(object):
         #self.shouldRestoreVm = False
         #self.shouldRestartProcesses = []
         self.clearPolicy()
-        self.policyList = [u"", u"恢复虚拟机", u"重启虚拟机", u"重启进程", u"关闭进程", u"打开进程",
+        self.policyList = [u"", u"恢复虚拟机", u"重启虚拟机", u"关闭虚拟机", u"重启进程", u"关闭进程", u"打开进程",
                            u"关闭端口", u"告警"]
         self.setPolicy(initpol)
 
@@ -50,7 +53,7 @@ class VmPolicy(object):
     def toString(self):
         return self.policyList[self.level]
 
-    def setPolicy(self, policy):
+    def setPolicy(self, policy, **kwargs):
         try:
             self.level =  self.policyList.index(policy)
         except ValueError:

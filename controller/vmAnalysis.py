@@ -40,35 +40,43 @@ class VmAnalysis(object):
 
     def analyseProcesses(self):
         """
-        # vmConf.processes是一个dict
-        # str:int, 进程名：处理等级
+        # vmConf.processes是一个文件描述符
         :return:
         """
-        for process, level in self.vmConf.processes.items():
-            #在vmState中查找该process，如果没找到该进程
-            if self.vm.processes.find(process) < 0:
-                # 设置策略响应等级
-                self.vmPoli.setLevel(level)
-                # 不管什么等级都将需重启进程添加进去
-                self.vmPoli.shouldRestartProcesses.append(process)
+        for name, isneed, policy, path in self.vmConf.processes:
+            #在vmState中查找该process
+            isFind = False
+            for line in self.vm.processes:
+                if line.find(name) >= 0:
+                    isFind = True
+                    break
+            # 只要与设置的需要不符，就添加虚拟机策略
+            if (isneed and (not isFind)) or ((not isneed) and isFind):
+                self.vmPoli.setPolicy(policy, name = name, path = path)
 
     def analysePorts(self):
         """
-        # vmConf.ports是一个dict
-        # str:int, 进程名：处理等级
+        # vmConf.ports是一个文件描述符
         :return:
         """
-        for port, level in self.vmConf.ports.items():
-            #在vmState中查看该端口状态，如果该端口被关闭
-            if self.vm.ports.find(port) < 0:
-                # 设置策略响应等级
-                self.vmPoli.setLevel(level)
+        for name, isneed, policy in self.vmConf.ports:
+            #在vmState中查找该端口
+            find = False
+            for line in self.vm.ports:
+                if line.find(name) >= 0:
+                    isFind = True
+                    break
+            # 只要与设置不符，就添加虚拟机策略
+            if (isneed and (not isFind)) or ((not isneed) and isFind):
+                self.vmPoli.setPolicy(policy, name = name)
 
     def analyseSsdt(self):
         """
-
+        # vmConf.ssdt是一个文件描述符
+        # 如果ssdt发生变化就添加策略
         :return:
         """
+
 
     def getPolicy(self):
         return self.vmPoli

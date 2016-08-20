@@ -58,4 +58,14 @@ class VmInspection(object):
                 vm.ssdt = self.getData("check_sys_call")
 
     def getData(self, plugin):
-        return os.popen(self.command + plugin)
+        """
+        # 根据命令和插件从终端调用volatility获取数据
+        # 将返回的文件描述符拼接成列表返回
+        :param plugin:
+        :return:
+        """
+        fileAns =  os.popen(self.command + plugin)
+        ans = []
+        for line in fileAns:
+            ans.append(line)
+        return ans
