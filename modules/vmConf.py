@@ -173,6 +173,13 @@ class VmConf(object):
         self.__systype = systype
 
     @property
+    def ip(self):
+        return self.__ip
+    @ip.setter
+    def ip(self, ip):
+        self.__ip = ip
+
+    @property
     def processes(self):
         return self.__processes
     @processes.setter

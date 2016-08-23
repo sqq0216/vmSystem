@@ -13,11 +13,12 @@
 @version:   1.0-2016-07-21
 """
 
-
+import logging
+logger = logging.getLogger()
 
 class VmExecute(object):
 
-    def execute(self, name, vm, history, policy):
+    def execute(self, name, ip, vm, history, policy):
         """
         # 根据现有的操作历史和策略进行相应的执行
         :param vm:
@@ -27,20 +28,136 @@ class VmExecute(object):
         """
         self.name = name
         self.vm = vm
+        self.ip = ip
         self.history = history
         self.policy = policy
 
-        # 如果恢复或重启过了或策略要求恢复，那当前只能恢复
-        if history.vmRestoreTimes > 0 or history.vmRestartTimes > 0 or policy.level == 3:
+        # 先判断策略与历史记录的严重等级，决定清除某些记录或更新策略
+        if policy.shouldRestoreVm:
+            if history.vmRestoreTimes:
+                logger.info(u"已经恢复虚拟机" + self.name + unicode(history.vmRestoreTimes) + u"次，继续恢复虚拟机")
+                history.vmRestoreTimes += 1
+            else:
+                logger.info(u"恢复虚拟机" + self.name)
+                history.vmRestoreTimes = 1
+        elif policy.shouldRestartVm:
+            if history.vmRestoreTimes:
+                logger.info(u"已经恢复虚拟机" + self.name + unicode(history.vmRestoreTimes) + u"次，继续恢复虚拟机")
+                # logger.info(u"重启虚拟机" + self.name)
+                history.vmRestoreTimes += 1
+            elif history.vmRestartTimes >= 3:
+                logger.info(u"已经重启虚拟机" + self.name + unicode(history.vmRestartTimes) + u"次，选择恢复虚拟机")
+                policy.setPolicy(u"恢复虚拟机")
+                history.vmRestoreTimes = 1
+            elif history.vmRestartTimes > 0:
+                logger.info(u"已经重启虚拟机" + self.name + unicode(history.vmRestartTimes) + u"次，继续重启虚拟机")
+                history.vmRestartTimes += 1
+            else:
+                logger.info(u"重启虚拟机" + self.name)
+                history.vmRestartTimes = 1
+        elif policy.shouldShutdownVm:
+            logger.info(u"关闭虚拟机" + self.name)
+
+        if policy.shouldRestartProcesses:
+            if history.vmRestoreTimes:
+                logger.info(u"已经恢复虚拟机" + self.name + unicode(history.vmRestoreTimes) + u"次，继续恢复虚拟机")
+                history.vmRestoreTimes += 1
+            elif history.vmRestartTimes >= 3:
+                logger.info(u"已经重启虚拟机" + self.name + unicode(history.vmRestartTimes) + u"次，选择恢复虚拟机")
+                policy.setPolicy(u"恢复虚拟机")
+                history.vmRestoreTimes = 1
+            elif history.vmRestartTimes > 0:
+                logger.info(u"已经重启虚拟机" + self.name + unicode(history.vmRestartTimes) + u"次，继续重启虚拟机")
+                history.vmRestartTimes += 1
+            else:
+                shouldRestartVm = False
+                pslist = []
+                for ps, path in policy.shouldRestartProcesses:
+                    if ps not in history.processesRestartTimes:
+                        history.processRestartTimes[ps] = 1
+                    elif history.processesRestartTimes[ps] >= 3:
+                        shouldRestartVm = True
+                        pslist.append(ps)
+                    else:
+                        history.processesRestartTimes[ps] += 1
+                if shouldRestartVm:
+                    policy.setPolicy(u"重启虚拟机")
+                    logger.info(u"进程" + unicode(pslist) + u"已经重启达到3次，选择重启虚拟机")
+                else:
+                    logger.info(u"重启进程" + unicode(policy.shouldRestartProcesses))
+
+        if policy.shouldOpenProcesses:
+            logger.info(u"打开进程" + unicode(policy.shouldOpenProcesses))
+
+        if policy.shouldShutdownProcesses:
+            logger.info((u"关闭进程" + unicode(policy.shouldShutdownProcesses)))
+
+        if policy.shouldShutdownPorts:
+            logger.info(u"关闭端口" + unicode(policy.shouldShutdownPorts))
+
+        if policy.level == 0:
+            history.clearHistory()
+
+        self.executePolicy()
+
+    def executePolicy(self):
+        if self.policy.shouldRestoreVm:
             self.restoreVm()
-        elif policy.level == 2:
+        elif self.policy.shouldRestartVm:
             self.restartVm()
+        elif self.policy.shouldShutdownVm:
+            self.shutdownVm()
+
+        if self.policy.shouldRestartProcesses:
+            for ps, path in self.policy.shouldRestartProcesses:
+                self.restartProcess(ps, path)
+
+        if self.policy.shouldOpenProcesses:
+            for ps, path in self.policy.shouldOpenProcesses:
+                self.openProcess(ps, path)
+
+        if self.policy.shouldShutdownProcesses:
+            for ps in self.policy.shouldRestartProcesses:
+                self.shutdownProcess(ps)
+
+        if self.policy.shouldShutdownPorts:
+            for pt in self.policy.shouldShutdownPorts:
+                self.shutdownPort(pt)
 
 
-    def restartProcess(self, process):
+    def shutdownPort(self, port):
+        """
+        # 关闭端口
+        :param port:
+        :return:
+        """
+
+    def shutdownProcess(self, process):
+        """
+        # 关闭进程
+        :param process:
+        :return:
+        """
+
+    def openProcess(self, process, path):
+        """
+        # 打开进程
+        :param process:
+        :param path:
+        :return:
+        """
+
+
+    def restartProcess(self, process, path):
         """
         # 重启进程process
         :param process:
+        :return:
+        """
+
+    def shutdownVm(self):
+        """
+        # 关闭虚拟机self.name
         :return:
         """
 

@@ -54,13 +54,15 @@ class VmController(object):
         """
         logger.info(u"开始监控虚拟机" + unicode(self.name))
         breakLock = ThreadCmd.getBreakLock()
+
         while True:
             breakLock.acquire()
             ebList = ThreadCmd.getEBList()
             if not ebList[self.name]:
                 # 没有通知关闭线程，立刻释放锁
                 breakLock.release()
-                time.sleep(4)
+                # 根据配置获取数据填入vm
+                self.vmInsp.getNeedData(self.name, self.vm, self.vmConf)
             else:
                 # 如果通知关闭线程，更改通知量，释放锁后跳出循环
                 ebList[self.name] = False
@@ -72,7 +74,34 @@ class VmController(object):
             if not ebList[self.name]:
                 # 没有通知关闭线程，立刻释放锁
                 breakLock.release()
-                time.sleep(6)
+                # 分析数据
+                self.vmAnal.analyseData(self.vm, self.vmConf)
+            else:
+                # 如果通知关闭线程，释放锁后跳出循环
+                ebList[self.name] = False
+                breakLock.release()
+                break
+
+            breakLock.acquire()
+            ebList = ThreadCmd.getEBList()
+            if not ebList[self.name]:
+                # 没有通知关闭线程，立刻释放锁
+                breakLock.release()
+                # 生成处理策略
+                self.policy = self.vmAnal.getPolicy()
+            else:
+                # 如果通知关闭线程，释放锁后跳出循环
+                ebList[self.name] = False
+                breakLock.release()
+                break
+
+            breakLock.acquire()
+            ebList = ThreadCmd.getEBList()
+            if not ebList[self.name]:
+                # 没有通知关闭线程，立刻释放锁
+                breakLock.release()
+                # 根据历史操作和策略对vm执行相应的操作，并记录在历史操作中
+                self.vmExec.execute(self.name, self.vmConf.ip, self.vm, self.vmHist, self.policy)
             else:
                 # 如果通知关闭线程，释放锁后跳出循环
                 ebList[self.name] = False
@@ -81,6 +110,7 @@ class VmController(object):
 
         logger.info(u"虚拟机" + unicode(self.name) + u"监控完毕")
         return
+
         while True:
             #根据配置获取数据填入vm
             self.vmInsp.getNeedData(self.name, self.vm, self.vmConf)
@@ -89,5 +119,5 @@ class VmController(object):
             #生成处理策略
             self.policy = self.vmAnal.getPolicy()
             #根据历史操作和策略对vm执行相应的操作，并记录在历史操作中
-            self.vmExec.execute(self.name, self.vm, self.vmHist, self.policy)
+            self.vmExec.execute(self.name, self.vmConf.ip, self.vm, self.vmHist, self.policy)
 

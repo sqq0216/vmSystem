@@ -19,27 +19,44 @@ logger = logging.getLogger()
 class VmPolicy(object):
 
     def __init__(self, initpol = u""):
+        """
+        # 初始化时可传入一个policy
+        :param initpol:
+        """
         #self.shouldRestartVm = False
         #self.shouldRestoreVm = False
         #self.shouldRestartProcesses = []
         self.clearPolicy()
-        self.policyList = [u"", u"恢复虚拟机", u"重启虚拟机", u"关闭虚拟机", u"重启进程", u"关闭进程", u"打开进程",
-                           u"关闭端口", u"告警"]
+        self.policyList = [u"", u"告警", u"关闭端口", u"关闭进程", u"打开进程", u"重启进程", u"关闭虚拟机", u"重启虚拟机", u"恢复虚拟机"]
         self.setPolicy(initpol)
 
     def clearPolicy(self):
         """
         # level=0,不执行操作
-        # level=1,最高为重启进程
-        # level=2,最高为重启虚拟机
-        # level=3,最高为恢复虚拟机
+        # 0 无操作
+        # 1 告警
+        # 2 关闭端口
+        # 3 关闭进程
+        # 4 打开进程
+        # 5 重启进程
+        # 6 关闭虚拟机
+        # 7 重启虚拟机
+        # 8 恢复虚拟机
         :return:
         """
         self.level = 0
 
-        self.shouldRestartVm = False
         self.shouldRestoreVm = False
-        self.shouldRestartProcesses = []
+        self.shouldRestartVm = False
+        self.shouldShutdownVm = False
+
+        self.shouldRestartProcesses = [] # (进程名，进程路径）
+        self.shouldShutdownProcesses = []
+        self.shouldOpenProcesses = []
+
+        self.shouldShutdownPorts = []
+
+        self.shouldAlert = False
 
     def setLevel(self, level):
         """
@@ -54,11 +71,36 @@ class VmPolicy(object):
         return self.policyList[self.level]
 
     def setPolicy(self, policy, **kwargs):
+        """
+        # 吸收新的策略，更新当前策略
+        :param policy:
+        :param kwargs:
+        :return:
+        """
         try:
-            self.level =  self.policyList.index(policy)
+            level =  self.policyList.index(policy)
         except ValueError:
-            print repr(policy).decode("unicode-escape")
-            self.level = 0
+            logger.warning(policy + u" is not a valid policy string")
+            # print repr(policy).decode("unicode-escape")
+            return
+        if level > self.level:
+            self.level = level
+        if level == 8:
+            self.shouldRestoreVm = True
+        elif level == 7:
+            self.shouldRestartVm = True
+        elif level == 6:
+            self.shouldShutdownVm = True
+        elif level == 5 or level == 4:
+            self.shouldRestartProcesses.append((kwargs['name'], kwargs['path']))
+        elif level == 3:
+            self.shouldShutdownProcesses.append(kwargs['name'])
+        elif level == 2:
+            self.shouldShutdownPorts.append(kwargs['name'])
+        elif level == 1:
+            self.shouldAlert = True
+
+
 
     def __str__(self):
         return self.policyList[self.level].encode("utf-8")
