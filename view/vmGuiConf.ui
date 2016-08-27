@@ -331,6 +331,17 @@
              <string>重启虚拟机</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>pptest</string>
+            </property>
+            <property name="text">
+             <string>需要</string>
+            </property>
+            <property name="text">
+             <string>恢复虚拟机</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>

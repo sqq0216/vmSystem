@@ -133,11 +133,19 @@ class VmGuiAction(Ui_mainWindow):
             QtCore.QObject.connect(childWndGenerator.pushButton_execute, QtCore.SIGNAL(_fromUtf8("clicked(bool)")),self.execute)
             QtCore.QObject.connect(childWndGenerator.pushButton_break, QtCore.SIGNAL(_fromUtf8("clicked(bool)")),self.break_)
 
+            QtCore.QObject.connect(childWndGenerator.pushButton_addprocess, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), self.addProcess)
+            QtCore.QObject.connect(childWndGenerator.pushButton_modifyprocess, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), self.modProcess)
+            QtCore.QObject.connect(childWndGenerator.pushButton_delprocess, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), self.delProcess)
+
+            QtCore.QObject.connect(childWndGenerator.pushButton_addport, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), self.addPort)
+            QtCore.QObject.connect(childWndGenerator.pushButton_modifyport, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), self.modPort)
+            QtCore.QObject.connect(childWndGenerator.pushButton_delport, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), self.delPort)
+
             # 把子界面插入到stackedWidget中
             self.stackedWidget.insertWidget(-1, childWnd)
 
         #默认载入页面1
-        self.load(0)
+        #self.load(0)
 
         self.stackedWidget.setCurrentIndex(0)
 
@@ -247,3 +255,27 @@ class VmGuiAction(Ui_mainWindow):
         """
         index = self.stackedWidget.currentIndex()
         self.uiController.stopMonitorVm(self.vms[index])
+
+    def addProcess(self):
+        pass
+
+    def modProcess(self):
+        pass
+
+    def delProcess(self):
+        index = self.stackedWidget.currentIndex()
+        childWndGen = self.childWindowsGens[index]
+
+        QtGui.QTreeWidget.takeTopLevelItem(childWndGen.treeWidget_processes, childWndGen.treeWidget_processes.currentIndex().row())
+
+    def addPort(self):
+        pass
+
+    def modPort(self):
+        pass
+
+    def delPort(self):
+        index = self.stackedWidget.currentIndex()
+        childWndGen = self.childWindowsGens[index]
+
+        QtGui.QTreeWidget.takeTopLevelItem(childWndGen.treeWidget_ports, childWndGen.treeWidget_ports.currentIndex().row())
