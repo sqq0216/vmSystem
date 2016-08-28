@@ -24,6 +24,7 @@ from PyQt4 import QtCore,QtGui
 from controller.userInterfaceController import UserInterfaceController
 from vmGui import Ui_mainWindow
 from vmGuiConf import Ui_Form as VmGuiConf
+from vmGuiDialog import VmGuiDialog
 #from vmGuiConfAction import VmGuiConfAction
 
 try:
@@ -257,10 +258,38 @@ class VmGuiAction(Ui_mainWindow):
         self.uiController.stopMonitorVm(self.vms[index])
 
     def addProcess(self):
-        pass
+        dialog = VmGuiDialog()
+        dialog.setOption(u"add", u"process", u"", True, u"", u"")
+        result = dialog.exec_()
+
+        if result == QtGui.QDialog.Accepted:
+            valueDict = dialog.getValue()
+
+            index = self.stackedWidget.currentIndex()
+            childWndGen = self.childWindowsGens[index]
+
+            item = QtGui.QTreeWidgetItem(childWndGen.treeWidget_processes)
+            item.setText(0, valueDict['name'])
+            item.setText(1, valueDict['isneed'])
+            item.setText(2, valueDict['policy'])
+            item.setText(3, valueDict['path'])
+
 
     def modProcess(self):
-        pass
+        index = self.stackedWidget.currentIndex()
+        childWndGen = self.childWindowsGens[index]
+
+        #QtGui.QTreeWidget.currentItem()
+        if childWndGen.treeWidget_processes.currentIndex().row() >= 0:
+            item = childWndGen.treeWidget_processes.currentItem()
+
+        dialog = VmGuiDialog()
+        name = u"测试进程名"
+        isneed = False
+        policy = u"测试策略"
+        path = u"测试路径"
+        dialog.setOption(u"mod", u"process", name, isneed, policy, path)
+        result = dialog.exec_()
 
     def delProcess(self):
         index = self.stackedWidget.currentIndex()
@@ -269,10 +298,14 @@ class VmGuiAction(Ui_mainWindow):
         QtGui.QTreeWidget.takeTopLevelItem(childWndGen.treeWidget_processes, childWndGen.treeWidget_processes.currentIndex().row())
 
     def addPort(self):
-        pass
+        dialog = VmGuiDialog()
+        dialog.setOption(u"add", u"port", u"", u"", u"")
+        result = dialog.exec_()
 
     def modPort(self):
-        pass
+        dialog = VmGuiDialog()
+        dialog.setOption(u"mod", u"port", u"", u"", u"")
+        result = dialog.exec_()
 
     def delPort(self):
         index = self.stackedWidget.currentIndex()
