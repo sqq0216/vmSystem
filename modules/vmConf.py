@@ -34,7 +34,6 @@ class VmConf(object):
         self.__name = name
 
     def clearConf(self):
-        #self.__name = ""
         self.__systype = u""
 
         self.__checkRootkit = False
@@ -44,9 +43,6 @@ class VmConf(object):
 
         self.__processes = []  # 监控进程列表，每个列表项是name,isneed,policy,path
         self.__ports = [] # 监控端口列表，每个列表项是name,isneed,policy
-
-
-        #self.ssdt = []
 
     def getConf(self):
         """
@@ -91,12 +87,12 @@ class VmConf(object):
         for ps,isneed,policy,path in kwargs['processesMonitor']:
             self.__processes.append((ps,
                                      True if isneed == u"需要" else False,
-                                     VmPolicy(policy),
+                                     policy,
                                      path))
         for pt,isneed,policy in kwargs['portsMonitor']:
             self.__ports.append((pt,
                                  True if isneed == u"需要" else False,
-                                 VmPolicy(policy)))
+                                 policy))
 
         logger.debug(unicode(self.__name) + u"配置信息保存到VmConf类中")
         logger.debug(u"当前配置:" + self.__unicode__())

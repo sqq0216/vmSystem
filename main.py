@@ -27,7 +27,6 @@ def initLogger():
     logger = logging.getLogger()
     logger.info(u"配置日志系统")
 
-
 def start():
     """
     #这里循环显示界面，根据界面的消息响应不同方法

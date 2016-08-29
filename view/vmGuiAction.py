@@ -25,7 +25,6 @@ from controller.userInterfaceController import UserInterfaceController
 from vmGui import Ui_mainWindow
 from vmGuiConf import Ui_Form as VmGuiConf
 from vmGuiDialog import VmGuiDialog
-#from vmGuiConfAction import VmGuiConfAction
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -274,7 +273,6 @@ class VmGuiAction(Ui_mainWindow):
             item.setText(2, valueDict['policy'])
             item.setText(3, valueDict['path'])
 
-
     def modProcess(self):
         index = self.stackedWidget.currentIndex()
         childWndGen = self.childWindowsGens[index]
@@ -330,7 +328,6 @@ class VmGuiAction(Ui_mainWindow):
                 item.setText(0, valueDict['name'])
                 item.setText(1, valueDict['isneed'])
                 item.setText(2, valueDict['policy'])
-
 
     def delPort(self):
         index = self.stackedWidget.currentIndex()
