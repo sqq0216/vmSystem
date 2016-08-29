@@ -279,17 +279,19 @@ class VmGuiAction(Ui_mainWindow):
         index = self.stackedWidget.currentIndex()
         childWndGen = self.childWindowsGens[index]
 
-        #QtGui.QTreeWidget.currentItem()
         if childWndGen.treeWidget_processes.currentIndex().row() >= 0:
             item = childWndGen.treeWidget_processes.currentItem()
+            dialog = VmGuiDialog()
+            dialog.setOption(u"mod", u"process", item.text(0), True if item.text(1) == u"需要" else False, item.text(2), item.text(3))
+            result = dialog.exec_()
 
-        dialog = VmGuiDialog()
-        name = u"测试进程名"
-        isneed = False
-        policy = u"测试策略"
-        path = u"测试路径"
-        dialog.setOption(u"mod", u"process", name, isneed, policy, path)
-        result = dialog.exec_()
+            if result == QtGui.QDialog.Accepted:
+                valueDict = dialog.getValue()
+
+                item.setText(0, valueDict['name'])
+                item.setText(1, valueDict['isneed'])
+                item.setText(2, valueDict['policy'])
+                item.setText(3, valueDict['path'])
 
     def delProcess(self):
         index = self.stackedWidget.currentIndex()
@@ -299,13 +301,36 @@ class VmGuiAction(Ui_mainWindow):
 
     def addPort(self):
         dialog = VmGuiDialog()
-        dialog.setOption(u"add", u"port", u"", u"", u"")
+        dialog.setOption(u"add", u"port", u"", False, u"")
         result = dialog.exec_()
 
+        if result == QtGui.QDialog.Accepted:
+            valueDict = dialog.getValue()
+
+            index = self.stackedWidget.currentIndex()
+            childWndGen = self.childWindowsGens[index]
+
+            item = QtGui.QTreeWidgetItem(childWndGen.treeWidget_ports)
+            item.setText(0, valueDict['name'])
+            item.setText(1, valueDict['isneed'])
+            item.setText(2, valueDict['policy'])
+
     def modPort(self):
-        dialog = VmGuiDialog()
-        dialog.setOption(u"mod", u"port", u"", u"", u"")
-        result = dialog.exec_()
+        index = self.stackedWidget.currentIndex()
+        childWndGen = self.childWindowsGens[index]
+
+        if childWndGen.treeWidget_ports.currentIndex().row() >= 0:
+            item = childWndGen.treeWidget_ports.currentItem()
+            dialog = VmGuiDialog()
+            dialog.setOption(u"mod", u"port", item.text(0), True if item.text(1) == u"需要" else False, item.text(2))
+            result = dialog.exec_()
+
+            if result == QtGui.QDialog.Accepted:
+                valueDict = dialog.getValue()
+                item.setText(0, valueDict['name'])
+                item.setText(1, valueDict['isneed'])
+                item.setText(2, valueDict['policy'])
+
 
     def delPort(self):
         index = self.stackedWidget.currentIndex()

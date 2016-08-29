@@ -54,7 +54,10 @@ class VmGuiDialog(QtGui.QDialog):
         self.gridLayout = QtGui.QGridLayout(self)
 
         self.label_name = QtGui.QLabel(self)
-        self.label_name.setText(_translate("Dialog", "进程名：", None))
+        if type == u"process":
+            self.label_name.setText(_translate("Dialog", "进程名：", None))
+        else:
+            self.label_name.setText(_translate("Dialog", "端口号：", None))
         self.gridLayout.addWidget(self.label_name, 0, 0, 1, 1)
 
         self.lineEdit_name = QtGui.QLineEdit(self)
