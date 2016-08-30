@@ -108,8 +108,8 @@ class UserInterfaceController(object):
             self.threadsVm[vmname].start()
         else:
             # 如果此线程已有并存活着
-            logger.warning(u"虚拟机" + unicode(vmname) + u"已经处于监控状态")
-        logger.debug(u"已有虚拟机监控列表：名称:线程:" + unicode(self.threadsVm))
+            logger.warning("虚拟机" + str(vmname) + "已经处于监控状态")
+        logger.debug("已有虚拟机监控列表：名称:线程:" + str(self.threadsVm))
 
     def generateSingleController(self, vmname):
         """
@@ -137,7 +137,7 @@ class UserInterfaceController(object):
             ebList = ThreadCmd.getEBList()
             ebList[vmname] = True
             breakLock.release()
-            logger.info(u"等待对虚拟机" + vmname + u"的监控结束")
+            logger.info("等待对虚拟机" + vmname + "的监控结束")
         else:
-            logger.warning(u"对虚拟机" + vmname + u"的监控未在进行")
-        logger.debug(u"线程" + unicode(self.threadsVm[vmname]) + u"状态：" + (u"存活" if self.threadsVm[vmname].isAlive() else u"死亡"))
+            logger.warning("对虚拟机" + vmname + "的监控未在进行")
+        logger.debug("线程" + str(self.threadsVm[vmname]) + "状态：" + ("存活" if self.threadsVm[vmname].isAlive() else "死亡"))

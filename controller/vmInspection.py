@@ -32,7 +32,7 @@ class VmInspection(object):
         # 虚拟机的简要类型
         self.systype = u""
         if not self.profile:
-            logger.warning(u"虚拟机" + name + u"系统类型为空")
+            logger.warning("虚拟机" + name + "系统类型为空")
         elif self.profile[:3] == u"Win" or self.profile[:5] == u"Vista":
             self.systype = u"Windows"
         else:

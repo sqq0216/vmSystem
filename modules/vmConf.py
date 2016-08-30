@@ -59,7 +59,7 @@ class VmConf(object):
         for ps, isneed, policy, path in self.__processes:
             psMonitor.append((ps,
                              u"需要" if isneed else u"禁止",
-                             policy.toString(),
+                             policy,
                              path))
         confdict["processesMonitor"] = psMonitor
         # 把portsMonitor属性还原出来
@@ -67,7 +67,7 @@ class VmConf(object):
         for pt, isneed, policy in self.__ports:
             ptMonitor.append((pt,
                               u"需要" if isneed else u"禁止",
-                              policy.toString()
+                              policy
                               ))
         confdict["portsMonitor"] = ptMonitor
         # 返回用户界面显示的所有数据
@@ -94,8 +94,8 @@ class VmConf(object):
                                  True if isneed == u"需要" else False,
                                  policy))
 
-        logger.debug(unicode(self.__name) + u"配置信息保存到VmConf类中")
-        logger.debug(u"当前配置:" + self.__unicode__())
+        logger.debug(unicode(self.__name) + "配置信息保存到VmConf类中")
+        logger.debug("当前配置:" + self.__unicode__().encode("utf-8").replace("u'", ""))
 
     def getConfFromFile(self):
         """
@@ -113,11 +113,11 @@ class VmConf(object):
                 self.__ip = conf.__ip
                 self.__processes = conf.__processes
                 self.__ports = conf.__ports
-                logger.info(u"从配置文件" + unicode(self.__name) + u".vmconf中读取配置")
-                logger.debug(u"读取出的配置：" + self.__unicode__())
+                logger.info("从配置文件" + str(self.__name) + ".vmconf中读取配置")
+                logger.debug("读取出的配置：" + self.__unicode__().encode('utf-8'))
 
         except IOError, e:
-            logger.warning(u"配置文件" + unicode(self.__name) + u".vmconf不存在")
+            logger.warning("配置文件" + str(self.__name) + ".vmconf不存在")
             self.clearConf()
 
     def setConfToFile(self):
@@ -127,30 +127,30 @@ class VmConf(object):
         """
         with open(self.__name + ".vmconf", "w") as f:
             pickle.dump(self, f)
-        logger.info(u"虚拟机" + unicode(self.__name) + u"配置信息保存到文件中")
+        logger.info("虚拟机" + str(self.__name) + "配置信息保存到文件中")
 
     def __str__(self):
         """
         # 输出类中全部内容
-        :return:
+        :return:str(dict)
         """
-        dict  = {u"name":self.__name,
-                u"sysType":self.__systype,
-                u"isCheckRootkit":self.__checkRootkit,
-                u"rootkitPolicy":unicode(self.__rootkitPolicy),
+        dict  = {u"系统名称":self.__name,
+                u"系统类型":self.__systype,
+                u"是否检查Rootkit":u"是" if self.__checkRootkit else u"否",
+                u"检测到Rootkit后的策略":unicode(self.__rootkitPolicy),
                 u"ip":self.__ip,
-                u"processesMonitor":[],
-                u"portsMonitor":[]}
+                u"进程监控列表":[],
+                u"端口监控列表":[]}
         for ps,isneed,policy,path in self.__processes:
-            dict[u"processesMonitor"].append((ps, isneed, unicode(policy), path))
+            dict[u"进程监控列表"].append((ps, u"需要" if isneed else u"禁止", unicode(policy), path))
         for pt,isneed,policy in self.__ports:
-            dict[u"portsMonitor"].append((pt, isneed, unicode(policy)))
+            dict[u"端口监控列表"].append((pt, u"需要" if isneed else u"禁止", unicode(policy)))
         return str(dict)
 
     def __unicode__(self):
         """
-        # 以中文可见的方式输出conf内容
-        :return:
+        # 将存储unicode字符串转换成unicode对象
+        :return:unicode对象
         """
         return self.__str__().decode("unicode-escape")
 

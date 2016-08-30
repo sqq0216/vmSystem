@@ -1,7 +1,7 @@
 #!/usr/local/bin/python2.7
 # -*- coding: utf-8 -*-
 
-#程序入口，指向用户界面以开始
+# 程序入口，指向用户界面以开始
 
 """
 @author:    chenkuan
@@ -21,15 +21,16 @@ def initLogger():
     # 配置logging，用于全局日志记录
     :return:
     """
-    logging.basicConfig(level=logging.INFO,
+    logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s %(filename)s[func:%(funcName)s() line:%(lineno)d] %(threadName)s-%(levelname)s: %(message)s',
-                        datefmt='%Y/%m/%d %X', )
+                        datefmt='%Y/%m/%d %X',)
     logger = logging.getLogger()
-    logger.info(u"配置日志系统")
+    logger.debug("配置日志系统")
+    logger.info("虚拟机监控恢复系统开始运行")
 
 def start():
     """
-    #这里循环显示界面，根据界面的消息响应不同方法
+    # 这里循环显示界面，根据界面的消息响应不同方法
     :return:None
     """
     # 生成应用和主界面

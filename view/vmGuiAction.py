@@ -5,17 +5,12 @@
 # 继承自界面生成的VmGui.py中的类
 # 添加事件响应，提供对外接口
 
-
-
 """
 @author:    chenkuan
 @license:   GNU General Public License 2.0
 @contact:   chen1511@foxmail.com
 @version:   1.0-2016-07-21
 """
-#import sys
-#reload(sys)
-#sys.setdefaultencoding( "utf-8" )
 
 import logging
 logger = logging.getLogger()
@@ -33,10 +28,13 @@ except AttributeError:
         return s
 
 class VmGuiAction(Ui_mainWindow):
-
+    """
+    # 继承自界面生成的VmGui.py中的类
+    # 添加事件响应，提供对外接口
+    """
     def __init__(self, MainWindow):
         """
-        #在这里添加控制器作为属性，以实现消息映射
+        # 在这里添加控制器作为属性，以实现消息映射
         :param MainWindow:
         """
         self.mainWindow = MainWindow
@@ -44,21 +42,20 @@ class VmGuiAction(Ui_mainWindow):
         self.childWindowsGens = []      #子界面包装器列表
         self.uiController = UserInterfaceController()   #主界面控制器
 
-        #虚拟机树字典，item:index，用来确定tree上的item与stackedWidget上的page对应关系
+        # 虚拟机树字典，item:index，用来确定tree上的item与stackedWidget上的page对应关系
         self.itemList = {}
 
         # 获取运行虚拟机列表
         self.vms = self.uiController.vms
 
-        #获取虚拟机类型列表
+        # 获取虚拟机类型列表
         self.vmTypes = self.uiController.getVmtypes()
 
     def setup(self):
         """
-        #对界面静态元素可通过调用父类方法添加
-        #对需要动态添加的部分在此方法实现
+        # 对界面静态元素可通过调用父类方法添加
+        # 对需要动态添加的部分在此方法实现
         # 添加事件响应
-        :param MainWindow:
         :return:
         """
         super(VmGuiAction, self).setupUi(self.mainWindow)
@@ -69,7 +66,7 @@ class VmGuiAction(Ui_mainWindow):
         # 添加主界面事件响应
         self.addAction()
 
-        #调用函数添加子界面
+        # 调用函数添加子界面
         self.addChildWindow()
 
     def addTreeItem(self):
@@ -85,7 +82,6 @@ class VmGuiAction(Ui_mainWindow):
     def addAction(self):
         """
         # 对主界面添加事件响应
-        :param MainWindow:
         :return:
         """
         # 当treeWidget点击切换时，调用方法来切换stackedWidget
@@ -102,7 +98,7 @@ class VmGuiAction(Ui_mainWindow):
         """
         i = self.itemList[item]
         self.stackedWidget.setCurrentIndex(i)
-        logger.debug(u"选择虚拟机列表时手动调用load函数")
+        logger.debug("选择虚拟机列表时手动调用load函数")
         self.load(i)
 
     def addChildWindow(self):
@@ -111,9 +107,9 @@ class VmGuiAction(Ui_mainWindow):
         # 维护一个子界面的列表，并依次添加到主界面中
         :return:
         """
-        #生成子界面列表，对每个子界面进行包装，并将其显示出来
+        # 生成子界面列表，对每个子界面进行包装，并将其显示出来
         for name in self.vms:
-            #生成子界面
+            # 生成子界面
             childWnd = QtGui.QWidget()
             self.childWindows.append(childWnd)
 
@@ -121,7 +117,7 @@ class VmGuiAction(Ui_mainWindow):
             childWndGenerator = VmGuiConf()
             self.childWindowsGens.append(childWndGenerator)
 
-            #简单包装子界面
+            # 简单包装子界面
             childWndGenerator.setupUi(childWnd)
             # 把虚拟机名字传入
             childWndGenerator.label_vmname.setText(name)
@@ -144,8 +140,8 @@ class VmGuiAction(Ui_mainWindow):
             # 把子界面插入到stackedWidget中
             self.stackedWidget.insertWidget(-1, childWnd)
 
-        #默认载入页面1
-        #self.load(0)
+        # 默认载入页面1
+        self.load(0)
 
         self.stackedWidget.setCurrentIndex(0)
 
@@ -211,7 +207,7 @@ class VmGuiAction(Ui_mainWindow):
             ptMonitor.append((unicode(item.text(0)), unicode(item.text(1)), unicode(item.text(2))))
             item = items.value()
 
-        logger.debug(u"从界面获取的设置： psMonitor:" + repr(psMonitor).decode("unicode-escape") + u" ptMonitor:" + repr(ptMonitor).decode("unicode-escape"))
+        logger.debug("从界面获取的设置： psMonitor:" + str(psMonitor).decode('unicode-escape').encode('utf-8') + " ptMonitor:" + str(ptMonitor).decode("unicode-escape").encode("utf-8"))
 
         # 获取配置后发给控制器令其保存至文件
         self.uiController.setVmsConfs(self.vms[index],

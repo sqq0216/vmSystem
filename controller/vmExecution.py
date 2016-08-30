@@ -35,39 +35,39 @@ class VmExecute(object):
         # 先判断策略与历史记录的严重等级，决定清除某些记录或更新策略
         if policy.shouldRestoreVm:
             if history.vmRestoreTimes:
-                logger.info(u"已经恢复虚拟机" + self.name + unicode(history.vmRestoreTimes) + u"次，继续恢复虚拟机")
+                logger.info("已经恢复虚拟机" + self.name + str(history.vmRestoreTimes) + "次，继续恢复虚拟机")
                 history.vmRestoreTimes += 1
             else:
-                logger.info(u"恢复虚拟机" + self.name)
+                logger.info("恢复虚拟机" + self.name)
                 history.vmRestoreTimes = 1
         elif policy.shouldRestartVm:
             if history.vmRestoreTimes:
-                logger.info(u"已经恢复虚拟机" + self.name + unicode(history.vmRestoreTimes) + u"次，继续恢复虚拟机")
+                logger.info("已经恢复虚拟机" + self.name + str(history.vmRestoreTimes) + "次，继续恢复虚拟机")
                 # logger.info(u"重启虚拟机" + self.name)
                 history.vmRestoreTimes += 1
             elif history.vmRestartTimes >= 3:
-                logger.info(u"已经重启虚拟机" + self.name + unicode(history.vmRestartTimes) + u"次，选择恢复虚拟机")
+                logger.info("已经重启虚拟机" + self.name + str(history.vmRestartTimes) + "次，选择恢复虚拟机")
                 policy.setPolicy(u"恢复虚拟机")
                 history.vmRestoreTimes = 1
             elif history.vmRestartTimes > 0:
-                logger.info(u"已经重启虚拟机" + self.name + unicode(history.vmRestartTimes) + u"次，继续重启虚拟机")
+                logger.info("已经重启虚拟机" + self.name + str(history.vmRestartTimes) + "次，继续重启虚拟机")
                 history.vmRestartTimes += 1
             else:
-                logger.info(u"重启虚拟机" + self.name)
+                logger.info("重启虚拟机" + self.name)
                 history.vmRestartTimes = 1
         elif policy.shouldShutdownVm:
-            logger.info(u"关闭虚拟机" + self.name)
+            logger.info("关闭虚拟机" + self.name)
 
         if policy.shouldRestartProcesses:
             if history.vmRestoreTimes:
-                logger.info(u"已经恢复虚拟机" + self.name + unicode(history.vmRestoreTimes) + u"次，继续恢复虚拟机")
+                logger.info("已经恢复虚拟机" + self.name + str(history.vmRestoreTimes) + "次，继续恢复虚拟机")
                 history.vmRestoreTimes += 1
             elif history.vmRestartTimes >= 3:
-                logger.info(u"已经重启虚拟机" + self.name + unicode(history.vmRestartTimes) + u"次，选择恢复虚拟机")
+                logger.info("已经重启虚拟机" + self.name + str(history.vmRestartTimes) + "次，选择恢复虚拟机")
                 policy.setPolicy(u"恢复虚拟机")
                 history.vmRestoreTimes = 1
             elif history.vmRestartTimes > 0:
-                logger.info(u"已经重启虚拟机" + self.name + unicode(history.vmRestartTimes) + u"次，继续重启虚拟机")
+                logger.info("已经重启虚拟机" + self.name + str(history.vmRestartTimes) + "次，继续重启虚拟机")
                 history.vmRestartTimes += 1
             else:
                 shouldRestartVm = False
@@ -82,18 +82,18 @@ class VmExecute(object):
                         history.processesRestartTimes[ps] += 1
                 if shouldRestartVm:
                     policy.setPolicy(u"重启虚拟机")
-                    logger.info(u"进程" + unicode(pslist) + u"已经重启达到3次，选择重启虚拟机")
+                    logger.info("进程" + str(pslist) + "已经重启达到3次，选择重启虚拟机")
                 else:
-                    logger.info(u"重启进程" + unicode(policy.shouldRestartProcesses))
+                    logger.info("重启进程" + str(policy.shouldRestartProcesses))
 
         if policy.shouldOpenProcesses:
-            logger.info(u"打开进程" + unicode(policy.shouldOpenProcesses))
+            logger.info("打开进程" + str(policy.shouldOpenProcesses))
 
         if policy.shouldShutdownProcesses:
-            logger.info((u"关闭进程" + unicode(policy.shouldShutdownProcesses)))
+            logger.info(("关闭进程" + str(policy.shouldShutdownProcesses)))
 
         if policy.shouldShutdownPorts:
-            logger.info(u"关闭端口" + unicode(policy.shouldShutdownPorts))
+            logger.info("关闭端口" + str(policy.shouldShutdownPorts))
 
         if policy.level == 0:
             history.clearHistory()
