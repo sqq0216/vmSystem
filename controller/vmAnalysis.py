@@ -61,7 +61,7 @@ class VmAnalysis(object):
         """
         for name, isneed, policy in self.vmConf.ports:
             #在vmState中查找该端口
-            find = False
+            isFind = False
             for line in self.vm.ports:
                 if line.find(name) >= 0:
                     isFind = True

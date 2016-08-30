@@ -94,7 +94,7 @@ class VmConf(object):
                                  True if isneed == u"需要" else False,
                                  policy))
 
-        logger.debug(unicode(self.__name) + "配置信息保存到VmConf类中")
+        logger.debug(self.__name + "配置信息保存到VmConf类中")
         logger.debug("当前配置:" + self.__unicode__().encode("utf-8").replace("u'", ""))
 
     def getConfFromFile(self):

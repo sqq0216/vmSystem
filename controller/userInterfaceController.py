@@ -109,7 +109,7 @@ class UserInterfaceController(object):
         else:
             # 如果此线程已有并存活着
             logger.warning("虚拟机" + str(vmname) + "已经处于监控状态")
-        logger.debug("已有虚拟机监控列表：名称:线程:" + str(self.threadsVm))
+        logger.debug("已有虚拟机监控列表：名称:线程:" + str([vm for vm in self.threadsVm.keys() if self.threadsVm[vm].isAlive()]))
 
     def generateSingleController(self, vmname):
         """

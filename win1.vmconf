@@ -11,7 +11,7 @@ NtRp4
 (dp5
 S'_VmConf__checkRootkit'
 p6
-I01
+I00
 sS'_VmConf__processes'
 p7
 (lp8
@@ -25,7 +25,7 @@ p11
 tp12
 asS'_VmConf__systype'
 p13
-VWin7SP1x64
+VCentOS65x64
 p14
 sS'_VmConf__name'
 p15
