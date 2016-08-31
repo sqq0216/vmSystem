@@ -118,7 +118,8 @@ class VmController(object):
                 # 没有通知关闭线程，立刻释放锁
                 breakLock.release()
                 # 根据配置获取数据填入vm
-                self.vmInsp.getNeedData(self.name, self.vm, self.vmConf)
+                if not self.vmInsp.getNeedData(self.name, self.vm, self.vmConf):
+                    break
             else:
                 # 如果通知关闭线程，更改通知量，释放锁后跳出循环
                 ebList[self.name] = False

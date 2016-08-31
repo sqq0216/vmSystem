@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'view\vmGuiConf.ui'
+# Form implementation generated from reading ui file 'view/vmGuiConf.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -25,13 +25,18 @@ except AttributeError:
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
-        Form.resize(672, 587)
+        Form.resize(736, 587)
+        Form.setStyleSheet(_fromUtf8("background-color: rgb(210, 221, 255);"))
         self.gridLayout = QtGui.QGridLayout(Form)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.groupBox_4 = QtGui.QGroupBox(Form)
         self.groupBox_4.setMinimumSize(QtCore.QSize(0, 51))
+        self.groupBox_4.setAutoFillBackground(False)
+        self.groupBox_4.setFlat(False)
+        self.groupBox_4.setCheckable(False)
         self.groupBox_4.setObjectName(_fromUtf8("groupBox_4"))
         self.gridLayout_5 = QtGui.QGridLayout(self.groupBox_4)
+        self.gridLayout_5.setContentsMargins(-1, 3, -1, 3)
         self.gridLayout_5.setObjectName(_fromUtf8("gridLayout_5"))
         self.checkBox_rootkit = QtGui.QCheckBox(self.groupBox_4)
         self.checkBox_rootkit.setObjectName(_fromUtf8("checkBox_rootkit"))
@@ -40,6 +45,12 @@ class Ui_Form(object):
         self.label_7.setObjectName(_fromUtf8("label_7"))
         self.gridLayout_5.addWidget(self.label_7, 0, 2, 1, 1)
         self.comboBox_rootkit_policy = QtGui.QComboBox(self.groupBox_4)
+        self.comboBox_rootkit_policy.setEnabled(True)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.comboBox_rootkit_policy.sizePolicy().hasHeightForWidth())
+        self.comboBox_rootkit_policy.setSizePolicy(sizePolicy)
         self.comboBox_rootkit_policy.setObjectName(_fromUtf8("comboBox_rootkit_policy"))
         self.comboBox_rootkit_policy.addItem(_fromUtf8(""))
         self.comboBox_rootkit_policy.addItem(_fromUtf8(""))
@@ -87,6 +98,7 @@ class Ui_Form(object):
         spacerItem5 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem5, 3, 8, 1, 1)
         self.groupBox_2 = QtGui.QGroupBox(Form)
+        self.groupBox_2.setStyleSheet(_fromUtf8("background-color: rgb(201, 223, 255);"))
         self.groupBox_2.setObjectName(_fromUtf8("groupBox_2"))
         self.gridLayout_4 = QtGui.QGridLayout(self.groupBox_2)
         self.gridLayout_4.setObjectName(_fromUtf8("gridLayout_4"))
@@ -162,6 +174,7 @@ class Ui_Form(object):
         self.gridLayout_3.addWidget(self.treeWidget_ports, 1, 0, 1, 5)
         self.gridLayout_4.addWidget(self.groupBox_3, 2, 0, 1, 5)
         self.label_5 = QtGui.QLabel(self.groupBox_2)
+        self.label_5.setStyleSheet(_fromUtf8("border-color: rgb(0, 0, 0);"))
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.gridLayout_4.addWidget(self.label_5, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.groupBox_2, 2, 0, 1, 11)

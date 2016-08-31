@@ -42,20 +42,27 @@ class VmInspection(object):
         self.command = "vol.py profile " + self.profile + " -l vmi://" + name + " "
 
         # 根据虚拟机的简要类型来选择不同的插件
-        if self.systype == u"Windows":
-            if vmConf.processes:
-                vm.processes = self.getData("pslist")
-            if vmConf.ports:
-                vm.ports = self.getData("sockets")
-            if vmConf.checkRootkit:
-                vm.ssdt = self.getData("ssdt")
-        elif self.systype == u"linux":
-            if vmConf.processes:
-                vm.processes = self.getData("linux_pslist")
-            if vmConf.ports:
-                vm.ports = self.getData("netstat")
-            if vmConf.checkRootkit:
-                vm.ssdt = self.getData("check_sys_call")
+        try:
+            if self.systype == u"Windows":
+                if vmConf.processes:
+                    vm.processes = self.getData("pslist")
+                if vmConf.ports:
+                    vm.ports = self.getData("sockets")
+                if vmConf.checkRootkit:
+                    vm.ssdt = self.getData("ssdt")
+            elif self.systype == u"linux":
+                if vmConf.processes:
+                    vm.processes = self.getData("linux_pslist")
+                if vmConf.ports:
+                    vm.ports = self.getData("netstat")
+                if vmConf.checkRootkit:
+                    vm.ssdt = self.getData("check_sys_call")
+        except PopenError, e:
+            logger.warning("调用volatility时未获取到数据")
+            logger.warning(e)
+            return False
+        return True
+
 
     def getData(self, plugin):
         """
@@ -68,4 +75,11 @@ class VmInspection(object):
         ans = []
         for line in fileAns:
             ans.append(line)
+        if not ans:
+            raise  PopenError("test")
+        if ans[0].startswith('No suitable address space mapping found'):
+            raise PopenError('No suitable address space mapping found')
         return ans
+
+class PopenError(StandardError):
+    pass
