@@ -39,7 +39,7 @@ class VmInspection(object):
             self.systype = u"linux"
 
         #self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
-        self.command = "vol.py profile " + self.profile + " -l vmi://" + name + " "
+        self.command = "sudo python /home/chenkuaan/Downloads/volatility-2.4/vol.py profile " + self.profile + " -l vmi://" + name + " "
 
         # 根据虚拟机的简要类型来选择不同的插件
         try:
@@ -54,9 +54,9 @@ class VmInspection(object):
                 if vmConf.processes:
                     vm.processes = self.getData("linux_pslist")
                 if vmConf.ports:
-                    vm.ports = self.getData("netstat")
+                    vm.ports = self.getData("linux_netstat")
                 if vmConf.checkRootkit:
-                    vm.ssdt = self.getData("check_sys_call")
+                    vm.ssdt = self.getData("linux_check_syscall")
         except PopenError, e:
             logger.warning("调用volatility时未获取到数据")
             logger.warning(e)
@@ -75,6 +75,7 @@ class VmInspection(object):
         ans = []
         for line in fileAns:
             ans.append(line)
+            print line
         if not ans:
             raise  PopenError("test")
         if ans[0].startswith('No suitable address space mapping found'):
