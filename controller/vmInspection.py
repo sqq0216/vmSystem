@@ -89,9 +89,7 @@ class VmInspection(object):
 
         ans = []
         for line in fileAns[2:]:
-            words = line.split()
-            if (len(words) > 2):
-                ans.append(words[1])
+            ans.append(line)
 
         return ans
 

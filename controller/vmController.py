@@ -121,7 +121,6 @@ class VmController(object):
                 if not self.vmInsp.getNeedData(self.name, self.vm, self.vmConf):
                     break
                 logger.debug(self.name+str(self.vm))
-                break
             else:
                 # 如果通知关闭线程，更改通知量，释放锁后跳出循环
                 ebList[self.name] = False

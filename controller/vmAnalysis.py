@@ -43,11 +43,14 @@ class VmAnalysis(object):
         # vmConf.processes是一个文件描述符
         :return:
         """
+        processes = self.vm.processes
+        for i, line in enumerate(processes):
+            processes[i] = line[1]
         for name, isneed, policy, path in self.vmConf.processes:
             #在vmState中查找该process
             isFind = False
-            for line in self.vm.processes:
-                if line.find(name) >= 0:
+            for ps in processes:
+                if ps == name:
                     isFind = True
                     break
             # 只要与设置的需要不符，就添加虚拟机策略
