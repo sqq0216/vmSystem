@@ -141,7 +141,8 @@ class VmGuiAction(Ui_mainWindow):
             self.stackedWidget.insertWidget(-1, childWnd)
 
         # 默认载入页面1
-        self.load(0)
+        if self.vms:
+            self.load(0)
 
         self.stackedWidget.setCurrentIndex(0)
 

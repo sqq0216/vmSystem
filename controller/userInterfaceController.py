@@ -15,6 +15,8 @@
 """
 
 import sys
+import os
+import subprocess
 import json
 import threading
 import logging
@@ -62,8 +64,12 @@ class UserInterfaceController(object):
         #从libvmi中获取virt-manager中实际添加的虚拟机列表
         :return: list:
         """
-        self.vms = ["win1", "win2", "win3", "WinXP"]
+        import kvm,unix
+        self.vms = kvm.KVM(unix.Local()).vms
+        # self.vms = ["win1", "win2", "win3", "WinXP"]
         #self.vms = []
+        if not self.vms:
+            self.vms = ["win1", "win2", "win3"]
         return self.vms
 
     def getVmtypes(self):
@@ -71,8 +77,36 @@ class UserInterfaceController(object):
         # 从volatility中获取可用的虚拟机类型
         :return:
         """
-        self.vmtypes = ["CentOS65x64", "WinXPSP3x86", "Win7SP1x64"]
-        return self.vmtypes
+        # self.vmtypes = ["CentOS65x64", "WinXPSP3x86", "Win7SP1x64"]
+        # return self.vmtypes
+
+        logger.debug("从volatility中获取可用的虚拟机类型")
+        command = "python /usr/local/bin/vol.py --info"
+        # info = os.popen(command)
+        info = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read().split("\n")
+        profiles = []
+
+        begin = False
+        for line in info:
+            # logger.debug("this info line:" + line)
+            if line == "Profiles":
+                begin = True
+                #logger.debug("this line equals Profiles")
+            elif begin:
+                #logger.debug("begin: " + line)
+                if line == "":
+                    break
+                elif line == "--------":
+                    continue
+                else:
+                    # logger.debug("this lineline:" + line)
+                    #logger.debug("line.split():" + line.split())
+                    profiles.append(line.split()[0])
+                    #logger.debug("this profiles:" + profiles)
+        # logger.debug(profiles)
+        return profiles
+
+
 
     def getVmsConfs(self, vmname):
         """

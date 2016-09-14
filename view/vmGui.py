@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'view\vmGui.ui'
+# Form implementation generated from reading ui file 'view/vmGui.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -62,9 +62,6 @@ class Ui_mainWindow(object):
         self.menu_2 = QtGui.QMenu(self.menubar)
         self.menu_2.setObjectName(_fromUtf8("menu_2"))
         mainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtGui.QStatusBar(mainWindow)
-        self.statusbar.setObjectName(_fromUtf8("statusbar"))
-        mainWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
 

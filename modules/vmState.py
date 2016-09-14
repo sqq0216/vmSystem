@@ -44,3 +44,10 @@ class VmState(object):
     @ssdt.setter
     def ssdt(self, ssdt):
         self.__ssdt = ssdt
+
+    def __str__(self):
+        name = "name:" + self.__name
+        process = "process:[" + ",".join(self.__processes) + "]"
+        port = "port:[" + ",".join(self.__ports) + "]"
+        ssdt = "ssdt:[" + ",".join(self.__ssdt) + "]"
+        return ",".join([name, process, port, ssdt])

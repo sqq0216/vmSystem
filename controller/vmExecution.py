@@ -14,6 +14,8 @@
 """
 
 import logging
+import kvm
+import unix
 logger = logging.getLogger()
 
 class VmExecute(object):
@@ -31,6 +33,8 @@ class VmExecute(object):
         self.ip = ip
         self.history = history
         self.policy = policy
+
+        self.kvm_host = kvm.KVM(unix.Local())
 
         # 先判断策略与历史记录的严重等级，决定清除某些记录或更新策略
         if policy.shouldRestoreVm:
@@ -161,13 +165,17 @@ class VmExecute(object):
         :return:
         """
 
+
     def restartVm(self):
         """
         # 重启虚拟机self.name
         :return:
         """
+        self.kvm_host.reboot(self.name)
+
     def restoreVm(self):
         """
         # 恢复虚拟机self.name
         :return:
         """
+        self.kvm_host.restore(self.name)

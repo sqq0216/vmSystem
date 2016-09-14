@@ -14,7 +14,10 @@
 """
 
 import os
+import subprocess
 import logging
+import kvm
+import unix
 logger = logging.getLogger()
 
 class VmInspection(object):
@@ -38,8 +41,15 @@ class VmInspection(object):
         else:
             self.systype = u"linux"
 
+        # 如果虚拟机未在启动状态，则先启动虚拟机
+        self.kvm_host = kvm.KVM(unix.Local())
+        if (self.kvm_host.state(name) != kvm.RUNNING):
+            logger.warning("虚拟机+" + name + "未启动，自动启动中")
+            self.kvm_host.start(name)
+
+
         #self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
-        self.command = "sudo python /home/chenkuaan/Downloads/volatility-2.4/vol.py profile " + self.profile + " -l vmi://" + name + " "
+        self.command = "sudo python /home/chenkuaan/Downloads/volatility-2.4/vol.py --profile=" + self.profile + " -l vmi://" + name + " "
 
         # 根据虚拟机的简要类型来选择不同的插件
         try:
@@ -58,7 +68,8 @@ class VmInspection(object):
                 if vmConf.checkRootkit:
                     vm.ssdt = self.getData("linux_check_syscall")
         except PopenError, e:
-            logger.warning("调用volatility时未获取到数据")
+            logger.warning("调用volatility时未获取到数据,调用命令:")
+            # logger.warning(self.command)
             logger.warning(e)
             return False
         return True
@@ -71,13 +82,19 @@ class VmInspection(object):
         :param plugin:
         :return:
         """
-        fileAns =  os.popen(self.command + plugin)
+        #fileAns =  os.popen(self.command + plugin)
+        fileAns = subprocess.Popen(self.command + plugin, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read().split("\n")
+        if len(fileAns) < 3:
+            raise PopenError("No Ans Error:" + self.command + plugin)
+
         ans = []
-        for line in fileAns:
-            ans.append(line)
-            print line
-        if not ans:
-            raise  PopenError("test")
+        for line in fileAns[2:]:
+            words = line.split()
+            if (len(words) > 2):
+                ans.append(words[1])
+
+        return ans
+
         if ans[0].startswith('No suitable address space mapping found'):
             raise PopenError('No suitable address space mapping found')
         return ans

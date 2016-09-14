@@ -35,6 +35,8 @@ def start():
     """
     # 生成应用和主界面
     app = QtGui.QApplication(sys.argv)
+    # 界面风格包括：windows, motif, cde, plastique, windowsxp, macintosh
+    app.setStyle(QtGui.QStyleFactory.create("windows"))
     mainWindow = QtGui.QMainWindow()
 
     # 调用view中的对象对界面进行包装
