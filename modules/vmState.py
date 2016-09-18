@@ -21,6 +21,9 @@ class VmState(object):
         self.__processes = [] # 虚拟机当前的进程列表
         self.__ports = []
         self.__ssdt = []
+        self.__ssdt_origin = []
+        self.__mbr = []
+        self.__mbr_origin = []
 
         self.machineStatus = False  #开关机状态
 
@@ -45,9 +48,30 @@ class VmState(object):
     def ssdt(self, ssdt):
         self.__ssdt = ssdt
 
+    @property
+    def mbr(self):
+        return self.__mbr
+    @mbr.setter
+    def mbr(self, mbr):
+        self.__mbr = mbr
+
+    @property
+    def ssdt_origin(self):
+        return self.__ssdt_origin
+    @ssdt_origin.setter
+    def ssdt_origin(self, ssdt_origin):
+        self.__ssdt_origin = ssdt_origin
+
+    @property
+    def mbr_origin(self):
+        return self.__mbr_origin
+    @mbr_origin.setter
+    def mbr_origin(self, mbr_origin):
+        self.__mbr_origin = mbr_origin
+
     def __str__(self):
-        name = "name:" + self.__name
-        process = "process:[" + ",".join(self.__processes) + "]"
-        port = "port:[" + ",".join(self.__ports) + "]"
-        ssdt = "ssdt:[" + ",".join(self.__ssdt) + "]"
-        return ",".join([name, process, port, ssdt])
+        name = "\nname:" + self.__name
+        process = "process:[\n" + "\n".join(self.__processes) + "]"
+        port = "port:[\n" + "\n".join(self.__ports) + "]"
+        ssdt = "ssdt:[\n" + "\n".join(self.__ssdt) + "]"
+        return "\n".join([name, process, port, ssdt])

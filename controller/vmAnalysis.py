@@ -13,6 +13,10 @@
 @version:   1.0-2016-07-21
 """
 
+import logging
+logger = logging.getLogger()
+import os
+import hashlib
 from modules.vmPolicy import VmPolicy
 
 class VmAnalysis(object):
@@ -37,6 +41,7 @@ class VmAnalysis(object):
 
         if vmConf.checkRootkit:
             self.analyseSsdt()
+            self.analyseMbr()
 
     def analyseProcesses(self):
         """
@@ -45,16 +50,20 @@ class VmAnalysis(object):
         """
         processes = self.vm.processes
         for i, line in enumerate(processes):
-            processes[i] = line[1]
+            lines = line.split()
+            if len(lines) < 2: continue
+            logger.debug("i="+str(i)+",line="+str(line))
+            logger.debug("i="+str(i)+",line.split()="+str(line.split()))
+            logger.debug("i="+str(i)+",line.split()[1]="+str(line.split()[1]))
+            processes[i] = lines[1]
         for name, isneed, policy, path in self.vmConf.processes:
             #在vmState中查找该process
             isFind = False
-            for ps in processes:
-                if ps == name:
-                    isFind = True
-                    break
+            if name in processes:
+                isFind = True
             # 只要与设置的需要不符，就添加虚拟机策略
             if (isneed and (not isFind)) or ((not isneed) and isFind):
+                #logger.info("虚拟机"+self.vm.)
                 self.vmPoli.setPolicy(policy, name = name, path = path)
 
     def analysePorts(self):
@@ -62,13 +71,16 @@ class VmAnalysis(object):
         # vmConf.ports是一个文件描述符
         :return:
         """
+        ports = self.vm.ports
+        for i, line in enumerate(ports):
+            lines = line.split()
+            if len(lines) < 2: continue
+            ports[i] = lines[1]
         for name, isneed, policy in self.vmConf.ports:
             #在vmState中查找该端口
             isFind = False
-            for line in self.vm.ports:
-                if line.find(name) >= 0:
-                    isFind = True
-                    break
+            if name in ports:
+                isFind = True
             # 只要与设置不符，就添加虚拟机策略
             if (isneed and (not isFind)) or ((not isneed) and isFind):
                 self.vmPoli.setPolicy(policy, name = name)
@@ -79,6 +91,20 @@ class VmAnalysis(object):
         # 如果ssdt发生变化就添加策略
         :return:
         """
+        if not self.vm.ssdt_origin:
+            # 如果是第一次得到ssdt，则进行备份
+            # md5 backup
+            self.vm.ssdt_origin = hashlib.md5(str(self.vm.ssdt)).hexdigest().upper()
+        else:
+            # 已有ssdt的话，进行比对
+            # md5 compare
+            # add policy
+            md5 = hashlib.md5(str(self.vm.ssdt)).hexdigest().upper()
+            if md5 != self.vm.ssdt_origin:
+                self.vmPoli.setPolicy(self.vmConf.rootkitPolicy)
+
+    def analyseMbr(self):
+        pass
 
 
     def getPolicy(self):

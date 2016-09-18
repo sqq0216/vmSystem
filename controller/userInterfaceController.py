@@ -164,14 +164,19 @@ class UserInterfaceController(object):
         :return:
         """
         # 如果此线程存活中，发出命令关闭他
-        if self.threadsVm[vmname].isAlive():
-            # 更改全局执行与中断命令判断表，迫使子线程结束
-            breakLock = ThreadCmd.getBreakLock()
-            breakLock.acquire()
-            ebList = ThreadCmd.getEBList()
-            ebList[vmname] = True
-            breakLock.release()
-            logger.info("等待对虚拟机" + vmname + "的监控结束")
-        else:
+        try:
+            if self.threadsVm[vmname].isAlive():
+                # 更改全局执行与中断命令判断表，迫使子线程结束
+                breakLock = ThreadCmd.getBreakLock()
+                breakLock.acquire()
+                ebList = ThreadCmd.getEBList()
+                ebList[vmname] = True
+                breakLock.release()
+                logger.info("等待对虚拟机" + vmname + "的监控结束")
+            else:
+                logger.warning("对虚拟机" + vmname + "的监控未在进行")
+            logger.debug("线程" + str(self.threadsVm[vmname]) + "状态：" + ("存活" if self.threadsVm[vmname].isAlive() else "死亡"))
+        except KeyError:
             logger.warning("对虚拟机" + vmname + "的监控未在进行")
-        logger.debug("线程" + str(self.threadsVm[vmname]) + "状态：" + ("存活" if self.threadsVm[vmname].isAlive() else "死亡"))
+
+

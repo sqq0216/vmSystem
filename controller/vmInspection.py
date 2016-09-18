@@ -18,6 +18,7 @@ import subprocess
 import logging
 import kvm
 import unix
+import time
 logger = logging.getLogger()
 
 class VmInspection(object):
@@ -46,6 +47,8 @@ class VmInspection(object):
         if (self.kvm_host.state(name) != kvm.RUNNING):
             logger.warning("虚拟机+" + name + "未启动，自动启动中")
             self.kvm_host.start(name)
+            time.sleep(60)
+
 
 
         #self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
@@ -67,6 +70,7 @@ class VmInspection(object):
                     vm.ports = self.getData("linux_netstat")
                 if vmConf.checkRootkit:
                     vm.ssdt = self.getData("linux_check_syscall")
+                    vm.mbr = self.getMbr()
         except PopenError, e:
             logger.warning("调用volatility时未获取到数据,调用命令:")
             # logger.warning(self.command)
@@ -96,6 +100,9 @@ class VmInspection(object):
         if ans[0].startswith('No suitable address space mapping found'):
             raise PopenError('No suitable address space mapping found')
         return ans
+
+    def getMbr(self):
+        pass
 
 class PopenError(StandardError):
     pass
