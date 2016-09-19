@@ -215,9 +215,12 @@ class VmGuiAction(Ui_mainWindow):
                                       sysType = unicode(childWndGen.comboBox_systype.currentText()),
                                       isCheckRootkit = childWndGen.checkBox_rootkit.isChecked(),
                                       rootkitPolicy = unicode(childWndGen.comboBox_rootkit_policy.currentText()),
+                                      username = (unicode(childWndGen.lineEdit_username.text())),
+                                      password = (unicode(childWndGen.lineEdit_password.text())),
                                       ip = (unicode(childWndGen.spinBox_ip1.text()) + u'.' + unicode(childWndGen.spinBox_ip2.text()) + u'.' + unicode(childWndGen.spinBox_ip3.text()) + u'.' + unicode(childWndGen.spinBox_ip4.text())),
                                       processesMonitor = psMonitor,
                                       portsMonitor = ptMonitor)
+
 
     def clear(self):
         """

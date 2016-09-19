@@ -39,6 +39,8 @@ class VmConf(object):
         self.__checkRootkit = False
         self.__rootkitPolicy = VmPolicy()
 
+        self.__username = u""
+        self.__password = u""
         self.__ip = u'0.0.0.0'
 
         self.__processes = []  # 监控进程列表，每个列表项是name,isneed,policy,path
@@ -83,6 +85,8 @@ class VmConf(object):
         self.__systype = kwargs["sysType"]
         self.__checkRootkit = kwargs["isCheckRootkit"]
         self.__rootkitPolicy.setPolicy(kwargs["rootkitPolicy"])
+        self.__username = kwargs["username"]
+        self.__password = kwargs["password"]
         self.__ip = kwargs["ip"]
         for ps,isneed,policy,path in kwargs['processesMonitor']:
             self.__processes.append((ps,
