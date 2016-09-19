@@ -80,7 +80,7 @@ class VmPolicy(object):
         try:
             level =  self.policyList.index(policy)
         except ValueError:
-            logger.warning(policy + u" is not a valid policy string")
+            logger.warning(policy + " is not a valid policy string")
             # print repr(policy).decode("unicode-escape")
             return
         if level > self.level:

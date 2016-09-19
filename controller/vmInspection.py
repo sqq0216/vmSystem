@@ -45,7 +45,7 @@ class VmInspection(object):
         # 如果虚拟机未在启动状态，则先启动虚拟机
         self.kvm_host = kvm.KVM(unix.Local())
         if (self.kvm_host.state(name) != kvm.RUNNING):
-            logger.warning("虚拟机+" + name + "未启动，自动启动中")
+            logger.warning("虚拟机" + name + "未启动，自动启动中")
             self.kvm_host.start(name)
             time.sleep(60)
 
@@ -95,10 +95,6 @@ class VmInspection(object):
         for line in fileAns[2:]:
             ans.append(line)
 
-        return ans
-
-        if ans[0].startswith('No suitable address space mapping found'):
-            raise PopenError('No suitable address space mapping found')
         return ans
 
     def getMbr(self):
