@@ -16,6 +16,7 @@
 import logging
 import kvm
 import unix
+import socket
 logger = logging.getLogger()
 
 class VmExecute(object):

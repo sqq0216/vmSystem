@@ -16,6 +16,7 @@
 import logging
 logger = logging.getLogger()
 import os
+import re
 import hashlib
 from modules.vmPolicy import VmPolicy
 
@@ -56,21 +57,17 @@ class VmAnalysis(object):
         for name, isneed, policy, path in self.vmConf.processes:
             #在vmState中查找该process
             isFind = False
-            if name in processes:
-                isFind = True
+            if re.match(r'.\exe', name, re.I):
+                # 如果配置的进程名有exe的话就直接判断相等关系
+                if name in processes:
+                    isFind = True
+            else:
+                # 如果配置的进程名没有exe的话就两种情况都考虑
+                if name in processes or name+'.exe' in processes:
+                    isFind = True
             # 只要与设置的需要不符，就添加虚拟机策略
             if (isneed and (not isFind)) or ((not isneed) and isFind):
-                logger.debug("虚拟机")
-                logger.debug(self.vmConf.name)
-                logger.debug("进程")
-                logger.debug(name)
-                logger.debug("存在" if isFind else "不存在")
-                logger.debug("，添加策略")
-                logger.debug(policy)
-                logger.debug("虚拟机"+self.vmConf.name+"进程")
-                logger.debug(name + ("存在"if isFind else "不存在"))
-                logger.debug("，添加策略"+policy)
-                logger.info("虚拟机"+self.vmConf.name+"进程"+name+("存在"if isFind else "不存在")+"，添加策略"+unicode(policy))
+                logger.info("虚拟机"+self.vmConf.name+"进程"+name.encode('utf-8')+("存在"if isFind else "不存在")+"，添加策略"+policy.encode('utf-8'))
                 self.vmPoli.setPolicy(policy, name = name, path = path)
 
     def analysePorts(self):
@@ -81,8 +78,8 @@ class VmAnalysis(object):
         ports = self.vm.ports
         for i, line in enumerate(ports):
             lines = line.split()
-            if len(lines) < 2: continue
-            ports[i] = lines[1]
+            if len(lines) < 3: continue
+            ports[i] = lines[2]
         for name, isneed, policy in self.vmConf.ports:
             #在vmState中查找该端口
             isFind = False
@@ -90,7 +87,7 @@ class VmAnalysis(object):
                 isFind = True
             # 只要与设置不符，就添加虚拟机策略
             if (isneed and (not isFind)) or ((not isneed) and isFind):
-                logger.info("虚拟机" + self.vmConf.name + "端口号" + name + ("开启" if isFind else "未开启") + "，添加策略" + unicode(policy))
+                logger.info("虚拟机" + self.vmConf.name + "端口号" + name.encode('utf-8') + ("开启" if isFind else "未开启") + "，添加策略" + policy.encode('utf-8'))
                 self.vmPoli.setPolicy(policy, name = name)
 
     def analyseSsdt(self):
@@ -111,7 +108,7 @@ class VmAnalysis(object):
             md5 = hashlib.md5(str(self.vm.ssdt)).hexdigest().upper()
             logger.info("当前系统调用表散列：" + md5)
             if md5 != self.vm.ssdt_origin:
-                logger.info("系统原始调用表散列：" + self.vm.ssdt_origin + "\n系统调用表发生变动，添加策略" + unicode(self.vmConf.rootkitPolicy))
+                logger.info("系统原始调用表散列：" + self.vm.ssdt_origin + "\n系统调用表发生变动，添加策略" + self.vmConf.rootkitPolicy.encode('utf-8'))
                 self.vmPoli.setPolicy(self.vmConf.rootkitPolicy)
             else:
                 logger.info("系统调用表未改变")
