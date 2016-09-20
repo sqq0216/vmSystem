@@ -55,6 +55,8 @@ class VmConf(object):
                     "sysType":self.__systype,
                     "isCheckRootkit":self.__checkRootkit,
                     "rootkitPolicy":self.__rootkitPolicy.toString(),
+                    "username":self.__username,
+                    "password":self.__password,
                     "ip":self.__ip}
         # 把processesMonitor属性还原出来
         psMonitor = []
@@ -114,6 +116,8 @@ class VmConf(object):
                 self.__systype = conf.__systype
                 self.__checkRootkit = conf.__checkRootkit
                 self.__rootkitPolicy = conf.__rootkitPolicy
+                self.__username = conf.__username
+                self.__password = conf.__password
                 self.__ip = conf.__ip
                 self.__processes = conf.__processes
                 self.__ports = conf.__ports
@@ -142,6 +146,8 @@ class VmConf(object):
                 u"系统类型":self.__systype,
                 u"是否检查Rootkit":u"是" if self.__checkRootkit else u"否",
                 u"检测到Rootkit后的策略":unicode(self.__rootkitPolicy),
+                u"用户名":self.__username,
+                u"密码":self.__password,
                 u"ip":self.__ip,
                 u"进程监控列表":[],
                 u"端口监控列表":[]}
@@ -171,6 +177,20 @@ class VmConf(object):
     @systype.setter
     def systype(self, systype):
         self.__systype = systype
+
+    @property
+    def username(self):
+        return self.__username
+    @username.setter
+    def username(self, username):
+        self.__username = username
+
+    @property
+    def password(self):
+        return self.__password
+    @password.setter
+    def password(self, password):
+        self.__password = password
 
     @property
     def ip(self):

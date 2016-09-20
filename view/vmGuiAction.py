@@ -164,6 +164,10 @@ class VmGuiAction(Ui_mainWindow):
         postion = childWndGen.comboBox_rootkit_policy.findText(confs["rootkitPolicy"])
         childWndGen.comboBox_rootkit_policy.setCurrentIndex(postion)
 
+        # 根据读取的用户名和密码填入对应中的lineEdi
+        childWndGen.lineEdit_username.setText(confs["username"])
+        childWndGen.lineEdit_password.setText(confs["password"])
+
         # 根据读取的ip来填入spinbox中
         ip = confs["ip"].split('.')
         childWndGen.spinBox_ip1.setValue(int(ip[0]))
@@ -229,9 +233,11 @@ class VmGuiAction(Ui_mainWindow):
         """
         index = self.stackedWidget.currentIndex()
         childWndGen = self.childWindowsGens[index]
-        childWndGen.comboBox_systype.setCurrentIndex(0)
+        childWndGen.comboBox_systype.setCurrentIndex(-1)
         childWndGen.checkBox_rootkit.setChecked(False)
-        childWndGen.comboBox_rootkit_policy.setCurrentIndex(0)
+        childWndGen.comboBox_rootkit_policy.setCurrentIndex(-1)
+        childWndGen.lineEdit_username.clear()
+        childWndGen.lineEdit_password.clear()
         childWndGen.spinBox_ip1.setValue(0)
         childWndGen.spinBox_ip2.setValue(0)
         childWndGen.spinBox_ip3.setValue(0)

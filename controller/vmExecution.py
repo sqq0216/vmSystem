@@ -17,6 +17,7 @@ import logging
 import kvm
 import unix
 import socket
+import time
 logger = logging.getLogger()
 
 class VmExecute(object):
@@ -180,3 +181,4 @@ class VmExecute(object):
         :return:
         """
         self.kvm_host.restore(self.name)
+        time.sleep(60)

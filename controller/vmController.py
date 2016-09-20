@@ -134,7 +134,6 @@ class VmController(object):
                 breakLock.release()
                 # 分析数据
                 self.vmAnal.analyseData(self.vm, self.vmConf)
-                continue
             else:
                 # 如果通知关闭线程，释放锁后跳出循环
                 ebList[self.name] = False
