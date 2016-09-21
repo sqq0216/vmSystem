@@ -19,6 +19,7 @@ import logging
 import kvm
 import unix
 import time
+import xml.dom.minidom
 logger = logging.getLogger()
 
 class VmInspection(object):
@@ -52,7 +53,7 @@ class VmInspection(object):
 
 
         #self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
-        self.command = "sudo python /home/chenkuaan/Downloads/volatility-2.4/vol.py --profile=" + self.profile + " -l vmi://" + name + " "
+        self.command = "sudo python /usr/local/bin/vol.py --profile=" + self.profile + " -l vmi://" + name + " "
 
         # 根据虚拟机的简要类型来选择不同的插件
         try:
@@ -62,7 +63,8 @@ class VmInspection(object):
                 if vmConf.ports:
                     vm.ports = self.getData("sockets")
                 if vmConf.checkRootkit:
-                    vm.ssdt = self.getData("ssdt")
+                    # vm.ssdt = self.getData("ssdt")
+                    vm.mbr = self.getMbr()
             elif self.systype == u"linux":
                 if vmConf.processes:
                     vm.processes = self.getData("linux_pslist")
@@ -98,7 +100,25 @@ class VmInspection(object):
         return ans
 
     def getMbr(self):
-        pass
+        xmlAns = subprocess.Popen("sudo virsh dumpxml " + self.name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
+        diskpath = xml.dom.minidom.parseString(xmlAns).documentElement.getElementsByTagName("devices")[0].getElementsByTagName("disk")[0].getElementsByTagName("source")[0].getAttribute("file")
+        logger.debug("diskpath:" + diskpath)
+        # logger.debug("xmlAns:\n" + xmlAns)
+        fd = open(diskpath, "rb")
+        ans = fd.read(512)
+        return ans
+        '''
+        for i, c in enumerate(ans):
+            print "%02X" %ord(c),
+            if (i+1) % 16 == 0:
+                print "\n",
+            elif (i+1) % 8 == 0:
+                print "    ",
+            elif (i+1) % 4 == 0:
+                print "  ",
+            elif (i+1) % 2 == 0:
+                print " ",
+        '''
 
 class PopenError(StandardError):
     pass

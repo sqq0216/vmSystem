@@ -108,13 +108,23 @@ class VmAnalysis(object):
             md5 = hashlib.md5(str(self.vm.ssdt)).hexdigest().upper()
             logger.info("当前系统调用表散列：" + md5)
             if md5 != self.vm.ssdt_origin:
-                logger.info("系统原始调用表散列：" + self.vm.ssdt_origin + "\n系统调用表发生变动，添加策略" + self.vmConf.rootkitPolicy.encode('utf-8'))
+                logger.warning("系统原始调用表散列：" + self.vm.ssdt_origin + "\n系统调用表发生变动，添加策略" + self.vmConf.rootkitPolicy.encode('utf-8'))
                 self.vmPoli.setPolicy(self.vmConf.rootkitPolicy)
             else:
                 logger.info("系统调用表未改变")
 
     def analyseMbr(self):
-        pass
+        if not self.vm.mbr_origin:
+            self.vm.mbr_origin = hashlib.md5(self.vm.mbr).hexdigest().upper()
+            logger.info("第一次得到磁盘MBR散列：" + str(self.vm.mbr_origin))
+        else:
+            md5 = hashlib.md5(self.vm.mbr).hexdigest().upper()
+            logger.info("当前磁盘MBR散列：" + md5)
+            if md5 != self.vm.mbr_origin:
+                logger.warning("磁盘原始MBR散列：" + self.vm.mbr_origin + "\n磁盘MBR发生变动，添加策略" + self.vmConf.rootkitPolicy.encode('utf-8'))
+                self.vmPoli.setPolicy(self.vmConf.rootkitPolicy)
+            else:
+                logger.info("磁盘MBR未改变")
 
 
     def getPolicy(self):

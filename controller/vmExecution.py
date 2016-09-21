@@ -33,6 +33,8 @@ class VmExecute(object):
         self.name = name
         self.vm = vm
         self.ip = ip
+        self.backport = 15001
+
         self.history = history
         self.policy = policy
 
@@ -80,7 +82,7 @@ class VmExecute(object):
                 pslist = []
                 for ps, path in policy.shouldRestartProcesses:
                     if ps not in history.processesRestartTimes:
-                        history.processRestartTimes[ps] = 1
+                        history.processesRestartTimes[ps] = 1
                     elif history.processesRestartTimes[ps] >= 3:
                         shouldRestartVm = True
                         pslist.append(ps)
@@ -152,6 +154,12 @@ class VmExecute(object):
         :param path:
         :return:
         """
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            sock.connect((self.ip, self.backport))
+            sock.sendall("start " + self.policy.shouldOpenProcesses[1])
+        finally:
+            sock.close()
 
 
     def restartProcess(self, process, path):
@@ -160,6 +168,13 @@ class VmExecute(object):
         :param process:
         :return:
         """
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            sock.connect((self.ip, self.backport))
+            sock.sendall("start " + path)
+            logger.info("虚拟机" + self.name + "重启进程" + process + ",使用命令:" + path)
+        finally:
+            sock.close()
 
     def shutdownVm(self):
         """
