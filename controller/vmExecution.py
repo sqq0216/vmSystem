@@ -172,7 +172,7 @@ class VmExecute(object):
         try:
             sock.connect((self.ip, self.backport))
             sock.sendall("start " + path)
-            logger.info("虚拟机" + self.name + "重启进程" + process + ",使用命令:" + path)
+            logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + path.encode('utf-8'))
         finally:
             sock.close()
 
