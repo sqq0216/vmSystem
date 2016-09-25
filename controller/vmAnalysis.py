@@ -53,22 +53,41 @@ class VmAnalysis(object):
         for i, line in enumerate(processes):
             lines = line.split()
             if len(lines) < 2: continue
-            processes[i] = lines[1]
+            processes[i] = (lines[1], lines[2]) #process name, process pid
         for name, isneed, policy, path in self.vmConf.processes:
             #在vmState中查找该process
             isFind = False
+            pspid = ""
+
             if re.match(r'.\exe', name, re.I):
                 # 如果配置的进程名有exe的话就直接判断相等关系
-                if name in processes:
-                    isFind = True
+                for ps, pid in processes:
+                    if name == ps:
+                        isFind = True
+                        pspid = pid
+                        break
             else:
                 # 如果配置的进程名没有exe的话就两种情况都考虑
-                if name in processes or name+'.exe' in processes:
-                    isFind = True
+                for ps, pid in processes:
+                    if name == ps or name+'.exe' == ps:
+                        isFind = True
+                        pspid = pid
+                        break
+
+            # if re.match(r'.\exe', name, re.I):
+            #     # 如果配置的进程名有exe的话就直接判断相等关系
+            #     if name in processes:
+            #         isFind = True
+            # else:
+            #     # 如果配置的进程名没有exe的话就两种情况都考虑
+            #     if name in processes or name+'.exe' in processes:
+            #         isFind = True
+
             # 只要与设置的需要不符，就添加虚拟机策略
+
             if (isneed and (not isFind)) or ((not isneed) and isFind):
                 logger.info("虚拟机"+self.vmConf.name+"进程"+name.encode('utf-8')+("存在"if isFind else "不存在")+"，添加策略"+policy.encode('utf-8'))
-                self.vmPoli.setPolicy(policy, name = name, path = path)
+                self.vmPoli.setPolicy(policy, name = name, path = path, pid = pspid)
 
     def analysePorts(self):
         """
@@ -79,16 +98,23 @@ class VmAnalysis(object):
         for i, line in enumerate(ports):
             lines = line.split()
             if len(lines) < 3: continue
-            ports[i] = lines[2]
+            ports[i] = (lines[2], lines[1]) #port, pid
+
         for name, isneed, policy in self.vmConf.ports:
             #在vmState中查找该端口
             isFind = False
-            if name in ports:
-                isFind = True
+            ptpid = ""
+            for pt, pid in ports:
+                if name == pt:
+                    isFind = True
+                    ptpid = pid
+            # if name in ports:
+            #     isFind = True
+
             # 只要与设置不符，就添加虚拟机策略
             if (isneed and (not isFind)) or ((not isneed) and isFind):
                 logger.info("虚拟机" + self.vmConf.name + "端口号" + name.encode('utf-8') + ("开启" if isFind else "未开启") + "，添加策略" + policy.encode('utf-8'))
-                self.vmPoli.setPolicy(policy, name = name)
+                self.vmPoli.setPolicy(policy, name = name, pid = ptpid)
 
     def analyseSsdt(self):
         """

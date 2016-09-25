@@ -38,6 +38,7 @@ class VmInspection(object):
         self.systype = u""
         if not self.profile:
             logger.warning("虚拟机" + name + "系统类型为空")
+            return False
         elif self.profile[:3] == u"Win" or self.profile[:5] == u"Vista":
             self.systype = u"Windows"
         else:
@@ -63,7 +64,7 @@ class VmInspection(object):
                 if vmConf.ports:
                     vm.ports = self.getData("sockets")
                 if vmConf.checkRootkit:
-                    # vm.ssdt = self.getData("ssdt")
+                    vm.ssdt = self.getData("ssdt")
                     vm.mbr = self.getMbr()
             elif self.systype == u"linux":
                 if vmConf.processes:
@@ -74,10 +75,13 @@ class VmInspection(object):
                     vm.ssdt = self.getData("linux_check_syscall")
                     vm.mbr = self.getMbr()
         except PopenError, e:
-            logger.warning("调用volatility时未获取到数据,调用命令:")
+            logger.warning("调用volatility时未获取到数据 " + str(e))
             # logger.warning(self.command)
-            logger.warning(e)
+            #logger.warning(e)
             return False
+        except ProfileError, e:
+            logger.warning("调用volatility时使用profile出错 " + str(e))
+            #logger.warning()
         return True
 
 
@@ -90,8 +94,11 @@ class VmInspection(object):
         """
         #fileAns =  os.popen(self.command + plugin)
         fileAns = subprocess.Popen(self.command + plugin, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read().split("\n")
+        logger.debug("fileAns:"+str(fileAns))
         if len(fileAns) < 3:
             raise PopenError("No Ans Error:" + self.command + plugin)
+        if fileAns[2] == "No suitable address space mapping found":
+            raise ProfileError("Profile Error:" + self.command + plugin)
 
         ans = []
         for line in fileAns[2:]:
@@ -121,4 +128,7 @@ class VmInspection(object):
         '''
 
 class PopenError(StandardError):
+    pass
+
+class ProfileError(StandardError):
     pass

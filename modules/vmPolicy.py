@@ -50,9 +50,9 @@ class VmPolicy(object):
         self.shouldRestartVm = False
         self.shouldShutdownVm = False
 
-        self.shouldRestartProcesses = [] # (进程名，进程路径）
-        self.shouldShutdownProcesses = []
-        self.shouldOpenProcesses = []
+        self.shouldRestartProcesses = [] # (进程名，进程路径，进程pid）
+        self.shouldShutdownProcesses = [] # (进程名，进程pid)
+        self.shouldOpenProcesses = [] # (进程名，进程pid)
 
         self.shouldShutdownPorts = []
 
@@ -91,12 +91,14 @@ class VmPolicy(object):
             self.shouldRestartVm = True
         elif level == 6:
             self.shouldShutdownVm = True
-        elif level == 5 or level == 4:
-            self.shouldRestartProcesses.append((kwargs['name'], kwargs['path']))
+        elif level == 5:
+            self.shouldRestartProcesses.append((kwargs['name'], kwargs['path'], kwargs['pid']))
+        elif level == 4:
+            self.shouldOpenProcesses.append((kwargs['name'], kwargs['path'], kwargs['pid']))
         elif level == 3:
-            self.shouldShutdownProcesses.append(kwargs['name'])
+            self.shouldShutdownProcesses.append((kwargs['name'], kwargs['pid']))
         elif level == 2:
-            self.shouldShutdownPorts.append(kwargs['name'])
+            self.shouldShutdownPorts.append((kwargs['name'], kwargs['pid']))
         elif level == 1:
             self.shouldAlert = True
 

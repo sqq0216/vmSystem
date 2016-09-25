@@ -117,16 +117,16 @@ class VmExecute(object):
             self.shutdownVm()
 
         if self.policy.shouldRestartProcesses:
-            for ps, path in self.policy.shouldRestartProcesses:
-                self.restartProcess(ps, path)
+            for ps, path, pid in self.policy.shouldRestartProcesses:
+                self.restartProcess(ps, path, pid)
 
         if self.policy.shouldOpenProcesses:
-            for ps, path in self.policy.shouldOpenProcesses:
+            for ps, path, pid in self.policy.shouldOpenProcesses:
                 self.openProcess(ps, path)
 
         if self.policy.shouldShutdownProcesses:
-            for ps in self.policy.shouldRestartProcesses:
-                self.shutdownProcess(ps)
+            for ps in self.policy.shouldShutdownProcesses:
+                self.shutdownProcess(ps, pid)
 
         if self.policy.shouldShutdownPorts:
             for pt in self.policy.shouldShutdownPorts:
@@ -140,12 +140,19 @@ class VmExecute(object):
         :return:
         """
 
-    def shutdownProcess(self, process):
+    def shutdownProcess(self, process, pid):
         """
         # 关闭进程
         :param process:
         :return:
         """
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            sock.connect((self.ip, self.backport))
+            sock.sendall("tskill " + pid)
+            logger.info("虚拟机" + self.name + "打开进程" + process.encode('utf-8') + "，使用命令：tskill" + pid)
+        finally:
+            sock.close()
 
     def openProcess(self, process, path):
         """
@@ -157,12 +164,13 @@ class VmExecute(object):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             sock.connect((self.ip, self.backport))
-            sock.sendall("start " + self.policy.shouldOpenProcesses[1])
+            sock.sendall("start " + path)
+            logger.info("虚拟机" + self.name + "打开进程" + process.encode('utf-8') + "，使用命令：" + path.encode('utf-8'))
         finally:
             sock.close()
 
 
-    def restartProcess(self, process, path):
+    def restartProcess(self, process, path, pid):
         """
         # 重启进程process
         :param process:
@@ -172,7 +180,8 @@ class VmExecute(object):
         try:
             sock.connect((self.ip, self.backport))
             sock.sendall("start " + path)
-            logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + path.encode('utf-8'))
+            sock.sendall("tskill" + pid)
+            logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + path.encode('utf-8') + ", tskill" + pid)
         finally:
             sock.close()
 
@@ -181,6 +190,8 @@ class VmExecute(object):
         # 关闭虚拟机self.name
         :return:
         """
+        self.kvm_host.destroy(self.name)
+        time.sleep(10)
 
 
     def restartVm(self):
@@ -188,7 +199,10 @@ class VmExecute(object):
         # 重启虚拟机self.name
         :return:
         """
-        self.kvm_host.reboot(self.name)
+        #self.kvm_host.reboot(self.name)
+        self.kvm_host.destroy(self.name)
+        self.kvm_host.start(self.name)
+        time.sleep(60)
 
     def restoreVm(self):
         """
