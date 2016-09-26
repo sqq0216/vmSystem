@@ -80,7 +80,7 @@ class VmExecute(object):
             else:
                 shouldRestartVm = False
                 pslist = []
-                for ps, path in policy.shouldRestartProcesses:
+                for ps, path, pid in policy.shouldRestartProcesses:
                     if ps not in history.processesRestartTimes:
                         history.processesRestartTimes[ps] = 1
                     elif history.processesRestartTimes[ps] >= 3:
@@ -121,11 +121,11 @@ class VmExecute(object):
                 self.restartProcess(ps, path, pid)
 
         if self.policy.shouldOpenProcesses:
-            for ps, path, pid in self.policy.shouldOpenProcesses:
+            for ps, path in self.policy.shouldOpenProcesses:
                 self.openProcess(ps, path)
 
         if self.policy.shouldShutdownProcesses:
-            for ps in self.policy.shouldShutdownProcesses:
+            for ps, pid in self.policy.shouldShutdownProcesses:
                 self.shutdownProcess(ps, pid)
 
         if self.policy.shouldShutdownPorts:
@@ -179,9 +179,11 @@ class VmExecute(object):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             sock.connect((self.ip, self.backport))
-            sock.sendall("start " + path)
-            sock.sendall("tskill" + pid)
-            logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + path.encode('utf-8') + ", tskill" + pid)
+            if pid:
+                sock.sendall("tskill" + pid + "\n")
+            sock.sendall("start " + path + "\n")
+
+            logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + (("tskill " + pid + ", ") if pid else "") + "start " + path.encode('utf-8'))
         finally:
             sock.close()
 
@@ -199,6 +201,8 @@ class VmExecute(object):
         # 重启虚拟机self.name
         :return:
         """
+        #return
+
         #self.kvm_host.reboot(self.name)
         self.kvm_host.destroy(self.name)
         self.kvm_host.start(self.name)
@@ -209,5 +213,7 @@ class VmExecute(object):
         # 恢复虚拟机self.name
         :return:
         """
-        self.kvm_host.restore(self.name)
+        # self.kvm_host.restore(self.name)
+        self.kvm_host.destroy(self.name)
+        self.kvm_host.snapshot_revert(self.name, "snap2-"+self.name)
         time.sleep(60)

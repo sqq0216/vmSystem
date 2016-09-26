@@ -31,6 +31,8 @@ class VmInspection(object):
         :param vmConf:
         :return:
         """
+        logger.info("从虚拟机" + name + "获取数据中...")
+
         self.name = name
         # 虚拟机的完整类型
         self.profile = vmConf.systype
@@ -94,7 +96,7 @@ class VmInspection(object):
         """
         #fileAns =  os.popen(self.command + plugin)
         fileAns = subprocess.Popen(self.command + plugin, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read().split("\n")
-        logger.debug("fileAns:"+str(fileAns))
+        #logger.debug("fileAns:"+str(fileAns))
         if len(fileAns) < 3:
             raise PopenError("No Ans Error:" + self.command + plugin)
         if fileAns[2] == "No suitable address space mapping found":

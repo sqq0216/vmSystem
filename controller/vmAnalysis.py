@@ -49,11 +49,15 @@ class VmAnalysis(object):
         # vmConf.processes
         :return:
         """
-        processes = self.vm.processes
-        for i, line in enumerate(processes):
+        processes = []
+        for i, line in enumerate(self.vm.processes):
             lines = line.split()
             if len(lines) < 2: continue
-            processes[i] = (lines[1], lines[2]) #process name, process pid
+            #logger.debug("lines:" + str(lines))
+            processes.append((lines[1], lines[2]))
+            #processes[i] = (lines[1], lines[2]) #process name, process pid
+            #logger.debug("processess[" + str(i) + "]:" + str(processes[i]))
+        #logger.debug("processes:" + str(processes))
         for name, isneed, policy, path in self.vmConf.processes:
             #在vmState中查找该process
             isFind = False
@@ -94,11 +98,12 @@ class VmAnalysis(object):
         # vmConf.ports是一个文件描述符
         :return:
         """
-        ports = self.vm.ports
-        for i, line in enumerate(ports):
+        ports = []
+        for i, line in enumerate(self.vm.ports):
             lines = line.split()
             if len(lines) < 3: continue
-            ports[i] = (lines[2], lines[1]) #port, pid
+            ports.append((lines[2], lines[1]))
+            #ports[i] = (lines[2], lines[1]) #port, pid
 
         for name, isneed, policy in self.vmConf.ports:
             #在vmState中查找该端口

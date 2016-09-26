@@ -52,7 +52,7 @@ class VmPolicy(object):
 
         self.shouldRestartProcesses = [] # (进程名，进程路径，进程pid）
         self.shouldShutdownProcesses = [] # (进程名，进程pid)
-        self.shouldOpenProcesses = [] # (进程名，进程pid)
+        self.shouldOpenProcesses = [] # (进程名，进程路径)
 
         self.shouldShutdownPorts = []
 
@@ -94,7 +94,7 @@ class VmPolicy(object):
         elif level == 5:
             self.shouldRestartProcesses.append((kwargs['name'], kwargs['path'], kwargs['pid']))
         elif level == 4:
-            self.shouldOpenProcesses.append((kwargs['name'], kwargs['path'], kwargs['pid']))
+            self.shouldOpenProcesses.append((kwargs['name'], kwargs['path']))
         elif level == 3:
             self.shouldShutdownProcesses.append((kwargs['name'], kwargs['pid']))
         elif level == 2:
