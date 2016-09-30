@@ -47,16 +47,24 @@ class VmInspection(object):
             self.systype = u"linux"
 
         # 如果虚拟机未在启动状态，则先启动虚拟机
-        self.kvm_host = kvm.KVM(unix.Local())
-        if (self.kvm_host.state(name) != kvm.RUNNING):
+        vm.state = subprocess.Popen("sudo virsh domstate " + name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
+        if (vm.state[:7] != "running"):
+            logger.debug("state:" + vm.state)
             logger.warning("虚拟机" + name + "未启动，自动启动中")
-            self.kvm_host.start(name)
+            subprocess.Popen("sudo virsh start " + name)
             time.sleep(60)
+
+
+        # self.kvm_host = kvm.KVM(unix.Local())
+        # if (self.kvm_host.state(name) != kvm.RUNNING):
+        #     logger.warning("虚拟机" + name + "未启动，自动启动中")
+        #     self.kvm_host.start(name)
+        #     time.sleep(60)
 
 
 
         #self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
-        self.command = "sudo python /usr/local/bin/vol.py --profile=" + self.profile + " -l vmi://" + name + " "
+        self.command = "sudo python /usr/bin/vol.py --profile=" + self.profile + " -l vmi://" + name + " "
 
         # 根据虚拟机的简要类型来选择不同的插件
         try:
@@ -64,7 +72,7 @@ class VmInspection(object):
                 if vmConf.processes:
                     vm.processes = self.getData("pslist")
                 if vmConf.ports:
-                    vm.ports = self.getData("sockets")
+                    vm.ports = self.getData("sockscan")
                 if vmConf.checkRootkit:
                     vm.ssdt = self.getData("ssdt")
                     vm.mbr = self.getMbr()

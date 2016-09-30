@@ -38,7 +38,7 @@ class VmExecute(object):
         self.history = history
         self.policy = policy
 
-        self.kvm_host = kvm.KVM(unix.Local())
+        # self.kvm_host = kvm.KVM(unix.Local())
 
         # 先判断策略与历史记录的严重等级，决定清除某些记录或更新策略
         if policy.shouldRestoreVm:
@@ -192,7 +192,8 @@ class VmExecute(object):
         # 关闭虚拟机self.name
         :return:
         """
-        self.kvm_host.destroy(self.name)
+        # self.kvm_host.destroy(self.name)
+        subprocess.Popen("sudo virsh destroy " + self.name)
         time.sleep(10)
 
 
@@ -204,8 +205,10 @@ class VmExecute(object):
         #return
 
         #self.kvm_host.reboot(self.name)
-        self.kvm_host.destroy(self.name)
-        self.kvm_host.start(self.name)
+        subprocess.Popen("sudo virsh destroy " + self.name)
+        subprocess.Popen("sudo virsh start " + self.name)
+        # self.kvm_host.destroy(self.name)
+        # self.kvm_host.start(self.name)
         time.sleep(60)
 
     def restoreVm(self):
@@ -214,6 +217,8 @@ class VmExecute(object):
         :return:
         """
         # self.kvm_host.restore(self.name)
-        self.kvm_host.destroy(self.name)
-        self.kvm_host.snapshot_revert(self.name, "snap2-"+self.name)
+        subprocess.Popen("sudo virsh destroy " + self.name)
+        subprocess.Popen("sudo virsh snapshot_revert " + self.name + " --snapshotname snap2-" + self.name)
+        # self.kvm_host.destroy(self.name)
+        # self.kvm_host.snapshot_revert(self.name, "snap2-"+self.name)
         time.sleep(60)

@@ -65,9 +65,12 @@ class UserInterfaceController(object):
         :return: list:
         """
         import kvm,unix
-        self.vms = kvm.KVM(unix.Local()).vms
+        # self.vms = kvm.KVM(unix.Local()).vms
         # self.vms = ["win1", "win2", "win3", "WinXP"]
         #self.vms = []
+        #self.vms = kvm.Hypervisor(unix.Local()).list_domains()
+        self.vms = subprocess.Popen("sudo virsh list --all --name", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read().split()
+        logger.debug("self.vms:" + str(self.vms))
         if not self.vms:
             self.vms = ["win1", "win2", "win3"]
         return self.vms
@@ -81,7 +84,7 @@ class UserInterfaceController(object):
         # return self.vmtypes
 
         logger.debug("从volatility中获取可用的虚拟机类型")
-        command = "python /usr/local/bin/vol.py --info"
+        command = "python /usr/bin/vol.py --info"
         # info = os.popen(command)
         info = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read().split("\n")
         profiles = []
