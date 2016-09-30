@@ -107,7 +107,7 @@ class VmInspection(object):
         #logger.debug("fileAns:"+str(fileAns))
         if len(fileAns) < 3:
             raise PopenError("No Ans Error:" + self.command + plugin)
-        if fileAns[2] == "No suitable address space mapping found":
+        if fileAns[2] == "No suitable address space mapping found" or fileAns[2] == "Tried to open image as:":
             raise ProfileError("Profile Error:" + self.command + plugin)
 
         ans = []
@@ -119,10 +119,14 @@ class VmInspection(object):
     def getMbr(self):
         xmlAns = subprocess.Popen("sudo virsh dumpxml " + self.name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
         diskpath = xml.dom.minidom.parseString(xmlAns).documentElement.getElementsByTagName("devices")[0].getElementsByTagName("disk")[0].getElementsByTagName("source")[0].getAttribute("file")
-        logger.debug("diskpath:" + diskpath)
+        logger.debug("diskpath:" + diskpath.encode('utf-8'))
         # logger.debug("xmlAns:\n" + xmlAns)
-        fd = open(diskpath, "rb")
-        ans = fd.read(512)
+        ans = ""
+        try:
+            with open(diskpath, "rb") as fd:
+                ans = fd.read(512)
+        except IOError, e:
+            logger.warning("无法读取虚拟机磁盘文件" + diskpath.encode('utf-8') + ",错误原因:%s" %e)
         return ans
         '''
         for i, c in enumerate(ans):

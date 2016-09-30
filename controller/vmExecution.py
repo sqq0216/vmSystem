@@ -14,6 +14,7 @@
 """
 
 import logging
+import subprocess
 import kvm
 import unix
 import socket
@@ -151,6 +152,8 @@ class VmExecute(object):
             sock.connect((self.ip, self.backport))
             sock.sendall("tskill " + pid)
             logger.info("虚拟机" + self.name + "打开进程" + process.encode('utf-8') + "，使用命令：tskill" + pid)
+        except socket.error, e:
+            logger.warning("虚拟机连接异常，错误：%s" %e)
         finally:
             sock.close()
 
@@ -166,6 +169,8 @@ class VmExecute(object):
             sock.connect((self.ip, self.backport))
             sock.sendall("start " + path)
             logger.info("虚拟机" + self.name + "打开进程" + process.encode('utf-8') + "，使用命令：" + path.encode('utf-8'))
+        except socket.error, e:
+            logger.warning("虚拟机连接异常，错误：%s" %e)
         finally:
             sock.close()
 
@@ -184,6 +189,8 @@ class VmExecute(object):
             sock.sendall("start " + path + "\n")
 
             logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + (("tskill " + pid + ", ") if pid else "") + "start " + path.encode('utf-8'))
+        except socket.error, e:
+            logger.warning("虚拟机连接异常，错误：%s" %e)
         finally:
             sock.close()
 
