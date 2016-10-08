@@ -45,6 +45,7 @@ class VmInspection(object):
             self.systype = u"Windows"
         else:
             self.systype = u"linux"
+        vm.platform = self.systype
 
         # 如果虚拟机未在启动状态，则先启动虚拟机
         vm.state = subprocess.Popen("sudo virsh domstate " + name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
@@ -61,10 +62,13 @@ class VmInspection(object):
         #     self.kvm_host.start(name)
         #     time.sleep(60)
 
+        volpath = subprocess.Popen("which vol.py", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
+        if len(volpath) > 15 and volpath[:15] == "/usr/bin/which:":
+            logger.warning("找不到volatility安装位置")
 
-
+        volpath = volpath.split()[0]
         #self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
-        self.command = "sudo python /usr/bin/vol.py --profile=" + self.profile + " -l vmi://" + name + " "
+        self.command = "sudo python " + volpath + " --profile=" + self.profile + " -l vmi://" + name + " "
 
         # 根据虚拟机的简要类型来选择不同的插件
         try:
@@ -73,6 +77,7 @@ class VmInspection(object):
                     vm.processes = self.getData("pslist")
                 if vmConf.ports:
                     vm.ports = self.getData("sockscan")
+                    vm.serials = self.getData("devicetree")
                 if vmConf.checkRootkit:
                     vm.ssdt = self.getData("ssdt")
                     vm.mbr = self.getMbr()
@@ -81,6 +86,7 @@ class VmInspection(object):
                     vm.processes = self.getData("linux_pslist")
                 if vmConf.ports:
                     vm.ports = self.getData("linux_netstat")
+                    vm.serials = self.getData("linux_check_tty")
                 if vmConf.checkRootkit:
                     vm.ssdt = self.getData("linux_check_syscall")
                     vm.mbr = self.getMbr()

@@ -150,8 +150,10 @@ class VmExecute(object):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             sock.connect((self.ip, self.backport))
-            sock.sendall("tskill " + pid)
-            logger.info("虚拟机" + self.name + "打开进程" + process.encode('utf-8') + "，使用命令：tskill" + pid)
+            #sock.sendall("tskill " + pid)
+            sock.sendall("kill " + pid + '\0')
+            logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：kill " + pid)
+            #logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：tskill" + pid)
         except socket.error, e:
             logger.warning("虚拟机连接异常，错误：%s" %e)
         finally:
@@ -167,7 +169,8 @@ class VmExecute(object):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             sock.connect((self.ip, self.backport))
-            sock.sendall("start " + path)
+            #sock.sendall("start " + path)
+            sock.sendall(path + '\0')
             logger.info("虚拟机" + self.name + "打开进程" + process.encode('utf-8') + "，使用命令：" + path.encode('utf-8'))
         except socket.error, e:
             logger.warning("虚拟机连接异常，错误：%s" %e)

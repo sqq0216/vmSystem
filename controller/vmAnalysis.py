@@ -39,6 +39,7 @@ class VmAnalysis(object):
 
         if vmConf.ports:
             self.analysePorts()
+            self.analyseSerial()
 
         if vmConf.checkRootkit:
             self.analyseSsdt()
@@ -63,35 +64,34 @@ class VmAnalysis(object):
             isFind = False
             pspid = ""
 
-            if re.match(r'.\exe', name, re.I):
-                # 如果配置的进程名有exe的话就直接判断相等关系
+            if self.vm.platform == u"windows":
+                if re.match(r'.\exe', name, re.I):
+                    # 如果配置的进程名有exe的话就直接判断相等关系
+                    for ps, pid in processes:
+                        if name == ps:
+                            isFind = True
+                            pspid = pid
+                            break
+                else:
+                    # 如果配置的进程名没有exe的话就两种情况都考虑
+                    for ps, pid in processes:
+                        if name == ps or name+'.exe' == ps:
+                            isFind = True
+                            pspid = pid
+                            break
+            else:
+                # linux平台直接判断相等关系
                 for ps, pid in processes:
                     if name == ps:
                         isFind = True
                         pspid = pid
                         break
-            else:
-                # 如果配置的进程名没有exe的话就两种情况都考虑
-                for ps, pid in processes:
-                    if name == ps or name+'.exe' == ps:
-                        isFind = True
-                        pspid = pid
-                        break
-
-            # if re.match(r'.\exe', name, re.I):
-            #     # 如果配置的进程名有exe的话就直接判断相等关系
-            #     if name in processes:
-            #         isFind = True
-            # else:
-            #     # 如果配置的进程名没有exe的话就两种情况都考虑
-            #     if name in processes or name+'.exe' in processes:
-            #         isFind = True
-
-            # 只要与设置的需要不符，就添加虚拟机策略
 
             if (isneed and (not isFind)) or ((not isneed) and isFind):
                 logger.info("虚拟机"+self.vmConf.name+"进程"+name.encode('utf-8')+("存在"if isFind else "不存在")+"，添加策略"+policy.encode('utf-8'))
                 self.vmPoli.setPolicy(policy, name = name, path = path, pid = pspid)
+            else:
+                logger.debug("虚拟机" + self.vmConf.name + "进程" + name.encode('utf-8') + ("存在" if isFind else "不存在"))
 
     def analysePorts(self):
         """
@@ -99,11 +99,28 @@ class VmAnalysis(object):
         :return:
         """
         ports = []
-        for i, line in enumerate(self.vm.ports):
-            lines = line.split()
-            if len(lines) < 3: continue
-            ports.append((lines[2], lines[1]))
-            #ports[i] = (lines[2], lines[1]) #port, pid
+        if self.vm.platform == u"windows":
+            for i, line in enumerate(self.vm.ports):
+                lines = line.split()
+                if len(lines) < 3 : continue
+                ports.append((lines[2], lines[1]))
+        else:
+            for i, line in enumerate(self.vm.ports):
+                lines = line.split()
+                if len(lines) < 3: continue
+                if lines[0][:4] == "UNIX": continue
+                #logger.debug("虚拟机端口列表:" + str(lines))
+                if lines[2] == ":":
+                    port = lines[3]
+                else:
+                    port = lines[2][1:]
+                try:
+                    pid = lines[-1][lines[-1].index("/")+1:]
+                except IndexError:
+                    pid = lines[-1]
+                ports.append((port, pid))
+                #ports[i] = (lines[2], lines[1]) #port, pid
+            logger.debug("虚拟机端口列表整理结果(port,pid):" + str(ports))
 
         for name, isneed, policy in self.vmConf.ports:
             #在vmState中查找该端口
@@ -120,6 +137,11 @@ class VmAnalysis(object):
             if (isneed and (not isFind)) or ((not isneed) and isFind):
                 logger.info("虚拟机" + self.vmConf.name + "端口号" + name.encode('utf-8') + ("开启" if isFind else "未开启") + "，添加策略" + policy.encode('utf-8'))
                 self.vmPoli.setPolicy(policy, name = name, pid = ptpid)
+            else:
+                logger.info("虚拟机" + self.vmConf.name + "端口号" + name.encode('utf-8') + "已经是" + ("开启" if isFind else "未开启"))
+
+    def analyseSerial(self):
+        logger.debug("串口信息" + str(self.vm.serials))
 
     def analyseSsdt(self):
         """

@@ -17,15 +17,24 @@ class VmState(object):
     def __init__(self, name):
 
         self.__name = name
+        self.__platform = "" # 虚拟机系统的类型
 
         self.__processes = [] # 虚拟机当前的进程列表
         self.__ports = []
+        self.__serials = []
         self.__ssdt = []
         self.__ssdt_origin = []
         self.__mbr = []
         self.__mbr_origin = []
 
         self.machineStatus = False  #开关机状态
+
+    @property
+    def platform(self):
+        return self.__platform
+    @platform.setter
+    def platform(self, platform):
+        self.__platform = platform
 
     @property
     def processes(self):
@@ -40,6 +49,13 @@ class VmState(object):
     @ports.setter
     def ports(self, ports):
         self.__ports = ports
+
+    @property
+    def serials(self):
+        return self.__serials
+    @serials.setter
+    def serials(self, serials):
+        self.__serials = serials
 
     @property
     def ssdt(self):
