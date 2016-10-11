@@ -77,7 +77,7 @@ class VmInspection(object):
                     vm.processes = self.getData("pslist")
                 if vmConf.ports:
                     vm.ports = self.getData("sockscan")
-                    vm.serials = self.getData("devicetree")
+                    vm.serials = self.getData("devicetree") #运行虚拟机需要约25分钟
                 if vmConf.checkRootkit:
                     vm.ssdt = self.getData("ssdt")
                     vm.mbr = self.getMbr()
@@ -86,9 +86,9 @@ class VmInspection(object):
                     vm.processes = self.getData("linux_pslist")
                 if vmConf.ports:
                     vm.ports = self.getData("linux_netstat")
-                    vm.serials = self.getData("linux_check_tty")
+                    vm.serials = self.getData("linux_check_tty")    #只有tty设备，无ttyS设备，即无串口信息
                 if vmConf.checkRootkit:
-                    vm.ssdt = self.getData("linux_check_syscall")
+                    vm.ssdt = self.getData("linux_check_syscall")   #xu yao hen jiu
                     vm.mbr = self.getMbr()
         except PopenError, e:
             logger.warning("调用volatility时未获取到数据 " + str(e))
@@ -117,7 +117,7 @@ class VmInspection(object):
             raise ProfileError("Profile Error:" + self.command + plugin)
 
         ans = []
-        for line in fileAns[2:]:
+        for line in fileAns:
             ans.append(line)
 
         return ans

@@ -51,7 +51,7 @@ class VmAnalysis(object):
         :return:
         """
         processes = []
-        for i, line in enumerate(self.vm.processes):
+        for i, line in enumerate(self.vm.processes[2:]):
             lines = line.split()
             if len(lines) < 2: continue
             #logger.debug("lines:" + str(lines))
@@ -100,7 +100,7 @@ class VmAnalysis(object):
         """
         ports = []
         if self.vm.platform == u"windows":
-            for i, line in enumerate(self.vm.ports):
+            for i, line in enumerate(self.vm.ports[2:]):
                 lines = line.split()
                 if len(lines) < 3 : continue
                 ports.append((lines[2], lines[1]))
@@ -120,7 +120,7 @@ class VmAnalysis(object):
                     pid = lines[-1]
                 ports.append((port, pid))
                 #ports[i] = (lines[2], lines[1]) #port, pid
-            logger.debug("虚拟机端口列表整理结果(port,pid):" + str(ports))
+        logger.debug("虚拟机端口列表整理结果(port,pid):" + str(ports))
 
         for name, isneed, policy in self.vmConf.ports:
             #在vmState中查找该端口
@@ -142,6 +142,45 @@ class VmAnalysis(object):
 
     def analyseSerial(self):
         logger.debug("串口信息" + str(self.vm.serials))
+        serials = []
+        if self.vm.platform == u"windows":
+            serialIndex = 0
+            for i in range(len(self.vm.serials)):
+                lines = self.vm.serials[i].split()
+                if len(lines) < 3: continue
+                if lines[0][:3] != "DRV": continue
+                if lines[2][:14] == "\Driver\Serial":
+                    serialIndex = i
+                    break
+            for i in range(serialIndex + 1, len(self.vm.serials)):
+                lines = self.vm.serials[i].split()
+                if lines[0] == "DRV": break
+                if len(lines) < 4: continue
+                if lines[1] == "DEV":
+                    serials.append(lines[3])
+        else:
+            pass
+
+        logger.debug("虚拟机串口列表整理结果(serial):" + str(serials))
+
+        for name, isneed, policy in self.vmConf.ports:
+            isFind = False
+            for serial in serials:
+                if serial == name:
+                    isFind = True
+
+            # 只要与设置不符，就添加虚拟机策略
+            if (isneed and (not isFind)) or ((not isneed) and isFind):
+                logger.info("虚拟机" + self.vmConf.name + "串口" + name.encode('utf-8') + ("开启" if isFind else "未开启") + "，添加策略" + policy.encode('utf-8'))
+                self.vmPoli.setPolicy(policy, name = name)
+            else:
+                logger.info("虚拟机" + self.vmConf.name + "串口" + name.encode('utf-8') + "已经是" + ("开启" if isFind else "未开启"))
+
+
+
+
+
+
 
     def analyseSsdt(self):
         """
