@@ -43,6 +43,7 @@ class VmExecute(object):
 
         # 先判断策略与历史记录的严重等级，决定清除某些记录或更新策略
         if policy.shouldRestoreVm:
+            logger.info("综合所有策略，选择恢复虚拟机" + self.name)
             if history.vmRestoreTimes:
                 logger.info("已经恢复虚拟机" + self.name + str(history.vmRestoreTimes) + "次，继续恢复虚拟机")
                 history.vmRestoreTimes += 1
@@ -52,7 +53,6 @@ class VmExecute(object):
         elif policy.shouldRestartVm:
             if history.vmRestoreTimes:
                 logger.info("已经恢复虚拟机" + self.name + str(history.vmRestoreTimes) + "次，继续恢复虚拟机")
-                # logger.info(u"重启虚拟机" + self.name)
                 history.vmRestoreTimes += 1
             elif history.vmRestartTimes >= 3:
                 logger.info("已经重启虚拟机" + self.name + str(history.vmRestartTimes) + "次，选择恢复虚拟机")
@@ -62,47 +62,51 @@ class VmExecute(object):
                 logger.info("已经重启虚拟机" + self.name + str(history.vmRestartTimes) + "次，继续重启虚拟机")
                 history.vmRestartTimes += 1
             else:
+                logger.info("综合所有策略，选择重启虚拟机" + self.name)
                 logger.info("重启虚拟机" + self.name)
                 history.vmRestartTimes = 1
         elif policy.shouldShutdownVm:
+            logger.info("综合所有策略，选择关闭虚拟机" + self.name)
             logger.info("关闭虚拟机" + self.name)
 
-        if policy.shouldRestartProcesses:
-            if history.vmRestoreTimes:
-                logger.info("已经恢复虚拟机" + self.name + str(history.vmRestoreTimes) + "次，继续恢复虚拟机")
-                history.vmRestoreTimes += 1
-            elif history.vmRestartTimes >= 3:
-                logger.info("已经重启虚拟机" + self.name + str(history.vmRestartTimes) + "次，选择恢复虚拟机")
-                policy.setPolicy(u"恢复虚拟机")
-                history.vmRestoreTimes = 1
-            elif history.vmRestartTimes > 0:
-                logger.info("已经重启虚拟机" + self.name + str(history.vmRestartTimes) + "次，继续重启虚拟机")
-                history.vmRestartTimes += 1
-            else:
-                shouldRestartVm = False
-                pslist = []
-                for ps, path, pid in policy.shouldRestartProcesses:
-                    if ps not in history.processesRestartTimes:
-                        history.processesRestartTimes[ps] = 1
-                    elif history.processesRestartTimes[ps] >= 3:
-                        shouldRestartVm = True
-                        pslist.append(ps)
-                    else:
-                        history.processesRestartTimes[ps] += 1
-                if shouldRestartVm:
-                    policy.setPolicy(u"重启虚拟机")
-                    logger.info("进程" + str(pslist) + "已经重启达到3次，选择重启虚拟机")
+        else:
+
+            if policy.shouldOpenProcesses:
+                logger.info("打开进程" + str(policy.shouldOpenProcesses))
+
+            if policy.shouldShutdownProcesses:
+                logger.info(("关闭进程" + str(policy.shouldShutdownProcesses)))
+
+            if policy.shouldShutdownPorts:
+                logger.info("关闭端口" + str(policy.shouldShutdownPorts))
+
+            if policy.shouldRestartProcesses:
+                if history.vmRestoreTimes:
+                    logger.info("已经恢复虚拟机" + self.name + str(history.vmRestoreTimes) + "次，继续恢复虚拟机")
+                    history.vmRestoreTimes += 1
+                elif history.vmRestartTimes >= 3:
+                    logger.info("已经重启虚拟机" + self.name + str(history.vmRestartTimes) + "次，选择恢复虚拟机")
+                    policy.setPolicy(u"恢复虚拟机")
+                    history.vmRestoreTimes = 1
+                elif history.vmRestartTimes > 0:
+                    logger.info("已经重启虚拟机" + self.name + str(history.vmRestartTimes) + "次，继续重启虚拟机")
+                    history.vmRestartTimes += 1
                 else:
-                    logger.info("重启进程" + str(policy.shouldRestartProcesses))
-
-        if policy.shouldOpenProcesses:
-            logger.info("打开进程" + str(policy.shouldOpenProcesses))
-
-        if policy.shouldShutdownProcesses:
-            logger.info(("关闭进程" + str(policy.shouldShutdownProcesses)))
-
-        if policy.shouldShutdownPorts:
-            logger.info("关闭端口" + str(policy.shouldShutdownPorts))
+                    shouldRestartVm = False
+                    pslist = []
+                    for ps, path, pid in policy.shouldRestartProcesses:
+                        if ps not in history.processesRestartTimes:
+                            history.processesRestartTimes[ps] = 1
+                        elif history.processesRestartTimes[ps] >= 3:
+                            shouldRestartVm = True
+                            pslist.append(ps)
+                        else:
+                            history.processesRestartTimes[ps] += 1
+                    if shouldRestartVm:
+                        policy.setPolicy(u"重启虚拟机")
+                        logger.info("进程" + str(pslist) + "已经重启达到3次，选择重启虚拟机")
+                    else:
+                        logger.info("重启进程" + str(policy.shouldRestartProcesses))
 
         if policy.level == 0:
             history.clearHistory()

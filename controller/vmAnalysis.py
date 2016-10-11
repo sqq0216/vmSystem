@@ -171,15 +171,10 @@ class VmAnalysis(object):
 
             # 只要与设置不符，就添加虚拟机策略
             if (isneed and (not isFind)) or ((not isneed) and isFind):
-                logger.info("虚拟机" + self.vmConf.name + "串口" + name.encode('utf-8') + ("开启" if isFind else "未开启") + "，添加策略" + policy.encode('utf-8'))
+                logger.info("虚拟机" + self.vmConf.name + "串口" + name.encode('utf-8') + ("存在" if isFind else "不存在") + "，添加策略" + policy.encode('utf-8'))
                 self.vmPoli.setPolicy(policy, name = name)
             else:
-                logger.info("虚拟机" + self.vmConf.name + "串口" + name.encode('utf-8') + "已经是" + ("开启" if isFind else "未开启"))
-
-
-
-
-
+                logger.info("虚拟机" + self.vmConf.name + "串口" + name.encode('utf-8') + "已经" + ("存在" if isFind else "不存在"))
 
 
     def analyseSsdt(self):
