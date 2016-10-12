@@ -54,62 +54,7 @@ class VmController(object):
         """
         logger.info("开始监控虚拟机" + self.name)
         breakLock = ThreadCmd.getBreakLock()
-
-        # while True:
-        #     breakLock.acquire()
-        #     ebList = ThreadCmd.getEBList()
-        #     if not ebList[self.name]:
-        #         # 没有通知关闭线程，立刻释放锁
-        #         breakLock.release()
-        #         # 根据配置获取数据填入vm
-        #         time.sleep(3)
-        #     else:
-        #         # 如果通知关闭线程，更改通知量，释放锁后跳出循环
-        #         ebList[self.name] = False
-        #         breakLock.release()
-        #         break
-        #
-        #     breakLock.acquire()
-        #     ebList = ThreadCmd.getEBList()
-        #     if not ebList[self.name]:
-        #         # 没有通知关闭线程，立刻释放锁
-        #         breakLock.release()
-        #         # 分析数据
-        #         time.sleep(3)
-        #     else:
-        #         # 如果通知关闭线程，释放锁后跳出循环
-        #         ebList[self.name] = False
-        #         breakLock.release()
-        #         break
-        #
-        #     breakLock.acquire()
-        #     ebList = ThreadCmd.getEBList()
-        #     if not ebList[self.name]:
-        #         # 没有通知关闭线程，立刻释放锁
-        #         breakLock.release()
-        #         # 生成处理策略
-        #         time.sleep(3)
-        #     else:
-        #         # 如果通知关闭线程，释放锁后跳出循环
-        #         ebList[self.name] = False
-        #         breakLock.release()
-        #         break
-        #
-        #     breakLock.acquire()
-        #     ebList = ThreadCmd.getEBList()
-        #     if not ebList[self.name]:
-        #         # 没有通知关闭线程，立刻释放锁
-        #         breakLock.release()
-        #         # 根据历史操作和策略对vm执行相应的操作，并记录在历史操作中
-        #         time.sleep(3)
-        #     else:
-        #         # 如果通知关闭线程，释放锁后跳出循环
-        #         ebList[self.name] = False
-        #         breakLock.release()
-        #         break
-        # logger.info("虚拟机" + self.name + "监控完毕")
-        # return
-
+        self.vmHist.clearHistory()
 
         while True:
             breakLock.acquire()
@@ -119,7 +64,7 @@ class VmController(object):
                 breakLock.release()
                 # 根据配置获取数据填入vm
                 if not self.vmInsp.getNeedData(self.name, self.vm, self.vmConf):
-                    break
+                    continue
                 logger.debug(str(self.vm))
             else:
                 # 如果通知关闭线程，更改通知量，释放锁后跳出循环

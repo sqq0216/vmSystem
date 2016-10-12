@@ -105,6 +105,7 @@ class VmExecute(object):
                     if shouldRestartVm:
                         policy.setPolicy(u"重启虚拟机")
                         logger.info("进程" + str(pslist) + "已经重启达到3次，选择重启虚拟机")
+                        history.vmRestartTimes = 1
                     else:
                         logger.info("重启进程" + str(policy.shouldRestartProcesses))
 
@@ -120,22 +121,22 @@ class VmExecute(object):
             self.restartVm()
         elif self.policy.shouldShutdownVm:
             self.shutdownVm()
+        else:
+            if self.policy.shouldRestartProcesses:
+                for ps, path, pid in self.policy.shouldRestartProcesses:
+                    self.restartProcess(ps, path, pid)
 
-        if self.policy.shouldRestartProcesses:
-            for ps, path, pid in self.policy.shouldRestartProcesses:
-                self.restartProcess(ps, path, pid)
+            if self.policy.shouldOpenProcesses:
+                for ps, path in self.policy.shouldOpenProcesses:
+                    self.openProcess(ps, path)
 
-        if self.policy.shouldOpenProcesses:
-            for ps, path in self.policy.shouldOpenProcesses:
-                self.openProcess(ps, path)
+            if self.policy.shouldShutdownProcesses:
+                for ps, pid in self.policy.shouldShutdownProcesses:
+                    self.shutdownProcess(ps, pid)
 
-        if self.policy.shouldShutdownProcesses:
-            for ps, pid in self.policy.shouldShutdownProcesses:
-                self.shutdownProcess(ps, pid)
-
-        if self.policy.shouldShutdownPorts:
-            for pt in self.policy.shouldShutdownPorts:
-                self.shutdownPort(pt)
+            if self.policy.shouldShutdownPorts:
+                for pt in self.policy.shouldShutdownPorts:
+                    self.shutdownPort(pt)
 
 
     def shutdownPort(self, port):
@@ -154,10 +155,12 @@ class VmExecute(object):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             sock.connect((self.ip, self.backport))
-            #sock.sendall("tskill " + pid)
-            sock.sendall("kill " + pid + '\0')
-            logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：kill " + pid)
-            #logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：tskill" + pid)
+            if self.vm.platform == u"Windows":
+                sock.sendall("tskill " + pid + "\0")
+                logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：tskill " + pid)
+            else:
+                sock.sendall("kill " + pid + '\0')
+                logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：kill " + pid)
         except socket.error, e:
             logger.warning("虚拟机连接异常，错误：%s" %e)
         finally:
@@ -191,11 +194,17 @@ class VmExecute(object):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             sock.connect((self.ip, self.backport))
-            if pid:
-                sock.sendall("tskill" + pid + "\n")
-            sock.sendall("start " + path + "\n")
+            if self.vm.platform == u"Windows":
+                if pid:
+                    sock.sendall("tskill " + pid + "\0")
+                sock.sendall(path + "\0")
+                logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + (("tskill " + pid + ", ") if pid else "") + path.encode('utf-8'))
+            else:
+                if pid:
+                    sock.sendall("kill " + pid + "\0")
+                sock.sendall(path + "\0")
+                logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + (("kill " + pid + ", ") if pid else "") + path.encode('utf-8'))
 
-            logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + (("tskill " + pid + ", ") if pid else "") + "start " + path.encode('utf-8'))
         except socket.error, e:
             logger.warning("虚拟机连接异常，错误：%s" %e)
         finally:
@@ -207,7 +216,7 @@ class VmExecute(object):
         :return:
         """
         # self.kvm_host.destroy(self.name)
-        subprocess.Popen("sudo virsh destroy " + self.name)
+        subprocess.Popen("sudo virsh destroy " + self.name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         time.sleep(10)
 
 
@@ -219,8 +228,8 @@ class VmExecute(object):
         #return
 
         #self.kvm_host.reboot(self.name)
-        subprocess.Popen("sudo virsh destroy " + self.name)
-        subprocess.Popen("sudo virsh start " + self.name)
+        subprocess.Popen("sudo virsh destroy " + self.name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        subprocess.Popen("sudo virsh start " + self.name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         # self.kvm_host.destroy(self.name)
         # self.kvm_host.start(self.name)
         time.sleep(60)
@@ -231,8 +240,8 @@ class VmExecute(object):
         :return:
         """
         # self.kvm_host.restore(self.name)
-        subprocess.Popen("sudo virsh destroy " + self.name)
-        subprocess.Popen("sudo virsh snapshot_revert " + self.name + " --snapshotname snap2-" + self.name)
+        subprocess.Popen("sudo virsh destroy " + self.name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        subprocess.Popen("sudo virsh snapshot_revert " + self.name + " --snapshotname snap2-" + self.name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         # self.kvm_host.destroy(self.name)
         # self.kvm_host.snapshot_revert(self.name, "snap2-"+self.name)
         time.sleep(60)

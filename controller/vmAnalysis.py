@@ -64,9 +64,11 @@ class VmAnalysis(object):
             isFind = False
             pspid = ""
 
-            if self.vm.platform == u"windows":
+            if self.vm.platform == u"Windows":
+                #logger.debug("platform is windows")
                 if re.match(r'.\exe', name, re.I):
                     # 如果配置的进程名有exe的话就直接判断相等关系
+                    #logger.debug("process is end of exe")
                     for ps, pid in processes:
                         if name == ps:
                             isFind = True
@@ -74,6 +76,7 @@ class VmAnalysis(object):
                             break
                 else:
                     # 如果配置的进程名没有exe的话就两种情况都考虑
+                    #logger.debug("process is not end of exe")
                     for ps, pid in processes:
                         if name == ps or name+'.exe' == ps:
                             isFind = True
@@ -81,6 +84,7 @@ class VmAnalysis(object):
                             break
             else:
                 # linux平台直接判断相等关系
+                #logger.debug("platform is linux")
                 for ps, pid in processes:
                     if name == ps:
                         isFind = True
@@ -99,7 +103,7 @@ class VmAnalysis(object):
         :return:
         """
         ports = []
-        if self.vm.platform == u"windows":
+        if self.vm.platform == u"Windows":
             for i, line in enumerate(self.vm.ports[2:]):
                 lines = line.split()
                 if len(lines) < 3 : continue
@@ -143,7 +147,7 @@ class VmAnalysis(object):
     def analyseSerial(self):
         logger.debug("串口信息" + str(self.vm.serials))
         serials = []
-        if self.vm.platform == u"windows":
+        if self.vm.platform == u"Windows":
             serialIndex = 0
             for i in range(len(self.vm.serials)):
                 lines = self.vm.serials[i].split()

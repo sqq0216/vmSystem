@@ -52,7 +52,7 @@ class VmInspection(object):
         if (vm.state[:7] != "running"):
             logger.debug("state:" + vm.state)
             logger.warning("虚拟机" + name + "未启动，自动启动中")
-            subprocess.Popen("sudo virsh start " + name)
+            subprocess.Popen("sudo virsh start " + name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             time.sleep(60)
 
 
@@ -92,12 +92,10 @@ class VmInspection(object):
                     vm.mbr = self.getMbr()
         except PopenError, e:
             logger.warning("调用volatility时未获取到数据 " + str(e))
-            # logger.warning(self.command)
-            #logger.warning(e)
             return False
         except ProfileError, e:
             logger.warning("调用volatility时使用profile出错 " + str(e))
-            #logger.warning()
+            return False
         return True
 
 
