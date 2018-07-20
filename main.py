@@ -10,7 +10,6 @@
 @version:   1.0-2016-07-18
 """
 
-
 import sys
 import logging
 from PyQt4 import QtGui
@@ -46,7 +45,6 @@ def start():
     # 显示界面
     mainWindow.show()
     sys.exit(app.exec_())
-
 if __name__ == "__main__":
 
     initLogger()

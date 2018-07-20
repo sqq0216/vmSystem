@@ -1,8 +1,8 @@
 import socket
 
-host = '192.168.122.238'
+host = '10.108.167.79'
 port = 15001
-username = 'vm01'
+username = 'vm'
 password = '123456'
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

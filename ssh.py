@@ -1,7 +1,7 @@
 import paramiko
 
-ip = '192.168.122.82'
-uname = 'vm04'
+ip = '10.108.167.79'
+uname = 'vm'
 passwd = '123456'
 
 client = paramiko.SSHClient()

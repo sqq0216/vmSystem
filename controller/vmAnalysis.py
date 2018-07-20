@@ -114,14 +114,14 @@ class VmAnalysis(object):
                 if len(lines) < 3: continue
                 if lines[0][:4] == "UNIX": continue
                 #logger.debug("虚拟机端口列表:" + str(lines))
-                if lines[2] == ":":
-                    port = lines[3]
-                else:
-                    port = lines[2][1:]
-                try:
+                if lines[0] == "TCP" or lines[0] == "UDP":
+                    if lines[2] == ":":
+                        port = lines[3]
+                    else:
+                        port = lines[2][1:]
+
                     pid = lines[-1][lines[-1].index("/")+1:]
-                except IndexError:
-                    pid = lines[-1]
+
                 ports.append((port, pid))
                 #ports[i] = (lines[2], lines[1]) #port, pid
         logger.debug("虚拟机端口列表整理结果(port,pid):" + str(ports))
@@ -163,7 +163,12 @@ class VmAnalysis(object):
                 if lines[1] == "DEV":
                     serials.append(lines[3])
         else:
-            pass
+            for i in range(len(self.vm.serials)):
+                if self.vm.serials[i] is not None:
+                    lines = self.vm.serials[i].split()
+                    if lines and lines[0][:3] == "tty":
+                        serials.append(lines[0])
+            print serials
 
         logger.debug("虚拟机串口列表整理结果(serial):" + str(serials))
 
@@ -187,6 +192,7 @@ class VmAnalysis(object):
         # 如果ssdt发生变化就添加策略
         :return:
         """
+        del self.vm.ssdt[-1]
         if not self.vm.ssdt_origin:
             # 如果是第一次得到ssdt，则进行备份
             # md5 backup
@@ -199,8 +205,11 @@ class VmAnalysis(object):
             md5 = hashlib.md5(str(self.vm.ssdt)).hexdigest().upper()
             logger.info("当前系统调用表散列：" + md5)
             if md5 != self.vm.ssdt_origin:
-                logger.warning("系统原始调用表散列：" + self.vm.ssdt_origin + "\n系统调用表发生变动，添加策略" + self.vmConf.rootkitPolicy.encode('utf-8'))
-                self.vmPoli.setPolicy(self.vmConf.rootkitPolicy)
+                rp = str(self.vmConf.rootkitPolicy)
+                logger.warning("系统原始调用表散列：" + self.vm.ssdt_origin + "\n系统调用表发生变动，添加策略" + str(rp))
+                if isinstance(rp, unicode) is False:
+                    rp = rp.decode('utf-8')
+                self.vmPoli.setPolicy(rp)
             else:
                 logger.info("系统调用表未改变")
 
@@ -212,8 +221,11 @@ class VmAnalysis(object):
             md5 = hashlib.md5(self.vm.mbr).hexdigest().upper()
             logger.info("当前磁盘MBR散列：" + md5)
             if md5 != self.vm.mbr_origin:
-                logger.warning("磁盘原始MBR散列：" + self.vm.mbr_origin + "\n磁盘MBR发生变动，添加策略" + self.vmConf.rootkitPolicy.encode('utf-8'))
-                self.vmPoli.setPolicy(self.vmConf.rootkitPolicy)
+                rp = str(self.vmConf.rootkitPolicy)
+                logger.warning("磁盘原始MBR散列：" + self.vm.mbr_origin + "\n磁盘MBR发生变动，添加策略" + rp)
+                if isinstance(rp, unicode) is False:
+                    rp = rp.decode('utf-8')
+                self.vmPoli.setPolicy(rp)
             else:
                 logger.info("磁盘MBR未改变")
 

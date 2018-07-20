@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unix
 
-ip = '192.168.122.12'
+ip = '10.108.167.79'
 uname = 'root'
 passwd = '123456'
 

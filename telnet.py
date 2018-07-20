@@ -1,7 +1,7 @@
 import telnetlib
 
-host = '192.168.122.238'
-username = 'vm01'
+host = '10.108.167.79'
+username = 'vm'
 password = '123456'
 
 tn = telnetlib.Telnet(host)

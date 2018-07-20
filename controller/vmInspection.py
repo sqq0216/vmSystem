@@ -62,11 +62,12 @@ class VmInspection(object):
         #     self.kvm_host.start(name)
         #     time.sleep(60)
 
-        volpath = subprocess.Popen("which vol.py", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
+        # volpath = subprocess.Popen("which vol.py", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
+        volpath = "/home/kong/JavaMemory/volatility-2.6/vol.py"
         if len(volpath) > 15 and volpath[:15] == "/usr/bin/which:":
             logger.warning("找不到volatility安装位置")
 
-        volpath = volpath.split()[0]
+        #volpath = volpath.split()[0]
         #self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
         self.command = "sudo python " + volpath + " --profile=" + self.profile + " -l vmi://" + name + " "
 
@@ -107,6 +108,7 @@ class VmInspection(object):
         :return:
         """
         #fileAns =  os.popen(self.command + plugin)
+        print self.command + plugin
         fileAns = subprocess.Popen(self.command + plugin, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read().split("\n")
         #logger.debug("fileAns:"+str(fileAns))
         if len(fileAns) < 3:
