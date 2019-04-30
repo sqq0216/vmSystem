@@ -10,7 +10,7 @@ from PyQt4 import QtCore, QtGui
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
+except AttributeError:   #chang shi fangwen weizhi duixiang shuxing
     def _fromUtf8(s):
         return s
 

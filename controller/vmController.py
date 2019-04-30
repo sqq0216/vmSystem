@@ -114,13 +114,13 @@ class VmController(object):
         logger.info("虚拟机" + self.name + "监控完毕")
         return
 
-        while True:
-            #根据配置获取数据填入vm
-            self.vmInsp.getNeedData(self.name, self.vm, self.vmConf)
-            #分析数据
-            self.vmAnal.analyseData(self.vm, self.vmConf)
-            #生成处理策略
-            self.policy = self.vmAnal.getPolicy()
-            #根据历史操作和策略对vm执行相应的操作，并记录在历史操作中
-            self.vmExec.execute(self.name, self.vmConf.ip, self.vm, self.vmHist, self.policy)
+        # while True:
+        #     #根据配置获取数据填入vm
+        #     self.vmInsp.getNeedData(self.name, self.vm, self.vmConf)
+        #     #分析数据
+        #     self.vmAnal.analyseData(self.vm, self.vmConf)
+        #     #生成处理策略
+        #     self.policy = self.vmAnal.getPolicy()
+        #     #根据历史操作和策略对vm执行相应的操作，并记录在历史操作中
+        #     self.vmExec.execute(self.name, self.vmConf.ip, self.vm, self.vmHist, self.policy)
 

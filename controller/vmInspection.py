@@ -63,7 +63,7 @@ class VmInspection(object):
         #     time.sleep(60)
 
         # volpath = subprocess.Popen("which vol.py", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
-        volpath = "/home/kong/JavaMemory/volatility-2.6/vol.py"
+        volpath = "/home/sqq/IdeaProjects/JavaMemory/volatility-2.6/vol.py"
         if len(volpath) > 15 and volpath[:15] == "/usr/bin/which:":
             logger.warning("找不到volatility安装位置")
 
@@ -116,10 +116,10 @@ class VmInspection(object):
         if fileAns[2] == "No suitable address space mapping found" or fileAns[2] == "Tried to open image as:":
             raise ProfileError("Profile Error:" + self.command + plugin)
 
-        ans = []
-        for line in fileAns:
-            ans.append(line)
+        #print "###in getData:\n", fileAns
 
+        ans = fileAns[:-2]
+        #print "###in getData:\n", ans
         return ans
 
     def getMbr(self):

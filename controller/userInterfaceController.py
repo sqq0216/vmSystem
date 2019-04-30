@@ -84,7 +84,7 @@ class UserInterfaceController(object):
         # return self.vmtypes
 
         logger.debug("从volatility中获取可用的虚拟机类型")
-        command = "python /home/kong/JavaMemory/volatility-2.6/vol.py --info"
+        command = "python /home/sqq/IdeaProjects/JavaMemory/volatility-2.6/vol.py --info"
         # info = os.popen(command)
         info = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read().split("\n")
         profiles = []

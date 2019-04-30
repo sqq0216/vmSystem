@@ -1,6 +1,6 @@
 import socket
 
-host = '10.108.167.79'
+host = '10.108.167.229'
 port = 15001
 username = 'vm'
 password = '123456'

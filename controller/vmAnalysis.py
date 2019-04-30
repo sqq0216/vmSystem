@@ -59,6 +59,7 @@ class VmAnalysis(object):
             #processes[i] = (lines[1], lines[2]) #process name, process pid
             #logger.debug("processess[" + str(i) + "]:" + str(processes[i]))
         #logger.debug("processes:" + str(processes))
+        #print "getProcess:\n"
         for name, isneed, policy, path in self.vmConf.processes:
             #在vmState中查找该process
             isFind = False
@@ -89,13 +90,15 @@ class VmAnalysis(object):
                     if name == ps:
                         isFind = True
                         pspid = pid
+                        print pspid
                         break
 
             if (isneed and (not isFind)) or ((not isneed) and isFind):
-                logger.info("虚拟机"+self.vmConf.name+"进程"+name.encode('utf-8')+("存在"if isFind else "不存在")+"，添加策略"+policy.encode('utf-8'))
+                logger.info("虚拟机"+self.vmConf.name+"进程"+name.encode('utf-8')+pspid+("存在"if isFind else "不存在")+"，添加策略"+policy.encode('utf-8'))
                 self.vmPoli.setPolicy(policy, name = name, path = path, pid = pspid)
             else:
-                logger.debug("虚拟机" + self.vmConf.name + "进程" + name.encode('utf-8') + ("存在" if isFind else "不存在"))
+                logger.debug("虚拟机" + self.vmConf.name + "进程" + pspid.encode('utf-8') + name.encode('utf-8') + ("存在" if isFind else "不存在"))
+                break
 
     def analysePorts(self):
         """
@@ -192,16 +195,19 @@ class VmAnalysis(object):
         # 如果ssdt发生变化就添加策略
         :return:
         """
-        del self.vm.ssdt[-1]
+        #self.vm.ssdt.pop()
+
         if not self.vm.ssdt_origin:
             # 如果是第一次得到ssdt，则进行备份
             # md5 backup
+            #print "ssdt in analyseSsdt first: \n", str(self.vm.ssdt)
             self.vm.ssdt_origin = hashlib.md5(str(self.vm.ssdt)).hexdigest().upper()
             logger.info("第一次得到系统调用表散列：" + str(self.vm.ssdt_origin))
         else:
             # 已有ssdt的话，进行比对
             # md5 compare
             # add policy
+            #print "ssdt in analyseSsdt second: \n", str(self.vm.ssdt)
             md5 = hashlib.md5(str(self.vm.ssdt)).hexdigest().upper()
             logger.info("当前系统调用表散列：" + md5)
             if md5 != self.vm.ssdt_origin:

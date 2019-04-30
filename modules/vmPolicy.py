@@ -103,7 +103,7 @@ class VmPolicy(object):
             self.shouldAlert = True
 
 
-
+        #返回一个对象的描述信息
     def __str__(self):
         return self.policyList[self.level].encode("utf-8")
         #return repr(self.policyList[self.level]).decode("unicode-escape")

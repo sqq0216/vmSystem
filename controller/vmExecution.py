@@ -17,7 +17,26 @@ import logging
 import subprocess 
 import socket
 import time
+import paramiko
 logger = logging.getLogger()
+
+
+def sshCmd(hostname, port, username, password, cmd):
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    client.connect(hostname=hostname, port=port, username=username, password=password)
+    stdin, stdout, stderr = client.exec_command(cmd)
+    result = stdout.read()
+    print result
+    error = stderr.read()
+    if error.decode() is not None:
+        print error.decode()
+    client.close()
+    return result
+    # #else:
+        #client.close()
+    # return result
 
 class VmExecute(object):
 
@@ -32,7 +51,7 @@ class VmExecute(object):
         self.name = name
         self.vm = vm
         self.ip = ip
-        self.backport = 15001
+        #self.backport = 15001
 
         self.history = history
         self.policy = policy
@@ -134,15 +153,25 @@ class VmExecute(object):
 
             if self.policy.shouldShutdownPorts:
                 for pt in self.policy.shouldShutdownPorts:
-                    self.shutdownPort(pt)
+                    self.shutdownPort(pt,pid)
 
 
-    def shutdownPort(self, port):
+
+    def shutdownPort(self, port, pid):
         """
         # 关闭端口
         :param port:
         :return:
         """
+        hostname = '10.108.167.229'
+        port = 22
+        username = 'root'
+        password = '123456'
+
+        cmd = "sudo kill " + pid + '\0'
+        sshCmd(hostname = hostname, port=port, username=username, password=password, cmd=cmd)
+        logger.info("虚拟机" + self.name + "关闭进程" + port.encode('utf-8') + "，使用命令：kill " + pid)
+        print port
 
     def shutdownProcess(self, process, pid):
         """
@@ -150,19 +179,52 @@ class VmExecute(object):
         :param process:
         :return:
         """
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            sock.connect((self.ip, self.backport))
-            if self.vm.platform == u"Windows":
-                sock.sendall("tskill " + pid + "\0")
-                logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：tskill " + pid)
-            else:
-                sock.sendall("kill " + pid + '\0')
-                logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：kill " + pid)
-        except socket.error, e:
-            logger.warning("虚拟机连接异常，错误：%s" %e)
-        finally:
-            sock.close()
+        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # try:
+        #     sock.connect((self.ip, self.backport))
+        #     if self.vm.platform == u"Windows":
+        #         sock.sendall("tskill " + pid + "\0")
+        #         logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：tskill " + pid)
+        #     else:
+        #         sock.sendall("kill " + pid + '\0')
+        #         logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：kill " + pid)
+        # except socket.error, e:
+        #     logger.warning("虚拟机连接异常，错误：%s" %e)
+        # finally:
+        #     sock.close()
+        hostname = '10.108.167.229'
+        port = 22
+        username = 'root'
+        password = '123456'
+
+        cmd = "sudo kill " + pid + '\0'
+        sshCmd(hostname = hostname, port=port, username=username, password=password, cmd=cmd)
+        logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：sudo kill " + pid)
+        # processesNew = getData("linux_pslist")
+        # processesSolved = []
+        # for i, line in enumerate(processesNew[2:]):
+        #     lines = line.split()
+        #     if len(lines) < 2: continue
+        #     processesSolved.append((lines[1], lines[2]))
+        #
+        # for name, isneed, policy, path in self.vmConf.processes:
+        #     #在vmState中查找该process
+        #     isFind = False
+        #     pspid = ""
+        #     for ps, pid in processesSolved:
+        #         if name == ps:
+        #             isFind = True
+        #             processespid = pid
+        #             print processespid + name + "is exist"
+        #         else:
+        #             print name + "have been killed"
+
+
+        # if 'yes' not in ssh_res:
+        #     print ssh_res.decode()
+        #     raise Exception("no task or wrong pid")
+        # else:
+        #     print 'pyagent.jar return yes'
 
     def openProcess(self, process, path):
         """
@@ -171,16 +233,30 @@ class VmExecute(object):
         :param path:
         :return:
         """
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            sock.connect((self.ip, self.backport))
-            #sock.sendall("start " + path)
-            sock.sendall(path + '\0')
-            logger.info("虚拟机" + self.name + "打开进程" + process.encode('utf-8') + "，使用命令：" + path.encode('utf-8'))
-        except socket.error, e:
-            logger.warning("虚拟机连接异常，错误：%s" %e)
-        finally:
-            sock.close()
+        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # try:
+        #     sock.connect((self.ip, self.backport))
+        #     #sock.sendall("start " + path)
+        #     sock.sendall(path + '\0')
+        #     logger.info("虚拟机" + self.name + "打开进程" + process.encode('utf-8') + "，使用命令：" + path.encode('utf-8'))
+        # except socket.error, e:
+        #     logger.warning("虚拟机连接异常，错误：%s" %e)
+        # finally:
+        #     sock.close()
+        hostname = '10.108.167.229'
+        port = 22
+        username = 'root'
+        password = '123456'
+
+        cmd = 'sudo systemctl start docker' + '\0'
+        print cmd
+        sshCmd(hostname=hostname, port=port, username=username, password=password, cmd=cmd)
+        # if 'Running Test...' not in ssh_res:
+        #     print ssh_res.decode()
+        #     raise Exception("open process failed")
+        # else:
+        #     print 'open process successful'
+        logger.info("虚拟机" + self.name + "打开进程" + process.encode('utf-8') + "，使用命令：sudo systemctl start docker " + path.encode('utf-8'))
 
 
     def restartProcess(self, process, path, pid):
