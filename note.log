@@ -1,0 +1,596 @@
+2019/04/26 12:09:32 main.py[func:initLogger() line:27] MainThread-DEBUG: 配置日志系统
+2019/04/26 12:09:32 main.py[func:initLogger() line:28] MainThread-INFO: 虚拟机监控恢复系统开始运行
+2019/04/26 12时09分33秒 userInterfaceController.py[func:getVms() line:73] MainThread-DEBUG: self.vms:['ubuntu']
+2019/04/26 12时09分33秒 userInterfaceController.py[func:getVmtypes() line:86] MainThread-DEBUG: 从volatility中获取可用的虚拟机类型
+['LinuxUbuntu1204_23x86', 'LinuxUbuntu1604_130x64', 'LinuxUbuntu1604_138x64', 'LinuxUbuntu1604_139x64', 'LinuxUbuntu1604_145x64', 'VistaSP0x64', 'VistaSP0x86', 'VistaSP1x64', 'VistaSP1x86', 'VistaSP2x64', 'VistaSP2x86', 'Win10x64', 'Win10x64_10586', 'Win10x64_14393', 'Win10x86', 'Win10x86_10586', 'Win10x86_14393', 'Win2003SP0x86', 'Win2003SP1x64', 'Win2003SP1x86', 'Win2003SP2x64', 'Win2003SP2x86', 'Win2008R2SP0x64', 'Win2008R2SP1x64', 'Win2008R2SP1x64_23418', 'Win2008SP1x64', 'Win2008SP1x86', 'Win2008SP2x64', 'Win2008SP2x86', 'Win2012R2x64', 'Win2012R2x64_18340', 'Win2012x64', 'Win2016x64_14393', 'Win7SP0x64', 'Win7SP0x86', 'Win7SP1x64', 'Win7SP1x64_23418', 'Win7SP1x86', 'Win7SP1x86_23418', 'Win81U1x64', 'Win81U1x86', 'Win8SP0x64', 'Win8SP0x86', 'Win8SP1x64', 'Win8SP1x64_18340', 'Win8SP1x86', 'WinXPSP1x64', 'WinXPSP2x64', 'WinXPSP2x86', 'WinXPSP3x86']
+2019/04/26 12时09分36秒 vmConf.py[func:getConfFromFile() line:124] MainThread-INFO: 从配置文件ubuntu.vmconf中读取配置
+2019/04/26 12时09分36秒 vmConf.py[func:getConfFromFile() line:125] MainThread-DEBUG: 读取出的配置：{u'ip': u'10.108.167.229', u'系统名称': 'ubuntu', u'用户名': u'vm', u'是否检查Rootkit': u'否', u'端口监控列表': [], u'密码': u'123456', u'检测到Rootkit后的策略': u'恢复虚拟机', u'系统类型': u'LinuxUbuntu1604_145x64', u'进程监控列表': [(u'dockerd', u'需要', u'打开进程', u'/home/vm/')]}
+2019/04/26 12时09分40秒 vmGuiAction.py[func:save() line:215] MainThread-DEBUG: 从界面获取的设置： psMonitor:[(u'dockerd', u'需要', u'打开进程', u'/home/vm/')] ptMonitor:[]
+2019/04/26 12时09分40秒 vmConf.py[func:setConf() line:103] MainThread-DEBUG: ubuntu配置信息保存到VmConf类中
+2019/04/26 12时09分40秒 vmConf.py[func:setConf() line:104] MainThread-DEBUG: 当前配置:{ip': 10.108.167.229', 系统名称': 'ubunt, 用户名': vm', 是否检查Rootkit': 否', 端口监控列表': [], 密码': 123456', 检测到Rootkit后的策略': 恢复虚拟机', 系统类型': LinuxUbuntu1604_145x64', 进程监控列表': [(dockerd', 需要', 打开进程', /home/vm/')]}
+2019/04/26 12时09分40秒 vmConf.py[func:setConfToFile() line:138] MainThread-INFO: 虚拟机ubuntu配置信息保存到文件中
+2019/04/26 12时09分40秒 vmController.py[func:startMonitor() line:55] Thread-ubuntu-INFO: 开始监控虚拟机ubuntu
+2019/04/26 12时09分40秒 userInterfaceController.py[func:startMonitorVm() line:150] MainThread-DEBUG: 已有虚拟机监控列表：名称:线程:['ubuntu']
+2019/04/26 12时09分40秒 vmInspection.py[func:getNeedData() line:34] Thread-ubuntu-INFO: 从虚拟机ubuntu获取数据中...
+sudo python /home/sqq/IdeaProjects/JavaMemory/volatility-2.6/vol.py --profile=LinuxUbuntu1604_145x64 -l vmi://ubuntu linux_pslist
+2019/04/26 12时10分02秒 vmController.py[func:startMonitor() line:68] Thread-ubuntu-DEBUG: 
+name:ubuntu
+process:[
+Offset             Name                 Pid             PPid            Uid             Gid    DTB                Start Time
+------------------ -------------------- --------------- --------------- --------------- ------ ------------------ ----------
+0xffff88003e3f8000 systemd              1               0               0               0      0x000000003db80000 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3f8cc0 kthreadd             2               0               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3f9980 ksoftirqd/0          3               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fb300 kworker/0:0H         5               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fcc80 rcu_sched            7               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fd940 rcu_bh               8               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fe600 migration/0          9               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3ff2c0 watchdog/0           10              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d868000 kdevtmpfs            11              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d868cc0 netns                12              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d869980 perf                 13              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86a640 khungtaskd           14              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86b300 writeback            15              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86bfc0 ksmd                 16              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86cc80 khugepaged           17              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86d940 crypto               18              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86e600 kintegrityd          19              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86f2c0 bioset               20              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d908000 kblockd              21              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d908cc0 ata_sff              22              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d909980 md                   23              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d90a640 devfreq_wq           24              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d90b300 kworker/u2:1         25              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d90d940 kswapd0              28              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003d90e600 vmstat               29              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003d90f2c0 fsnotify_mark        30              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373b8000 ecryptfs-kthrea      31              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fcc80 kthrotld             47              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fd940 acpi_thermal_pm      48              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fbfc0 vballoon             49              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fb300 bioset               50              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fa640 bioset               51              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373f9980 bioset               52              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373f8cc0 bioset               53              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373f8000 bioset               54              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fe600 bioset               55              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373ff2c0 bioset               56              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bf2c0 bioset               57              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373be600 bioset               58              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bd940 scsi_eh_0            59              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bcc80 scsi_tmf_0           60              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bbfc0 scsi_eh_1            61              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bb300 scsi_tmf_1           62              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035048cc0 ipv6_addrconf        68              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350bb300 deferwq              81              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350bbfc0 charger_manager      82              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350b8000 bioset               120             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350b9980 bioset               121             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350ba640 bioset               122             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003504d940 bioset               123             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035048000 bioset               125             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035398000 bioset               126             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035398cc0 bioset               127             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035399980 bioset               128             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003539a640 kpsmoused            129             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003539bfc0 ttm_swap             131             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003539cc80 qxl_gc               132             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800351df2c0 kworker/0:1H         153             2               0               0      ------------------ 2019-04-24 07:25:06 UTC+0000
+0xffff8800351dbfc0 jbd2/vda1-8          155             2               0               0      ------------------ 2019-04-24 07:25:06 UTC+0000
+0xffff8800351db300 ext4-rsv-conver      156             2               0               0      ------------------ 2019-04-24 07:25:06 UTC+0000
+0xffff8800351d9980 systemd-journal      192             1               0               0      0x000000003a632000 2019-04-24 07:25:09 UTC+0000
+0xffff8800350bd940 kauditd              206             2               0               0      ------------------ 2019-04-24 07:25:09 UTC+0000
+0xffff8800351d8cc0 systemd-udevd        226             1               0               0      0x00000000391a2000 2019-04-24 07:25:10 UTC+0000
+0xffff880039188000 systemd-timesyn      416             1               100             102    0x00000000391c8000 2019-04-24 07:25:12 UTC+0000
+0xffff880039c36600 ModemManager         564             1               0               0      0x000000003945a000 2019-04-24 07:25:15 UTC+0000
+0xffff88003539f2c0 avahi-daemon         574             1               111             120    0x000000003a684000 2019-04-24 07:25:15 UTC+0000
+0xffff88003918e600 cron                 587             1               0               0      0x00000000394f6000 2019-04-24 07:25:15 UTC+0000
+0xffff88003918cc80 whoopsie             589             1               109             116    0x000000003a6fe000 2019-04-24 07:25:15 UTC+0000
+0xffff88003d0ee600 acpid                596             1               0               0      0x00000000385c8000 2019-04-24 07:25:15 UTC+0000
+0xffff88003d0e8cc0 rsyslogd             600             1               104             108    0x0000000037234000 2019-04-24 07:25:15 UTC+0000
+0xffff880034843fc0 dbus-daemon          616             1               106             110    0x00000000372e8000 2019-04-24 07:25:15 UTC+0000
+0xffff88003721d940 avahi-daemon         647             574             111             120    0x00000000349bc000 2019-04-24 07:25:16 UTC+0000
+0xffff88003907bfc0 systemd-logind       664             1               0               0      0x00000000395a2000 2019-04-24 07:25:17 UTC+0000
+0xffff88003907cc80 accounts-daemon      665             1               0               0      0x000000003a6bc000 2019-04-24 07:25:17 UTC+0000
+0xffff880039d08cc0 NetworkManager       673             1               0               0      0x000000003c8bc000 2019-04-24 07:25:17 UTC+0000
+0xffff88003c848cc0 lightdm              704             1               0               0      0x000000003c986000 2019-04-24 07:25:18 UTC+0000
+0xffff8800350bf2c0 polkitd              710             1               0               0      0x000000003c9e2000 2019-04-24 07:25:18 UTC+0000
+0xffff8800351dcc80 dhclient             763             673             0               0      0x0000000038592000 2019-04-24 07:25:21 UTC+0000
+0xffff88003c84e600 Xorg                 806             704             0               0      0x0000000039540000 2019-04-24 07:25:21 UTC+0000
+0xffff8800351da640 containerd           830             1               0               0      0x0000000039caa000 2019-04-24 07:25:22 UTC+0000
+0xffff88003d0ed940 mysqld               849             1               122             129    0x0000000038716000 2019-04-24 07:25:22 UTC+0000
+0xffff880039c32640 sshd                 861             1               0               0      0x000000003c1f0000 2019-04-24 07:25:23 UTC+0000
+0xffff880039c33fc0 dnsmasq              871             673             -               30     0x0000000039080000 2019-04-24 07:25:23 UTC+0000
+0xffff88003c848000 agetty               1090            1               0               0      0x000000003ca18000 2019-04-24 07:25:27 UTC+0000
+0xffff8800396c5940 lightdm              1277            704             0               0      0x0000000039754000 2019-04-24 07:25:51 UTC+0000
+0xffff8800370acc80 rtkit-daemon         1346            1               118             126    0x0000000034be6000 2019-04-24 07:25:53 UTC+0000
+0xffff88003c0ccc80 upowerd              1364            1               0               0      0x000000000007e000 2019-04-24 07:25:56 UTC+0000
+0xffff88003c1b5940 colord               1386            1               113             123    0x000000003c168000 2019-04-24 07:25:59 UTC+0000
+0xffff88003b123fc0 systemd              1683            1               1000            1000   0x000000003a58c000 2019-04-24 07:27:30 UTC+0000
+0xffff88003b122640 (sd-pam)             1686            1683            1000            1000   0x0000000039e84000 2019-04-24 07:27:30 UTC+0000
+0xffff88003b126600 gnome-keyring-d      1691            1               1000            1000   0x0000000038548000 2019-04-24 07:27:30 UTC+0000
+0xffff88003b1272c0 upstart              1693            1277            1000            1000   0x0000000034ad0000 2019-04-24 07:27:30 UTC+0000
+0xffff88003930bfc0 upstart-udev-br      1779            1693            1000            1000   0x0000000034afe000 2019-04-24 07:27:32 UTC+0000
+0xffff88003930f2c0 dbus-daemon          1780            1693            1000            1000   0x0000000039612000 2019-04-24 07:27:32 UTC+0000
+0xffff88003b125940 window-stack-br      1792            1693            1000            1000   0x000000003969c000 2019-04-24 07:27:32 UTC+0000
+0xffff88003c0cf2c0 ibus-daemon          1818            1693            1000            1000   0x000000003c3ce000 2019-04-24 07:27:33 UTC+0000
+0xffff880035049980 upstart-dbus-br      1830            1693            1000            1000   0x00000000392d4000 2019-04-24 07:27:33 UTC+0000
+0xffff8800370af2c0 upstart-dbus-br      1831            1693            1000            1000   0x0000000034aa8000 2019-04-24 07:27:33 UTC+0000
+0xffff8800370ab300 upstart-file-br      1834            1693            1000            1000   0x000000003d32e000 2019-04-24 07:27:33 UTC+0000
+0xffff88003b121980 gvfsd                1838            1693            1000            1000   0x0000000038780000 2019-04-24 07:27:33 UTC+0000
+0xffff88003930e600 gvfsd-fuse           1843            1693            1000            1000   0x000000003a5ee000 2019-04-24 07:27:33 UTC+0000
+0xffff880039309980 ibus-dconf           1846            1818            1000            1000   0x000000003b03c000 2019-04-24 07:27:33 UTC+0000
+0xffff8800370a8000 ibus-ui-gtk3         1847            1818            1000            1000   0x000000003b08e000 2019-04-24 07:27:33 UTC+0000
+0xffff8800396c0000 ibus-x11             1849            1693            1000            1000   0x000000003c060000 2019-04-24 07:27:33 UTC+0000
+0xffff88003caf72c0 bamfdaemon           1872            1693            1000            1000   0x0000000039fee000 2019-04-24 07:27:34 UTC+0000
+0xffff880039e8d940 at-spi-bus-laun      1891            1693            1000            1000   0x0000000034a28000 2019-04-24 07:27:34 UTC+0000
+0xffff88003c84d940 dbus-daemon          1896            1891            1000            1000   0x0000000039252000 2019-04-24 07:27:34 UTC+0000
+0xffff88003c1b6600 at-spi2-registr      1899            1693            1000            1000   0x000000003c1d4000 2019-04-24 07:27:34 UTC+0000
+0xffff88003c1b0000 ibus-engine-sim      1902            1818            1000            1000   0x000000003923e000 2019-04-24 07:27:35 UTC+0000
+0xffff880039eb2640 gpg-agent            1913            1693            1000            1000   0x0000000039606000 2019-04-24 07:27:37 UTC+0000
+0xffff880039eb3300 hud-service          1923            1693            1000            1000   0x0000000039e98000 2019-04-24 07:27:39 UTC+0000
+0xffff880039eb0cc0 unity-settings-      1925            1693            1000            1000   0x00000000396a8000 2019-04-24 07:27:39 UTC+0000
+0xffff88003c0cbfc0 gnome-session-b      1939            1693            1000            1000   0x00000000392a8000 2019-04-24 07:27:39 UTC+0000
+0xffff880039eb4c80 compiz               1940            1693            1000            1000   0x00000000392f0000 2019-04-24 07:27:39 UTC+0000
+0xffff880039d0cc80 unity-panel-ser      1945            1693            1000            1000   0x0000000039ed8000 2019-04-24 07:27:39 UTC+0000
+0xffff880039fde600 indicator-messa      1963            1693            1000            1000   0x00000000370b6000 2019-04-24 07:27:40 UTC+0000
+0xffff880039fdf2c0 indicator-bluet      1964            1693            1000            1000   0x000000003700a000 2019-04-24 07:27:40 UTC+0000
+0xffff880037179980 indicator-power      1967            1693            1000            1000   0x0000000035774000 2019-04-24 07:27:40 UTC+0000
+0xffff88003717cc80 indicator-datet      1971            1693            1000            1000   0x000000003b16e000 2019-04-24 07:27:40 UTC+0000
+0xffff88003717d940 indicator-keybo      1972            1693            1000            1000   0x00000000370b8000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b140000 dconf-service        1975            1693            1000            1000   0x000000003b0a2000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b140cc0 indicator-sound      1976            1693            1000            1000   0x000000003b188000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b142640 indicator-print      1978            1693            1000            1000   0x000000003b25e000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b143300 indicator-sessi      1979            1693            1000            1000   0x000000003b200000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b145940 indicator-appli      1982            1693            1000            1000   0x000000003b0cc000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b3e4c80 pulseaudio           2013            1693            1000            1000   0x000000003a81e000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b3f0cc0 evolution-sourc      2060            1693            1000            1000   0x000000003aaae000 2019-04-24 07:27:42 UTC+0000
+0xffff88003b3f6600 nm-applet            2087            1939            1000            1000   0x000000003a05c000 2019-04-24 07:27:44 UTC+0000
+0xffff88000082e600 nautilus             2090            1939            1000            1000   0x000000003a0e8000 2019-04-24 07:27:44 UTC+0000
+0xffff88003b39d940 gnome-software       2096            1939            1000            1000   0x000000003a0be000 2019-04-24 07:27:44 UTC+0000
+0xffff880039d0e600 polkit-gnome-au      2098            1939            1000            1000   0x000000003a02a000 2019-04-24 07:27:44 UTC+0000
+0xffff88003b3e5940 unity-fallback-      2100            1939            1000            1000   0x000000003a1ce000 2019-04-24 07:27:44 UTC+0000
+0xffff88003a2f1980 gvfs-udisks2-vo      2114            1693            1000            1000   0x000000003a344000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a2f6600 udisksd              2120            1               0               0      0x000000003a3ae000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a3c0cc0 evolution-calen      2128            1693            1000            1000   0x000000003980c000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a3c72c0 gvfs-gphoto2-vo      2136            1693            1000            1000   0x0000000039894000 2019-04-24 07:27:45 UTC+0000
+0xffff88003990bfc0 gvfs-goa-volume      2145            1693            1000            1000   0x0000000039968000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a3c6600 gvfs-mtp-volume      2150            1693            1000            1000   0x00000000399c8000 2019-04-24 07:27:45 UTC+0000
+0xffff8800399d2640 gvfs-afc-volume      2155            1693            1000            1000   0x0000000039a10000 2019-04-24 07:27:45 UTC+0000
+0xffff88003b3e0000 fwupd                2164            1               0               0      0x00000000398d8000 2019-04-24 07:27:46 UTC+0000
+0xffff880039b29980 gvfsd-trash          2174            1693            1000            1000   0x0000000039b34000 2019-04-24 07:27:49 UTC+0000
+0xffff8800370abfc0 evolution-calen      2202            2128            1000            1000   0x0000000038d16000 2019-04-24 07:27:50 UTC+0000
+0xffff880039b28000 evolution-calen      2213            2128            1000            1000   0x0000000038d70000 2019-04-24 07:27:50 UTC+0000
+0xffff8800399d72c0 evolution-addre      2220            1693            1000            1000   0x0000000038ca8000 2019-04-24 07:27:51 UTC+0000
+0xffff880038d60cc0 evolution-addre      2241            2220            1000            1000   0x0000000038db0000 2019-04-24 07:27:51 UTC+0000
+0xffff880034fcd940 zeitgeist-datah      2281            1939            1000            1000   0x000000003a92e000 2019-04-24 07:28:04 UTC+0000
+0xffff880039bed940 sh                   2288            1693            1000            1000   0x0000000038d38000 2019-04-24 07:28:06 UTC+0000
+0xffff88000082a640 zeitgeist-daemo      2292            2288            1000            1000   0x000000003b3ba000 2019-04-24 07:28:07 UTC+0000
+0xffff880039fdbfc0 zeitgeist-fts        2300            1693            1000            1000   0x0000000038c08000 2019-04-24 07:28:07 UTC+0000
+0xffff88003a224c80 update-notifier      2387            1939            1000            1000   0x000000003b3a6000 2019-04-24 07:28:44 UTC+0000
+0xffff88003a88bfc0 deja-dup-monito      2425            1939            1000            1000   0x000000003a5dc000 2019-04-24 07:29:44 UTC+0000
+0xffff88003b399980 notify-osd           7520            1693            1000            1000   0x0000000038f0c000 2019-04-24 22:05:55 UTC+0000
+0xffff880034840000 apache2              18726           1               0               0      0x0000000000078000 2019-04-24 22:19:37 UTC+0000
+0xffff880034fcbfc0 gnome-terminal-      23779           1693            1000            1000   0x00000000387d6000 2019-04-25 09:48:31 UTC+0000
+0xffff880038d5b300 zsh                  23786           23779           1000            1000   0x000000003c88c000 2019-04-25 09:48:31 UTC+0000
+0xffff880038d5f2c0 kworker/u2:0         27523           2               0               0      ------------------ 2019-04-25 22:06:51 UTC+0000
+0xffff880034fce600 apache2              28728           18726           33              33     0x0000000039440000 2019-04-25 23:35:09 UTC+0000
+0xffff880034fcb300 apache2              28729           18726           33              33     0x000000003ca3a000 2019-04-25 23:35:09 UTC+0000
+0xffff880037218000 apache2              28730           18726           33              33     0x000000003a4b6000 2019-04-25 23:35:09 UTC+0000
+0xffff880039d0b300 apache2              28731           18726           33              33     0x0000000038fa0000 2019-04-25 23:35:09 UTC+0000
+0xffff8800399d6600 apache2              28732           18726           33              33     0x000000003a49e000 2019-04-25 23:35:09 UTC+0000
+0xffff880037218cc0 cupsd                28735           1               0               0      0x000000003895a000 2019-04-25 23:35:10 UTC+0000
+0xffff88003a3c5940 cups-browsed         28739           1               0               0      0x0000000038750000 2019-04-25 23:35:10 UTC+0000
+0xffff88003d0e8000 dbus                 28743           28735           7               7      0x0000000038bba000 2019-04-25 23:35:11 UTC+0000
+0xffff88003caf3fc0 kworker/0:1          30892           2               0               0      ------------------ 2019-04-26 03:40:47 UTC+0000
+0xffff88003a88e600 kworker/0:2          31006           2               0               0      ------------------ 2019-04-26 03:50:00 UTC+0000
+0xffff880034fca640 kworker/0:0          31376           2               0               0      ------------------ 2019-04-26 04:04:22 UTC+0000
+0xffff880039d0d940 kworker/0:3          31565           2               0               0      ------------------ 2019-04-26 04:06:45 UTC+0000
+0xffff880038d672c0 kworker/0:4          31575           2               0               0      ------------------ 2019-04-26 04:06:45 UTC+0000]
+port:[
+]
+ssdt:[
+]
+2019/04/26 12时10分02秒 vmAnalysis.py[func:analyseProcesses() line:97] Thread-ubuntu-INFO: 虚拟机ubuntu进程dockerd不存在，添加策略打开进程
+2019/04/26 12时10分02秒 vmExecution.py[func:execute() line:92] Thread-ubuntu-INFO: 打开进程[(u'dockerd', u'/home/vm/')]
+sudo systemctl start docker 
+2019/04/26 12时10分02秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: starting thread (client mode): 0x65af8f50L
+2019/04/26 12时10分02秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: Local version/idstring: SSH-2.0-paramiko_2.4.2
+2019/04/26 12时10分02秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: Remote version/idstring: SSH-2.0-OpenSSH_7.2p2 Ubuntu-4ubuntu2.8
+2019/04/26 12时10分02秒 transport.py[func:_log() line:1746] Thread-1-INFO: Connected (version 2.0, client OpenSSH_7.2p2)
+2019/04/26 12时10分02秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: kex algos:[u'curve25519-sha256@libssh.org', u'ecdh-sha2-nistp256', u'ecdh-sha2-nistp384', u'ecdh-sha2-nistp521', u'diffie-hellman-group-exchange-sha256', u'diffie-hellman-group14-sha1'] server key:[u'ssh-rsa', u'rsa-sha2-512', u'rsa-sha2-256', u'ecdsa-sha2-nistp256', u'ssh-ed25519'] client encrypt:[u'chacha20-poly1305@openssh.com', u'aes128-ctr', u'aes192-ctr', u'aes256-ctr', u'aes128-gcm@openssh.com', u'aes256-gcm@openssh.com'] server encrypt:[u'chacha20-poly1305@openssh.com', u'aes128-ctr', u'aes192-ctr', u'aes256-ctr', u'aes128-gcm@openssh.com', u'aes256-gcm@openssh.com'] client mac:[u'umac-64-etm@openssh.com', u'umac-128-etm@openssh.com', u'hmac-sha2-256-etm@openssh.com', u'hmac-sha2-512-etm@openssh.com', u'hmac-sha1-etm@openssh.com', u'umac-64@openssh.com', u'umac-128@openssh.com', u'hmac-sha2-256', u'hmac-sha2-512', u'hmac-sha1'] server mac:[u'umac-64-etm@openssh.com', u'umac-128-etm@openssh.com', u'hmac-sha2-256-etm@openssh.com', u'hmac-sha2-512-etm@openssh.com', u'hmac-sha1-etm@openssh.com', u'umac-64@openssh.com', u'umac-128@openssh.com', u'hmac-sha2-256', u'hmac-sha2-512', u'hmac-sha1'] client compress:[u'none', u'zlib@openssh.com'] server compress:[u'none', u'zlib@openssh.com'] client lang:[u''] server lang:[u''] kex follows?False
+2019/04/26 12时10分02秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: Kex agreed: ecdh-sha2-nistp256
+2019/04/26 12时10分02秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: HostKey agreed: ssh-ed25519
+2019/04/26 12时10分02秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: Cipher agreed: aes128-ctr
+2019/04/26 12时10分02秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: MAC agreed: hmac-sha2-256
+2019/04/26 12时10分02秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: Compression agreed: none
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: kex engine KexNistp256 specified hash_algo <built-in function openssl_sha256>
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: Switch to new keys ...
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-ubuntu-DEBUG: Adding ssh-ed25519 host key for 10.108.167.229: 0cbdf027a2685cc4399adf8d24a44077
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-ubuntu-DEBUG: Trying discovered key 223d07429e6c96f83c1f594601d540e2 in /home/sqq/.ssh/id_rsa
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: userauth is OK
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-1-INFO: Authentication (publickey) failed.
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: userauth is OK
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-1-INFO: Authentication (password) successful!
+2019/04/26 12时10分03秒 channel.py[func:_log() line:1194] Thread-ubuntu-DEBUG: [chan 0] Max packet in: 32768 bytes
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: Received global request "hostkeys-00@openssh.com"
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: Rejecting "hostkeys-00@openssh.com" global request from server.
+2019/04/26 12时10分03秒 channel.py[func:_log() line:1194] Thread-1-DEBUG: [chan 0] Max packet out: 32768 bytes
+2019/04/26 12时10分03秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: Secsh channel 0 opened.
+2019/04/26 12时10分03秒 channel.py[func:_log() line:1194] Thread-1-DEBUG: [chan 0] Sesch channel 0 request ok
+2019/04/26 12时10分04秒 channel.py[func:_log() line:1194] Thread-1-DEBUG: [chan 0] EOF received (0)
+2019/04/26 12时10分04秒 channel.py[func:_log() line:1194] Thread-1-DEBUG: [chan 0] EOF sent (0)
+
+
+2019/04/26 12时10分04秒 transport.py[func:_log() line:1746] Thread-1-DEBUG: EOF in transport thread
+2019/04/26 12时10分04秒 vmExecution.py[func:openProcess() line:259] Thread-ubuntu-INFO: 虚拟机ubuntu打开进程dockerd，使用命令：sudo systemctl start docker /home/vm/
+2019/04/26 12时10分04秒 vmInspection.py[func:getNeedData() line:34] Thread-ubuntu-INFO: 从虚拟机ubuntu获取数据中...
+sudo python /home/sqq/IdeaProjects/JavaMemory/volatility-2.6/vol.py --profile=LinuxUbuntu1604_145x64 -l vmi://ubuntu linux_pslist
+2019/04/26 12时10分28秒 vmController.py[func:startMonitor() line:68] Thread-ubuntu-DEBUG: 
+name:ubuntu
+process:[
+Offset             Name                 Pid             PPid            Uid             Gid    DTB                Start Time
+------------------ -------------------- --------------- --------------- --------------- ------ ------------------ ----------
+0xffff88003e3f8000 systemd              1               0               0               0      0x000000003db80000 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3f8cc0 kthreadd             2               0               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3f9980 ksoftirqd/0          3               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fb300 kworker/0:0H         5               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fcc80 rcu_sched            7               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fd940 rcu_bh               8               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fe600 migration/0          9               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3ff2c0 watchdog/0           10              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d868000 kdevtmpfs            11              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d868cc0 netns                12              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d869980 perf                 13              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86a640 khungtaskd           14              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86b300 writeback            15              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86bfc0 ksmd                 16              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86cc80 khugepaged           17              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86d940 crypto               18              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86e600 kintegrityd          19              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86f2c0 bioset               20              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d908000 kblockd              21              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d908cc0 ata_sff              22              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d909980 md                   23              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d90a640 devfreq_wq           24              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d90b300 kworker/u2:1         25              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d90d940 kswapd0              28              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003d90e600 vmstat               29              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003d90f2c0 fsnotify_mark        30              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373b8000 ecryptfs-kthrea      31              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fcc80 kthrotld             47              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fd940 acpi_thermal_pm      48              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fbfc0 vballoon             49              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fb300 bioset               50              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fa640 bioset               51              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373f9980 bioset               52              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373f8cc0 bioset               53              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373f8000 bioset               54              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fe600 bioset               55              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373ff2c0 bioset               56              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bf2c0 bioset               57              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373be600 bioset               58              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bd940 scsi_eh_0            59              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bcc80 scsi_tmf_0           60              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bbfc0 scsi_eh_1            61              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bb300 scsi_tmf_1           62              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035048cc0 ipv6_addrconf        68              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350bb300 deferwq              81              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350bbfc0 charger_manager      82              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350b8000 bioset               120             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350b9980 bioset               121             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350ba640 bioset               122             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003504d940 bioset               123             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035048000 bioset               125             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035398000 bioset               126             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035398cc0 bioset               127             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035399980 bioset               128             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003539a640 kpsmoused            129             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003539bfc0 ttm_swap             131             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003539cc80 qxl_gc               132             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800351df2c0 kworker/0:1H         153             2               0               0      ------------------ 2019-04-24 07:25:06 UTC+0000
+0xffff8800351dbfc0 jbd2/vda1-8          155             2               0               0      ------------------ 2019-04-24 07:25:06 UTC+0000
+0xffff8800351db300 ext4-rsv-conver      156             2               0               0      ------------------ 2019-04-24 07:25:06 UTC+0000
+0xffff8800351d9980 systemd-journal      192             1               0               0      0x000000003a632000 2019-04-24 07:25:09 UTC+0000
+0xffff8800350bd940 kauditd              206             2               0               0      ------------------ 2019-04-24 07:25:09 UTC+0000
+0xffff8800351d8cc0 systemd-udevd        226             1               0               0      0x00000000391a2000 2019-04-24 07:25:10 UTC+0000
+0xffff880039188000 systemd-timesyn      416             1               100             102    0x00000000391c8000 2019-04-24 07:25:12 UTC+0000
+0xffff880039c36600 ModemManager         564             1               0               0      0x000000003945a000 2019-04-24 07:25:15 UTC+0000
+0xffff88003539f2c0 avahi-daemon         574             1               111             120    0x000000003a684000 2019-04-24 07:25:15 UTC+0000
+0xffff88003918e600 cron                 587             1               0               0      0x00000000394f6000 2019-04-24 07:25:15 UTC+0000
+0xffff88003918cc80 whoopsie             589             1               109             116    0x000000003a6fe000 2019-04-24 07:25:15 UTC+0000
+0xffff88003d0ee600 acpid                596             1               0               0      0x00000000385c8000 2019-04-24 07:25:15 UTC+0000
+0xffff88003d0e8cc0 rsyslogd             600             1               104             108    0x0000000037234000 2019-04-24 07:25:15 UTC+0000
+0xffff880034843fc0 dbus-daemon          616             1               106             110    0x00000000372e8000 2019-04-24 07:25:15 UTC+0000
+0xffff88003721d940 avahi-daemon         647             574             111             120    0x00000000349bc000 2019-04-24 07:25:16 UTC+0000
+0xffff88003907bfc0 systemd-logind       664             1               0               0      0x00000000395a2000 2019-04-24 07:25:17 UTC+0000
+0xffff88003907cc80 accounts-daemon      665             1               0               0      0x000000003a6bc000 2019-04-24 07:25:17 UTC+0000
+0xffff880039d08cc0 NetworkManager       673             1               0               0      0x000000003c8bc000 2019-04-24 07:25:17 UTC+0000
+0xffff88003c848cc0 lightdm              704             1               0               0      0x000000003c986000 2019-04-24 07:25:18 UTC+0000
+0xffff8800350bf2c0 polkitd              710             1               0               0      0x000000003c9e2000 2019-04-24 07:25:18 UTC+0000
+0xffff8800351dcc80 dhclient             763             673             0               0      0x0000000038592000 2019-04-24 07:25:21 UTC+0000
+0xffff88003c84e600 Xorg                 806             704             0               0      0x0000000039540000 2019-04-24 07:25:21 UTC+0000
+0xffff8800351da640 containerd           830             1               0               0      0x0000000039caa000 2019-04-24 07:25:22 UTC+0000
+0xffff88003d0ed940 mysqld               849             1               122             129    0x0000000038716000 2019-04-24 07:25:22 UTC+0000
+0xffff880039c32640 sshd                 861             1               0               0      0x000000003c1f0000 2019-04-24 07:25:23 UTC+0000
+0xffff880039c33fc0 dnsmasq              871             673             -               30     0x0000000039080000 2019-04-24 07:25:23 UTC+0000
+0xffff88003c848000 agetty               1090            1               0               0      0x000000003ca18000 2019-04-24 07:25:27 UTC+0000
+0xffff8800396c5940 lightdm              1277            704             0               0      0x0000000039754000 2019-04-24 07:25:51 UTC+0000
+0xffff8800370acc80 rtkit-daemon         1346            1               118             126    0x0000000034be6000 2019-04-24 07:25:53 UTC+0000
+0xffff88003c0ccc80 upowerd              1364            1               0               0      0x000000000007e000 2019-04-24 07:25:56 UTC+0000
+0xffff88003c1b5940 colord               1386            1               113             123    0x000000003c168000 2019-04-24 07:25:59 UTC+0000
+0xffff88003b123fc0 systemd              1683            1               1000            1000   0x000000003a58c000 2019-04-24 07:27:30 UTC+0000
+0xffff88003b122640 (sd-pam)             1686            1683            1000            1000   0x0000000039e84000 2019-04-24 07:27:30 UTC+0000
+0xffff88003b126600 gnome-keyring-d      1691            1               1000            1000   0x0000000038548000 2019-04-24 07:27:30 UTC+0000
+0xffff88003b1272c0 upstart              1693            1277            1000            1000   0x0000000034ad0000 2019-04-24 07:27:30 UTC+0000
+0xffff88003930bfc0 upstart-udev-br      1779            1693            1000            1000   0x0000000034afe000 2019-04-24 07:27:32 UTC+0000
+0xffff88003930f2c0 dbus-daemon          1780            1693            1000            1000   0x0000000039612000 2019-04-24 07:27:32 UTC+0000
+0xffff88003b125940 window-stack-br      1792            1693            1000            1000   0x000000003969c000 2019-04-24 07:27:32 UTC+0000
+0xffff88003c0cf2c0 ibus-daemon          1818            1693            1000            1000   0x000000003c3ce000 2019-04-24 07:27:33 UTC+0000
+0xffff880035049980 upstart-dbus-br      1830            1693            1000            1000   0x00000000392d4000 2019-04-24 07:27:33 UTC+0000
+0xffff8800370af2c0 upstart-dbus-br      1831            1693            1000            1000   0x0000000034aa8000 2019-04-24 07:27:33 UTC+0000
+0xffff8800370ab300 upstart-file-br      1834            1693            1000            1000   0x000000003d32e000 2019-04-24 07:27:33 UTC+0000
+0xffff88003b121980 gvfsd                1838            1693            1000            1000   0x0000000038780000 2019-04-24 07:27:33 UTC+0000
+0xffff88003930e600 gvfsd-fuse           1843            1693            1000            1000   0x000000003a5ee000 2019-04-24 07:27:33 UTC+0000
+0xffff880039309980 ibus-dconf           1846            1818            1000            1000   0x000000003b03c000 2019-04-24 07:27:33 UTC+0000
+0xffff8800370a8000 ibus-ui-gtk3         1847            1818            1000            1000   0x000000003b08e000 2019-04-24 07:27:33 UTC+0000
+0xffff8800396c0000 ibus-x11             1849            1693            1000            1000   0x000000003c060000 2019-04-24 07:27:33 UTC+0000
+0xffff88003caf72c0 bamfdaemon           1872            1693            1000            1000   0x0000000039fee000 2019-04-24 07:27:34 UTC+0000
+0xffff880039e8d940 at-spi-bus-laun      1891            1693            1000            1000   0x0000000034a28000 2019-04-24 07:27:34 UTC+0000
+0xffff88003c84d940 dbus-daemon          1896            1891            1000            1000   0x0000000039252000 2019-04-24 07:27:34 UTC+0000
+0xffff88003c1b6600 at-spi2-registr      1899            1693            1000            1000   0x000000003c1d4000 2019-04-24 07:27:34 UTC+0000
+0xffff88003c1b0000 ibus-engine-sim      1902            1818            1000            1000   0x000000003923e000 2019-04-24 07:27:35 UTC+0000
+0xffff880039eb2640 gpg-agent            1913            1693            1000            1000   0x0000000039606000 2019-04-24 07:27:37 UTC+0000
+0xffff880039eb3300 hud-service          1923            1693            1000            1000   0x0000000039e98000 2019-04-24 07:27:39 UTC+0000
+0xffff880039eb0cc0 unity-settings-      1925            1693            1000            1000   0x00000000396a8000 2019-04-24 07:27:39 UTC+0000
+0xffff88003c0cbfc0 gnome-session-b      1939            1693            1000            1000   0x00000000392a8000 2019-04-24 07:27:39 UTC+0000
+0xffff880039eb4c80 compiz               1940            1693            1000            1000   0x00000000392f0000 2019-04-24 07:27:39 UTC+0000
+0xffff880039d0cc80 unity-panel-ser      1945            1693            1000            1000   0x0000000039ed8000 2019-04-24 07:27:39 UTC+0000
+0xffff880039fde600 indicator-messa      1963            1693            1000            1000   0x00000000370b6000 2019-04-24 07:27:40 UTC+0000
+0xffff880039fdf2c0 indicator-bluet      1964            1693            1000            1000   0x000000003700a000 2019-04-24 07:27:40 UTC+0000
+0xffff880037179980 indicator-power      1967            1693            1000            1000   0x0000000035774000 2019-04-24 07:27:40 UTC+0000
+0xffff88003717cc80 indicator-datet      1971            1693            1000            1000   0x000000003b16e000 2019-04-24 07:27:40 UTC+0000
+0xffff88003717d940 indicator-keybo      1972            1693            1000            1000   0x00000000370b8000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b140000 dconf-service        1975            1693            1000            1000   0x000000003b0a2000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b140cc0 indicator-sound      1976            1693            1000            1000   0x000000003b188000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b142640 indicator-print      1978            1693            1000            1000   0x000000003b25e000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b143300 indicator-sessi      1979            1693            1000            1000   0x000000003b200000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b145940 indicator-appli      1982            1693            1000            1000   0x000000003b0cc000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b3e4c80 pulseaudio           2013            1693            1000            1000   0x000000003a81e000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b3f0cc0 evolution-sourc      2060            1693            1000            1000   0x000000003aaae000 2019-04-24 07:27:42 UTC+0000
+0xffff88003b3f6600 nm-applet            2087            1939            1000            1000   0x000000003a05c000 2019-04-24 07:27:44 UTC+0000
+0xffff88000082e600 nautilus             2090            1939            1000            1000   0x000000003a0e8000 2019-04-24 07:27:44 UTC+0000
+0xffff88003b39d940 gnome-software       2096            1939            1000            1000   0x000000003a0be000 2019-04-24 07:27:44 UTC+0000
+0xffff880039d0e600 polkit-gnome-au      2098            1939            1000            1000   0x000000003a02a000 2019-04-24 07:27:44 UTC+0000
+0xffff88003b3e5940 unity-fallback-      2100            1939            1000            1000   0x000000003a1ce000 2019-04-24 07:27:44 UTC+0000
+0xffff88003a2f1980 gvfs-udisks2-vo      2114            1693            1000            1000   0x000000003a344000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a2f6600 udisksd              2120            1               0               0      0x000000003a3ae000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a3c0cc0 evolution-calen      2128            1693            1000            1000   0x000000003980c000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a3c72c0 gvfs-gphoto2-vo      2136            1693            1000            1000   0x0000000039894000 2019-04-24 07:27:45 UTC+0000
+0xffff88003990bfc0 gvfs-goa-volume      2145            1693            1000            1000   0x0000000039968000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a3c6600 gvfs-mtp-volume      2150            1693            1000            1000   0x00000000399c8000 2019-04-24 07:27:45 UTC+0000
+0xffff8800399d2640 gvfs-afc-volume      2155            1693            1000            1000   0x0000000039a10000 2019-04-24 07:27:45 UTC+0000
+0xffff88003b3e0000 fwupd                2164            1               0               0      0x00000000398d8000 2019-04-24 07:27:46 UTC+0000
+0xffff880039b29980 gvfsd-trash          2174            1693            1000            1000   0x0000000039b34000 2019-04-24 07:27:49 UTC+0000
+0xffff8800370abfc0 evolution-calen      2202            2128            1000            1000   0x0000000038d16000 2019-04-24 07:27:50 UTC+0000
+0xffff880039b28000 evolution-calen      2213            2128            1000            1000   0x0000000038d70000 2019-04-24 07:27:50 UTC+0000
+0xffff8800399d72c0 evolution-addre      2220            1693            1000            1000   0x0000000038ca8000 2019-04-24 07:27:51 UTC+0000
+0xffff880038d60cc0 evolution-addre      2241            2220            1000            1000   0x0000000038db0000 2019-04-24 07:27:51 UTC+0000
+0xffff880034fcd940 zeitgeist-datah      2281            1939            1000            1000   0x000000003a92e000 2019-04-24 07:28:04 UTC+0000
+0xffff880039bed940 sh                   2288            1693            1000            1000   0x0000000038d38000 2019-04-24 07:28:06 UTC+0000
+0xffff88000082a640 zeitgeist-daemo      2292            2288            1000            1000   0x000000003b3ba000 2019-04-24 07:28:07 UTC+0000
+0xffff880039fdbfc0 zeitgeist-fts        2300            1693            1000            1000   0x0000000038c08000 2019-04-24 07:28:07 UTC+0000
+0xffff88003a224c80 update-notifier      2387            1939            1000            1000   0x000000003b3a6000 2019-04-24 07:28:44 UTC+0000
+0xffff88003a88bfc0 deja-dup-monito      2425            1939            1000            1000   0x000000003a5dc000 2019-04-24 07:29:44 UTC+0000
+0xffff88003b399980 notify-osd           7520            1693            1000            1000   0x0000000038f0c000 2019-04-24 22:05:55 UTC+0000
+0xffff880034840000 apache2              18726           1               0               0      0x0000000000078000 2019-04-24 22:19:37 UTC+0000
+0xffff880034fcbfc0 gnome-terminal-      23779           1693            1000            1000   0x00000000387d6000 2019-04-25 09:48:31 UTC+0000
+0xffff880038d5b300 zsh                  23786           23779           1000            1000   0x000000003c88c000 2019-04-25 09:48:31 UTC+0000
+0xffff880038d5f2c0 kworker/u2:0         27523           2               0               0      ------------------ 2019-04-25 22:06:51 UTC+0000
+0xffff880034fce600 apache2              28728           18726           33              33     0x0000000039440000 2019-04-25 23:35:09 UTC+0000
+0xffff880034fcb300 apache2              28729           18726           33              33     0x000000003ca3a000 2019-04-25 23:35:09 UTC+0000
+0xffff880037218000 apache2              28730           18726           33              33     0x000000003a4b6000 2019-04-25 23:35:09 UTC+0000
+0xffff880039d0b300 apache2              28731           18726           33              33     0x0000000038fa0000 2019-04-25 23:35:09 UTC+0000
+0xffff8800399d6600 apache2              28732           18726           33              33     0x000000003a49e000 2019-04-25 23:35:09 UTC+0000
+0xffff880037218cc0 cupsd                28735           1               0               0      0x000000003895a000 2019-04-25 23:35:10 UTC+0000
+0xffff88003a3c5940 cups-browsed         28739           1               0               0      0x0000000038750000 2019-04-25 23:35:10 UTC+0000
+0xffff88003d0e8000 dbus                 28743           28735           7               7      0x0000000038bba000 2019-04-25 23:35:11 UTC+0000
+0xffff88003caf3fc0 kworker/0:1          30892           2               0               0      ------------------ 2019-04-26 03:40:47 UTC+0000
+0xffff88003a88e600 kworker/0:2          31006           2               0               0      ------------------ 2019-04-26 03:50:00 UTC+0000
+0xffff880034fca640 kworker/0:0          31376           2               0               0      ------------------ 2019-04-26 04:04:22 UTC+0000
+0xffff880039d0d940 kworker/0:3          31565           2               0               0      ------------------ 2019-04-26 04:06:45 UTC+0000
+0xffff880038d672c0 kworker/0:4          31575           2               0               0      ------------------ 2019-04-26 04:06:45 UTC+0000
+0xffff88003539e600 dockerd              31668           1               0               0      0x000000003d262000 2019-04-26 04:10:07 UTC+0000
+0xffff880034fc9980 kworker/0:5          31792           2               0               0      ------------------ 2019-04-26 04:10:09 UTC+0000]
+port:[
+]
+ssdt:[
+]
+2019/04/26 12时10分28秒 vmAnalysis.py[func:analyseProcesses() line:100] Thread-ubuntu-DEBUG: 虚拟机ubuntu进程31668dockerd存在
+2019/04/26 12时10分28秒 vmInspection.py[func:getNeedData() line:34] Thread-ubuntu-INFO: 从虚拟机ubuntu获取数据中...
+31668
+sudo python /home/sqq/IdeaProjects/JavaMemory/volatility-2.6/vol.py --profile=LinuxUbuntu1604_145x64 -l vmi://ubuntu linux_pslist
+2019/04/26 12时10分52秒 vmController.py[func:startMonitor() line:68] Thread-ubuntu-DEBUG: 
+name:ubuntu
+process:[
+Offset             Name                 Pid             PPid            Uid             Gid    DTB                Start Time
+------------------ -------------------- --------------- --------------- --------------- ------ ------------------ ----------
+0xffff88003e3f8000 systemd              1               0               0               0      0x000000003db80000 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3f8cc0 kthreadd             2               0               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3f9980 ksoftirqd/0          3               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fb300 kworker/0:0H         5               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fcc80 rcu_sched            7               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fd940 rcu_bh               8               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3fe600 migration/0          9               2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003e3ff2c0 watchdog/0           10              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d868000 kdevtmpfs            11              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d868cc0 netns                12              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d869980 perf                 13              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86a640 khungtaskd           14              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86b300 writeback            15              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86bfc0 ksmd                 16              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86cc80 khugepaged           17              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86d940 crypto               18              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86e600 kintegrityd          19              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d86f2c0 bioset               20              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d908000 kblockd              21              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d908cc0 ata_sff              22              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d909980 md                   23              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d90a640 devfreq_wq           24              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d90b300 kworker/u2:1         25              2               0               0      ------------------ 2019-04-24 07:25:04 UTC+0000
+0xffff88003d90d940 kswapd0              28              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003d90e600 vmstat               29              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003d90f2c0 fsnotify_mark        30              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373b8000 ecryptfs-kthrea      31              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fcc80 kthrotld             47              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fd940 acpi_thermal_pm      48              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fbfc0 vballoon             49              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fb300 bioset               50              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fa640 bioset               51              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373f9980 bioset               52              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373f8cc0 bioset               53              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373f8000 bioset               54              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373fe600 bioset               55              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373ff2c0 bioset               56              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bf2c0 bioset               57              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373be600 bioset               58              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bd940 scsi_eh_0            59              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bcc80 scsi_tmf_0           60              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+31668
+0xffff8800373bbfc0 scsi_eh_1            61              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800373bb300 scsi_tmf_1           62              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035048cc0 ipv6_addrconf        68              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350bb300 deferwq              81              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350bbfc0 charger_manager      82              2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350b8000 bioset               120             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350b9980 bioset               121             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800350ba640 bioset               122             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003504d940 bioset               123             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035048000 bioset               125             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035398000 bioset               126             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035398cc0 bioset               127             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff880035399980 bioset               128             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003539a640 kpsmoused            129             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003539bfc0 ttm_swap             131             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff88003539cc80 qxl_gc               132             2               0               0      ------------------ 2019-04-24 07:25:05 UTC+0000
+0xffff8800351df2c0 kworker/0:1H         153             2               0               0      ------------------ 2019-04-24 07:25:06 UTC+0000
+0xffff8800351dbfc0 jbd2/vda1-8          155             2               0               0      ------------------ 2019-04-24 07:25:06 UTC+0000
+0xffff8800351db300 ext4-rsv-conver      156             2               0               0      ------------------ 2019-04-24 07:25:06 UTC+0000
+0xffff8800351d9980 systemd-journal      192             1               0               0      0x000000003a632000 2019-04-24 07:25:09 UTC+0000
+0xffff8800350bd940 kauditd              206             2               0               0      ------------------ 2019-04-24 07:25:09 UTC+0000
+0xffff8800351d8cc0 systemd-udevd        226             1               0               0      0x00000000391a2000 2019-04-24 07:25:10 UTC+0000
+0xffff880039188000 systemd-timesyn      416             1               100             102    0x00000000391c8000 2019-04-24 07:25:12 UTC+0000
+0xffff880039c36600 ModemManager         564             1               0               0      0x000000003945a000 2019-04-24 07:25:15 UTC+0000
+0xffff88003539f2c0 avahi-daemon         574             1               111             120    0x000000003a684000 2019-04-24 07:25:15 UTC+0000
+0xffff88003918e600 cron                 587             1               0               0      0x00000000394f6000 2019-04-24 07:25:15 UTC+0000
+0xffff88003918cc80 whoopsie             589             1               109             116    0x000000003a6fe000 2019-04-24 07:25:15 UTC+0000
+0xffff88003d0ee600 acpid                596             1               0               0      0x00000000385c8000 2019-04-24 07:25:15 UTC+0000
+0xffff88003d0e8cc0 rsyslogd             600             1               104             108    0x0000000037234000 2019-04-24 07:25:15 UTC+0000
+0xffff880034843fc0 dbus-daemon          616             1               106             110    0x00000000372e8000 2019-04-24 07:25:15 UTC+0000
+0xffff88003721d940 avahi-daemon         647             574             111             120    0x00000000349bc000 2019-04-24 07:25:16 UTC+0000
+0xffff88003907bfc0 systemd-logind       664             1               0               0      0x00000000395a2000 2019-04-24 07:25:17 UTC+0000
+0xffff88003907cc80 accounts-daemon      665             1               0               0      0x000000003a6bc000 2019-04-24 07:25:17 UTC+0000
+0xffff880039d08cc0 NetworkManager       673             1               0               0      0x000000003c8bc000 2019-04-24 07:25:17 UTC+0000
+0xffff88003c848cc0 lightdm              704             1               0               0      0x000000003c986000 2019-04-24 07:25:18 UTC+0000
+0xffff8800350bf2c0 polkitd              710             1               0               0      0x000000003c9e2000 2019-04-24 07:25:18 UTC+0000
+0xffff8800351dcc80 dhclient             763             673             0               0      0x0000000038592000 2019-04-24 07:25:21 UTC+0000
+0xffff88003c84e600 Xorg                 806             704             0               0      0x0000000039540000 2019-04-24 07:25:21 UTC+0000
+0xffff8800351da640 containerd           830             1               0               0      0x0000000039caa000 2019-04-24 07:25:22 UTC+0000
+0xffff88003d0ed940 mysqld               849             1               122             129    0x0000000038716000 2019-04-24 07:25:22 UTC+0000
+0xffff880039c32640 sshd                 861             1               0               0      0x000000003c1f0000 2019-04-24 07:25:23 UTC+0000
+0xffff880039c33fc0 dnsmasq              871             673             -               30     0x0000000039080000 2019-04-24 07:25:23 UTC+0000
+0xffff88003c848000 agetty               1090            1               0               0      0x000000003ca18000 2019-04-24 07:25:27 UTC+0000
+0xffff8800396c5940 lightdm              1277            704             0               0      0x0000000039754000 2019-04-24 07:25:51 UTC+0000
+0xffff8800370acc80 rtkit-daemon         1346            1               118             126    0x0000000034be6000 2019-04-24 07:25:53 UTC+0000
+0xffff88003c0ccc80 upowerd              1364            1               0               0      0x000000000007e000 2019-04-24 07:25:56 UTC+0000
+0xffff88003c1b5940 colord               1386            1               113             123    0x000000003c168000 2019-04-24 07:25:59 UTC+0000
+0xffff88003b123fc0 systemd              1683            1               1000            1000   0x000000003a58c000 2019-04-24 07:27:30 UTC+0000
+0xffff88003b122640 (sd-pam)             1686            1683            1000            1000   0x0000000039e84000 2019-04-24 07:27:30 UTC+0000
+0xffff88003b126600 gnome-keyring-d      1691            1               1000            1000   0x0000000038548000 2019-04-24 07:27:30 UTC+0000
+0xffff88003b1272c0 upstart              1693            1277            1000            1000   0x0000000034ad0000 2019-04-24 07:27:30 UTC+0000
+0xffff88003930bfc0 upstart-udev-br      1779            1693            1000            1000   0x0000000034afe000 2019-04-24 07:27:32 UTC+0000
+0xffff88003930f2c0 dbus-daemon          1780            1693            1000            1000   0x0000000039612000 2019-04-24 07:27:32 UTC+0000
+0xffff88003b125940 window-stack-br      1792            1693            1000            1000   0x000000003969c000 2019-04-24 07:27:32 UTC+0000
+0xffff88003c0cf2c0 ibus-daemon          1818            1693            1000            1000   0x000000003c3ce000 2019-04-24 07:27:33 UTC+0000
+0xffff880035049980 upstart-dbus-br      1830            1693            1000            1000   0x00000000392d4000 2019-04-24 07:27:33 UTC+0000
+0xffff8800370af2c0 upstart-dbus-br      1831            1693            1000            1000   0x0000000034aa8000 2019-04-24 07:27:33 UTC+0000
+0xffff8800370ab300 upstart-file-br      1834            1693            1000            1000   0x000000003d32e000 2019-04-24 07:27:33 UTC+0000
+0xffff88003b121980 gvfsd                1838            1693            1000            1000   0x0000000038780000 2019-04-24 07:27:33 UTC+0000
+0xffff88003930e600 gvfsd-fuse           1843            1693            1000            1000   0x000000003a5ee000 2019-04-24 07:27:33 UTC+0000
+0xffff880039309980 ibus-dconf           1846            1818            1000            1000   0x000000003b03c000 2019-04-24 07:27:33 UTC+0000
+0xffff8800370a8000 ibus-ui-gtk3         1847            1818            1000            1000   0x000000003b08e000 2019-04-24 07:27:33 UTC+0000
+0xffff8800396c0000 ibus-x11             1849            1693            1000            1000   0x000000003c060000 2019-04-24 07:27:33 UTC+0000
+0xffff88003caf72c0 bamfdaemon           1872            1693            1000            1000   0x0000000039fee000 2019-04-24 07:27:34 UTC+0000
+0xffff880039e8d940 at-spi-bus-laun      1891            1693            1000            1000   0x0000000034a28000 2019-04-24 07:27:34 UTC+0000
+0xffff88003c84d940 dbus-daemon          1896            1891            1000            1000   0x0000000039252000 2019-04-24 07:27:34 UTC+0000
+0xffff88003c1b6600 at-spi2-registr      1899            1693            1000            1000   0x000000003c1d4000 2019-04-24 07:27:34 UTC+0000
+0xffff88003c1b0000 ibus-engine-sim      1902            1818            1000            1000   0x000000003923e000 2019-04-24 07:27:35 UTC+0000
+0xffff880039eb2640 gpg-agent            1913            1693            1000            1000   0x0000000039606000 2019-04-24 07:27:37 UTC+0000
+0xffff880039eb3300 hud-service          1923            1693            1000            1000   0x0000000039e98000 2019-04-24 07:27:39 UTC+0000
+0xffff880039eb0cc0 unity-settings-      1925            1693            1000            1000   0x00000000396a8000 2019-04-24 07:27:39 UTC+0000
+0xffff88003c0cbfc0 gnome-session-b      1939            1693            1000            1000   0x00000000392a8000 2019-04-24 07:27:39 UTC+0000
+0xffff880039eb4c80 compiz               1940            1693            1000            1000   0x00000000392f0000 2019-04-24 07:27:39 UTC+0000
+0xffff880039d0cc80 unity-panel-ser      1945            1693            1000            1000   0x0000000039ed8000 2019-04-24 07:27:39 UTC+0000
+0xffff880039fde600 indicator-messa      1963            1693            1000            1000   0x00000000370b6000 2019-04-24 07:27:40 UTC+0000
+0xffff880039fdf2c0 indicator-bluet      1964            1693            1000            1000   0x000000003700a000 2019-04-24 07:27:40 UTC+0000
+0xffff880037179980 indicator-power      1967            1693            1000            1000   0x0000000035774000 2019-04-24 07:27:40 UTC+0000
+0xffff88003717cc80 indicator-datet      1971            1693            1000            1000   0x000000003b16e000 2019-04-24 07:27:40 UTC+0000
+0xffff88003717d940 indicator-keybo      1972            1693            1000            1000   0x00000000370b8000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b140000 dconf-service        1975            1693            1000            1000   0x000000003b0a2000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b140cc0 indicator-sound      1976            1693            1000            1000   0x000000003b188000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b142640 indicator-print      1978            1693            1000            1000   0x000000003b25e000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b143300 indicator-sessi      1979            1693            1000            1000   0x000000003b200000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b145940 indicator-appli      1982            1693            1000            1000   0x000000003b0cc000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b3e4c80 pulseaudio           2013            1693            1000            1000   0x000000003a81e000 2019-04-24 07:27:40 UTC+0000
+0xffff88003b3f0cc0 evolution-sourc      2060            1693            1000            1000   0x000000003aaae000 2019-04-24 07:27:42 UTC+0000
+0xffff88003b3f6600 nm-applet            2087            1939            1000            1000   0x000000003a05c000 2019-04-24 07:27:44 UTC+0000
+0xffff88000082e600 nautilus             2090            1939            1000            1000   0x000000003a0e8000 2019-04-24 07:27:44 UTC+0000
+0xffff88003b39d940 gnome-software       2096            1939            1000            1000   0x000000003a0be000 2019-04-24 07:27:44 UTC+0000
+0xffff880039d0e600 polkit-gnome-au      2098            1939            1000            1000   0x000000003a02a000 2019-04-24 07:27:44 UTC+0000
+0xffff88003b3e5940 unity-fallback-      2100            1939            1000            1000   0x000000003a1ce000 2019-04-24 07:27:44 UTC+0000
+0xffff88003a2f1980 gvfs-udisks2-vo      2114            1693            1000            1000   0x000000003a344000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a2f6600 udisksd              2120            1               0               0      0x000000003a3ae000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a3c0cc0 evolution-calen      2128            1693            1000            1000   0x000000003980c000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a3c72c0 gvfs-gphoto2-vo      2136            1693            1000            1000   0x0000000039894000 2019-04-24 07:27:45 UTC+0000
+0xffff88003990bfc0 gvfs-goa-volume      2145            1693            1000            1000   0x0000000039968000 2019-04-24 07:27:45 UTC+0000
+0xffff88003a3c6600 gvfs-mtp-volume      2150            1693            1000            1000   0x00000000399c8000 2019-04-24 07:27:45 UTC+0000
+0xffff8800399d2640 gvfs-afc-volume      2155            1693            1000            1000   0x0000000039a10000 2019-04-24 07:27:45 UTC+0000
+0xffff88003b3e0000 fwupd                2164            1               0               0      0x00000000398d8000 2019-04-24 07:27:46 UTC+0000
+0xffff880039b29980 gvfsd-trash          2174            1693            1000            1000   0x0000000039b34000 2019-04-24 07:27:49 UTC+0000
+0xffff8800370abfc0 evolution-calen      2202            2128            1000            1000   0x0000000038d16000 2019-04-24 07:27:50 UTC+0000
+0xffff880039b28000 evolution-calen      2213            2128            1000            1000   0x0000000038d70000 2019-04-24 07:27:50 UTC+0000
+0xffff8800399d72c0 evolution-addre      2220            1693            1000            1000   0x0000000038ca8000 2019-04-24 07:27:51 UTC+0000
+0xffff880038d60cc0 evolution-addre      2241            2220            1000            1000   0x0000000038db0000 2019-04-24 07:27:51 UTC+0000
+0xffff880034fcd940 zeitgeist-datah      2281            1939            1000            1000   0x000000003a92e000 2019-04-24 07:28:04 UTC+0000
+0xffff880039bed940 sh                   2288            1693            1000            1000   0x0000000038d38000 2019-04-24 07:28:06 UTC+0000
+0xffff88000082a640 zeitgeist-daemo      2292            2288            1000            1000   0x000000003b3ba000 2019-04-24 07:28:07 UTC+0000
+0xffff880039fdbfc0 zeitgeist-fts        2300            1693            1000            1000   0x0000000038c08000 2019-04-24 07:28:07 UTC+0000
+0xffff88003a224c80 update-notifier      2387            1939            1000            1000   0x000000003b3a6000 2019-04-24 07:28:44 UTC+0000
+0xffff88003a88bfc0 deja-dup-monito      2425            1939            1000            1000   0x000000003a5dc000 2019-04-24 07:29:44 UTC+0000
+0xffff88003b399980 notify-osd           7520            1693            1000            1000   0x0000000038f0c000 2019-04-24 22:05:55 UTC+0000
+0xffff880034840000 apache2              18726           1               0               0      0x0000000000078000 2019-04-24 22:19:37 UTC+0000
+0xffff880034fcbfc0 gnome-terminal-      23779           1693            1000            1000   0x00000000387d6000 2019-04-25 09:48:31 UTC+0000
+0xffff880038d5b300 zsh                  23786           23779           1000            1000   0x000000003c88c000 2019-04-25 09:48:31 UTC+0000
+0xffff880038d5f2c0 kworker/u2:0         27523           2               0               0      ------------------ 2019-04-25 22:06:51 UTC+0000
+0xffff880034fce600 apache2              28728           18726           33              33     0x0000000039440000 2019-04-25 23:35:09 UTC+0000
+0xffff880034fcb300 apache2              28729           18726           33              33     0x000000003ca3a000 2019-04-25 23:35:09 UTC+0000
+0xffff880037218000 apache2              28730           18726           33              33     0x000000003a4b6000 2019-04-25 23:35:09 UTC+0000
+0xffff880039d0b300 apache2              28731           18726           33              33     0x0000000038fa0000 2019-04-25 23:35:09 UTC+0000
+0xffff8800399d6600 apache2              28732           18726           33              33     0x000000003a49e000 2019-04-25 23:35:09 UTC+0000
+0xffff880037218cc0 cupsd                28735           1               0               0      0x000000003895a000 2019-04-25 23:35:10 UTC+0000
+0xffff88003a3c5940 cups-browsed         28739           1               0               0      0x0000000038750000 2019-04-25 23:35:10 UTC+0000
+0xffff88003d0e8000 dbus                 28743           28735           7               7      0x0000000038bba000 2019-04-25 23:35:11 UTC+0000
+0xffff88003caf3fc0 kworker/0:1          30892           2               0               0      ------------------ 2019-04-26 03:40:47 UTC+0000
+0xffff88003a88e600 kworker/0:2          31006           2               0               0      ------------------ 2019-04-26 03:50:00 UTC+0000
+0xffff880034fca640 kworker/0:0          31376           2               0               0      ------------------ 2019-04-26 04:04:22 UTC+0000
+0xffff880039d0d940 kworker/0:3          31565           2               0               0      ------------------ 2019-04-26 04:06:45 UTC+0000
+0xffff880038d672c0 kworker/0:4          31575           2               0               0      ------------------ 2019-04-26 04:06:45 UTC+0000
+0xffff88003539e600 dockerd              31668           1               0               0      0x000000003d262000 2019-04-26 04:10:07 UTC+0000
+0xffff880034fc9980 kworker/0:5          31792           2               0               0      ------------------ 2019-04-26 04:10:09 UTC+0000]
+port:[
+]
+ssdt:[
+]
+2019/04/26 12时10分52秒 vmAnalysis.py[func:analyseProcesses() line:100] Thread-ubuntu-DEBUG: 虚拟机ubuntu进程31668dockerd存在
+2019/04/26 12时10分52秒 vmInspection.py[func:getNeedData() line:34] Thread-ubuntu-INFO: 从虚拟机ubuntu获取数据中...
+sudo python /home/sqq/IdeaProjects/JavaMemory/volatility-2.6/vol.py --profile=LinuxUbuntu1604_145x64 -l vmi://ubuntu linux_pslist
