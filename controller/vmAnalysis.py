@@ -144,6 +144,7 @@ class VmAnalysis(object):
             if (isneed and (not isFind)) or ((not isneed) and isFind):
                 logger.info("虚拟机" + self.vmConf.name + "端口号" + name.encode('utf-8') + ("开启" if isFind else "未开启") + "，添加策略" + policy.encode('utf-8'))
                 self.vmPoli.setPolicy(policy, name = name, pid = ptpid)
+            #add a part for restart process
             else:
                 logger.info("虚拟机" + self.vmConf.name + "端口号" + name.encode('utf-8') + "已经是" + ("开启" if isFind else "未开启"))
 

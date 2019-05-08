@@ -18,6 +18,7 @@ import subprocess
 import socket
 import time
 import paramiko
+from varconfig import vconf
 logger = logging.getLogger()
 
 
@@ -34,9 +35,13 @@ def sshCmd(hostname, port, username, password, cmd):
         print error.decode()
     client.close()
     return result
-    # #else:
-        #client.close()
-    # return result
+
+
+global hostname,port,username,password
+hostname= vconf.hostname
+port = vconf.port
+username = vconf.username
+password = vconf.password
 
 class VmExecute(object):
 
@@ -152,26 +157,22 @@ class VmExecute(object):
                     self.shutdownProcess(ps, pid)
 
             if self.policy.shouldShutdownPorts:
-                for pt in self.policy.shouldShutdownPorts:
-                    self.shutdownPort(pt,pid)
+                for pt,port_pid in self.policy.shouldShutdownPorts:
+                    self.shutdownPort(pt,port_pid)
 
 
 
-    def shutdownPort(self, port, pid):
+    def shutdownPort(self, pport, portpid):
+
         """
         # 关闭端口
         :param port:
         :return:
         """
-        hostname = '10.108.167.229'
-        port = 22
-        username = 'root'
-        password = '123456'
-
-        cmd = "sudo kill " + pid + '\0'
+        cmd = "sudo kill " + portpid + '\0'
         sshCmd(hostname = hostname, port=port, username=username, password=password, cmd=cmd)
-        logger.info("虚拟机" + self.name + "关闭进程" + port.encode('utf-8') + "，使用命令：kill " + pid)
-        print port
+        logger.info("虚拟机" + self.name + "关闭进程" + pport.encode('utf-8') + "，使用命令：kill " + portpid)
+        print pport
 
     def shutdownProcess(self, process, pid):
         """
@@ -179,52 +180,11 @@ class VmExecute(object):
         :param process:
         :return:
         """
-        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # try:
-        #     sock.connect((self.ip, self.backport))
-        #     if self.vm.platform == u"Windows":
-        #         sock.sendall("tskill " + pid + "\0")
-        #         logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：tskill " + pid)
-        #     else:
-        #         sock.sendall("kill " + pid + '\0')
-        #         logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：kill " + pid)
-        # except socket.error, e:
-        #     logger.warning("虚拟机连接异常，错误：%s" %e)
-        # finally:
-        #     sock.close()
-        hostname = '10.108.167.229'
-        port = 22
-        username = 'root'
-        password = '123456'
 
-        cmd = "sudo kill " + pid + '\0'
+        cmd = "sudo systemctl stop docker " + '\0'
         sshCmd(hostname = hostname, port=port, username=username, password=password, cmd=cmd)
-        logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：sudo kill " + pid)
-        # processesNew = getData("linux_pslist")
-        # processesSolved = []
-        # for i, line in enumerate(processesNew[2:]):
-        #     lines = line.split()
-        #     if len(lines) < 2: continue
-        #     processesSolved.append((lines[1], lines[2]))
-        #
-        # for name, isneed, policy, path in self.vmConf.processes:
-        #     #在vmState中查找该process
-        #     isFind = False
-        #     pspid = ""
-        #     for ps, pid in processesSolved:
-        #         if name == ps:
-        #             isFind = True
-        #             processespid = pid
-        #             print processespid + name + "is exist"
-        #         else:
-        #             print name + "have been killed"
+        logger.info("虚拟机" + self.name + "关闭进程" + process.encode('utf-8') + "，使用命令：sudo systemctl stop docker ")
 
-
-        # if 'yes' not in ssh_res:
-        #     print ssh_res.decode()
-        #     raise Exception("no task or wrong pid")
-        # else:
-        #     print 'pyagent.jar return yes'
 
     def openProcess(self, process, path):
         """
@@ -233,21 +193,6 @@ class VmExecute(object):
         :param path:
         :return:
         """
-        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # try:
-        #     sock.connect((self.ip, self.backport))
-        #     #sock.sendall("start " + path)
-        #     sock.sendall(path + '\0')
-        #     logger.info("虚拟机" + self.name + "打开进程" + process.encode('utf-8') + "，使用命令：" + path.encode('utf-8'))
-        # except socket.error, e:
-        #     logger.warning("虚拟机连接异常，错误：%s" %e)
-        # finally:
-        #     sock.close()
-        hostname = '10.108.167.229'
-        port = 22
-        username = 'root'
-        password = '123456'
-
         cmd = 'sudo systemctl start docker' + '\0'
         print cmd
         sshCmd(hostname=hostname, port=port, username=username, password=password, cmd=cmd)
@@ -265,24 +210,11 @@ class VmExecute(object):
         :param process:
         :return:
         """
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            sock.connect((self.ip, self.backport))
-            if self.vm.platform == u"Windows":
-                if pid:
-                    sock.sendall("tskill " + pid + "\0")
-                sock.sendall(path + "\0")
-                logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + (("tskill " + pid + ", ") if pid else "") + path.encode('utf-8'))
-            else:
-                if pid:
-                    sock.sendall("kill " + pid + "\0")
-                sock.sendall(path + "\0")
-                logger.info("虚拟机" + self.name + "重启进程" + process.encode('utf-8') + ",使用命令:" + (("kill " + pid + ", ") if pid else "") + path.encode('utf-8'))
-
-        except socket.error, e:
-            logger.warning("虚拟机连接异常，错误：%s" %e)
-        finally:
-            sock.close()
+        cmd1 = "sudo systemctl stop docker " + '\0'
+        sshCmd(hostname = hostname, port=port, username=username, password=password, cmd=cmd1)
+        cmd2 = 'sudo systemctl start docker' + '\0'
+        sshCmd(hostname=hostname, port=port, username=username, password=password, cmd=cmd2)
+        logger.info("虚拟机" + self.name + "restart process" + process.encode('utf-8'))
 
     def shutdownVm(self):
         """
