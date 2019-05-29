@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>736</width>
-    <height>616</height>
+    <width>738</width>
+    <height>617</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,208 +17,50 @@
    <string notr="true">background-color: rgb(210, 221, 255);</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0" colspan="11">
-    <widget class="QGroupBox" name="groupBox_4">
+   <item row="7" column="9">
+    <widget class="QComboBox" name="comboBox_systype">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="10">
+    <widget class="QGroupBox" name="groupBox_6">
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>51</height>
+       <height>30</height>
       </size>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
      </property>
      <property name="title">
-      <string>Rootkit检查</string>
+      <string/>
      </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_5">
-      <property name="topMargin">
-       <number>3</number>
+     <widget class="QCheckBox" name="checkBox_local">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>170</width>
+        <height>28</height>
+       </rect>
       </property>
-      <property name="bottomMargin">
-       <number>3</number>
+      <property name="text">
+       <string>监控本地计算机</string>
       </property>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="checkBox_rootkit">
-        <property name="text">
-         <string>Rootkit检查</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>检查到Rootkit后的操作:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QComboBox" name="comboBox_rootkit_policy">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <item>
-         <property name="text">
-          <string>重启虚拟机</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>恢复虚拟机</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>148</width>
-          <height>16</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="0">
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
+     </widget>
     </widget>
    </item>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer_6">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="2">
-    <widget class="QPushButton" name="pushButton_save">
-     <property name="text">
-      <string>保存</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
+   <item row="7" column="4" colspan="3">
     <widget class="QLabel" name="label_vmname">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>虚拟机名称：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="8">
-    <spacer name="horizontalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="4">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <widget class="QPushButton" name="pushButton_clear">
-     <property name="text">
-      <string>清空</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="5">
-    <widget class="QPushButton" name="pushButton_execute">
-     <property name="text">
-      <string>执行</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="6">
-    <widget class="QPushButton" name="pushButton_break">
-     <property name="text">
-      <string>中断</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="5">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>虚拟机类型：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <spacer name="horizontalSpacer_7">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="8">
-    <spacer name="horizontalSpacer_8">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="0" colspan="11">
+   <item row="12" column="0" colspan="13">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="styleSheet">
       <string notr="true">background-color: rgb(201, 223, 255);</string>
@@ -227,87 +69,16 @@
       <string>进程与端口监控</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_6">
-      <item row="0" column="0">
-       <widget class="QGroupBox" name="groupBox_5">
-        <property name="title">
-         <string/>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>用户名</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_username"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>密码</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_password"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>ip</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spinBox_ip1">
-           <property name="maximum">
-            <number>256</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spinBox_ip2">
-           <property name="maximum">
-            <number>256</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spinBox_ip3">
-           <property name="maximum">
-            <number>256</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spinBox_ip4">
-           <property name="maximum">
-            <number>256</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QGroupBox" name="groupBox">
         <property name="title">
          <string>进程监控</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="2" column="3">
-          <widget class="QPushButton" name="pushButton_modifyprocess">
+         <item row="2" column="0">
+          <widget class="QLabel" name="label">
            <property name="text">
-            <string>修改</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QPushButton" name="pushButton_addprocess">
-           <property name="text">
-            <string>添加</string>
+            <string>添加需要存在和禁止存在的进程，当发现不满足时将执行处理策略</string>
            </property>
           </widget>
          </item>
@@ -315,6 +86,13 @@
           <widget class="QPushButton" name="pushButton_delprocess">
            <property name="text">
             <string>删除</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QPushButton" name="pushButton_addprocess">
+           <property name="text">
+            <string>添加</string>
            </property>
           </widget>
          </item>
@@ -330,13 +108,6 @@
             </size>
            </property>
           </spacer>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>添加需要存在和禁止存在的进程，当发现不满足时将执行处理策略</string>
-           </property>
-          </widget>
          </item>
          <item row="1" column="0" colspan="5">
           <widget class="QTreeWidget" name="treeWidget_processes">
@@ -405,6 +176,13 @@
              <string>恢复虚拟机</string>
             </property>
            </item>
+          </widget>
+         </item>
+         <item row="2" column="3">
+          <widget class="QPushButton" name="pushButton_modifyprocess">
+           <property name="text">
+            <string>修改</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -513,17 +291,280 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="6" colspan="2">
-    <widget class="QComboBox" name="comboBox_systype">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="13" column="7">
+    <widget class="QPushButton" name="pushButton_execute">
+     <property name="text">
+      <string>执行</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <spacer name="horizontalSpacer_6">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="7" column="10">
+    <spacer name="horizontalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="13" column="10">
+    <spacer name="horizontalSpacer_8">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="13" column="1">
+    <spacer name="horizontalSpacer_7">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="7" column="2">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>计算机名称：</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="4">
+    <widget class="QPushButton" name="pushButton_clear">
+     <property name="text">
+      <string>清空</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="7">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>计算机类型：</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="11">
+    <widget class="QGroupBox" name="groupBox_5">
+     <property name="title">
+      <string/>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QCheckBox" name="checkBox_vm">
+        <property name="text">
+         <string>监控虚拟机</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>用户名</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_username"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>密码</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_password"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>ip</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_ip1">
+        <property name="maximum">
+         <number>256</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_ip2">
+        <property name="maximum">
+         <number>256</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_ip3">
+        <property name="maximum">
+         <number>256</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_ip4">
+        <property name="maximum">
+         <number>256</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="11" column="0" colspan="13">
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>51</height>
+      </size>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>Rootkit检查</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <property name="topMargin">
+       <number>3</number>
+      </property>
+      <property name="bottomMargin">
+       <number>3</number>
+      </property>
+      <item row="0" column="3">
+       <widget class="QComboBox" name="comboBox_rootkit_policy">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>重启虚拟机</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>恢复虚拟机</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="checkBox_rootkit">
+        <property name="text">
+         <string>Rootkit检查</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>检查到Rootkit后的操作:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>148</width>
+          <height>16</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0">
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="13" column="2">
+    <widget class="QPushButton" name="pushButton_save">
+     <property name="text">
+      <string>保存</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="9">
+    <widget class="QPushButton" name="pushButton_break">
+     <property name="text">
+      <string>中断</string>
      </property>
     </widget>
    </item>
   </layout>
+  <zorder>groupBox_6</zorder>
+  <zorder>groupBox_4</zorder>
+  <zorder>label_vmname</zorder>
+  <zorder>groupBox_2</zorder>
+  <zorder>groupBox_5</zorder>
+  <zorder>horizontalSpacer_7</zorder>
+  <zorder>horizontalSpacer_6</zorder>
+  <zorder>label_6</zorder>
+  <zorder>pushButton_execute</zorder>
+  <zorder>horizontalSpacer_5</zorder>
+  <zorder>comboBox_systype</zorder>
+  <zorder>label_3</zorder>
+  <zorder>pushButton_clear</zorder>
+  <zorder>pushButton_save</zorder>
+  <zorder>pushButton_break</zorder>
  </widget>
  <resources/>
  <connections/>

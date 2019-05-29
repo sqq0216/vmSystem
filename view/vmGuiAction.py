@@ -153,6 +153,9 @@ class VmGuiAction(Ui_mainWindow):
         # 先清空一下当前页的配置
         self.clear()
 
+        # read isLocalMonitor to checkBox
+        childWndGen.checkBox_local.setChecked(confs['isLocalMonitor'])
+
         # 根据读取的sysType来定位到comboBox中
         postion = childWndGen.comboBox_systype.findText(confs["sysType"])
         childWndGen.comboBox_systype.setCurrentIndex(postion)
@@ -217,6 +220,7 @@ class VmGuiAction(Ui_mainWindow):
         # 获取配置后发给控制器令其保存至文件
         self.uiController.setVmsConfs(self.vms[index],
                                       sysType = unicode(childWndGen.comboBox_systype.currentText()),
+                                      isLocalMonitor = childWndGen.checkBox_local.isChecked(),
                                       isCheckRootkit = childWndGen.checkBox_rootkit.isChecked(),
                                       rootkitPolicy = unicode(childWndGen.comboBox_rootkit_policy.currentText()),
                                       username = (unicode(childWndGen.lineEdit_username.text())),
@@ -234,6 +238,7 @@ class VmGuiAction(Ui_mainWindow):
         index = self.stackedWidget.currentIndex()
         childWndGen = self.childWindowsGens[index]
         childWndGen.comboBox_systype.setCurrentIndex(-1)
+        childWndGen.checkBox_local.setChecked(False)
         childWndGen.checkBox_rootkit.setChecked(False)
         childWndGen.comboBox_rootkit_policy.setCurrentIndex(-1)
         childWndGen.lineEdit_username.clear()

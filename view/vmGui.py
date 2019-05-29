@@ -70,7 +70,7 @@ class Ui_mainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, mainWindow):
-        mainWindow.setWindowTitle(_translate("mainWindow", "虚拟机安全监控系统", None))
+        mainWindow.setWindowTitle(_translate("mainWindow", "安全监控系统", None))
         self.treeWidget.headerItem().setText(0, _translate("mainWindow", "虚拟机列表", None))
         self.menu.setTitle(_translate("mainWindow", "文件", None))
         self.menu_2.setTitle(_translate("mainWindow", "关于", None))

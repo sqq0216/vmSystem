@@ -46,9 +46,9 @@ class VmPolicy(object):
         """
         self.level = 0
 
-        self.shouldRestoreVm = False
-        self.shouldRestartVm = False
-        self.shouldShutdownVm = False
+        self.shouldRestore = False
+        self.shouldRestart = False
+        self.shouldShutdown = False
 
         self.shouldRestartProcesses = [] # (进程名，进程路径，进程pid）
         self.shouldShutdownProcesses = [] # (进程名，进程pid)
@@ -86,11 +86,11 @@ class VmPolicy(object):
         if level > self.level:
             self.level = level
         if level == 8:
-            self.shouldRestoreVm = True
+            self.shouldRestore = True
         elif level == 7:
-            self.shouldRestartVm = True
+            self.shouldRestart = True
         elif level == 6:
-            self.shouldShutdownVm = True
+            self.shouldShutdown = True
         elif level == 5:
             self.shouldRestartProcesses.append((kwargs['name'], kwargs['path'], kwargs['pid']))
         elif level == 4:

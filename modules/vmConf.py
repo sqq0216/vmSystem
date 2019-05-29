@@ -36,6 +36,7 @@ class VmConf(object):
     def clearConf(self):
         self.__systype = u""
 
+        self.__localMonitor = False
         self.__checkRootkit = False
         self.__rootkitPolicy = VmPolicy()
 
@@ -53,6 +54,7 @@ class VmConf(object):
         """
         confdict = {"name":self.__name,
                     "sysType":self.__systype,
+                    "isLocalMonitor":self.__localMonitor,
                     "isCheckRootkit":self.__checkRootkit,
                     "rootkitPolicy":self.__rootkitPolicy.toString(),
                     "username":self.__username,
@@ -85,6 +87,7 @@ class VmConf(object):
         """
         self.clearConf()
         self.__systype = kwargs["sysType"]
+        self.__localMonitor = kwargs["isLocalMonitor"]
         self.__checkRootkit = kwargs["isCheckRootkit"]
         self.__rootkitPolicy.setPolicy(kwargs["rootkitPolicy"])
         self.__username = kwargs["username"]
@@ -103,6 +106,15 @@ class VmConf(object):
         logger.debug(self.__name + "配置信息保存到VmConf类中")
         logger.debug("当前配置:" + self.__unicode__().encode("utf-8").replace("u'", ""))
 
+    def setConfToFile(self):
+        """
+        # 将类所有属性序列化到json文件中
+        :return:
+        """
+        with open(self.__name + ".vmconf", "w") as f:
+            pickle.dump(self, f)
+        logger.info("配置信息保存到文件中")
+
     def getConfFromFile(self):
         """
         # 从文件中读取json数据，读出来是dict
@@ -114,6 +126,7 @@ class VmConf(object):
             with open(self.__name + ".vmconf", "r") as f:
                 conf = pickle.load(f)
                 self.__systype = conf.__systype
+                self.__localMonitor = conf.__localMonitor
                 self.__checkRootkit = conf.__checkRootkit
                 self.__rootkitPolicy = conf.__rootkitPolicy
                 self.__username = conf.__username
@@ -128,21 +141,22 @@ class VmConf(object):
             logger.warning("配置文件" + str(self.__name) + ".vmconf不存在")
             self.clearConf()
 
-    def setConfToFile(self):
-        """
-        # 将类所有属性序列化到json文件中
-        :return:
-        """
-        with open(self.__name + ".vmconf", "w") as f:
-            pickle.dump(self, f)
-        logger.info("虚拟机" + str(self.__name) + "配置信息保存到文件中")
+    # def setConfToFile(self):
+    #     """
+    #     # 将类所有属性序列化到json文件中
+    #     :return:
+    #     """
+    #     with open(self.__name + ".vmconf", "w") as f:
+    #         pickle.dump(self, f)
+    #     logger.info("配置信息保存到文件中")
 
     def __str__(self):
         """
         # 输出类中全部内容
         :return:str(dict)
         """
-        dict  = {u"系统名称":self.__name,
+        dict  = {u"isLocalMonitor":self.__localMonitor,
+                u"系统名称":self.__name,
                 u"系统类型":self.__systype,
                 u"是否检查Rootkit":u"是" if self.__checkRootkit else u"否",
                 u"检测到Rootkit后的策略":unicode(self.__rootkitPolicy),
@@ -212,6 +226,14 @@ class VmConf(object):
     @ports.setter
     def ports(self, ports):
         self.__ports = ports
+
+    @property
+    def localMonitor(self):
+        return self.__localMonitor
+
+    @localMonitor.setter
+    def localMonitor(self, localMonitor):
+        self.__localMonitor = localMonitor
 
     @property
     def checkRootkit(self):

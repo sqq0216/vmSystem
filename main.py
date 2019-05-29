@@ -32,6 +32,7 @@ def start():
     # 这里循环显示界面，根据界面的消息响应不同方法
     :return:None
     """
+
     # 生成应用和主界面
     app = QtGui.QApplication(sys.argv)
     # 界面风格包括：windows, motif, cde, plastique, windowsxp, macintosh

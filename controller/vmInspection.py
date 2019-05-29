@@ -20,7 +20,10 @@ import kvm
 import unix
 import time
 import xml.dom.minidom
+import userInterfaceController
+from modules.vmConf import VmConf
 logger = logging.getLogger()
+
 
 class VmInspection(object):
 
@@ -31,45 +34,74 @@ class VmInspection(object):
         :param vmConf:
         :return:
         """
-        logger.info("从虚拟机" + name + "获取数据中...")
+        #add a if to select vm or local TODO
 
-        self.name = name
-        # 虚拟机的完整类型
-        self.profile = vmConf.systype
-        # 虚拟机的简要类型
-        self.systype = u""
-        if not self.profile:
-            logger.warning("虚拟机" + name + "系统类型为空")
-            return False
-        elif self.profile[:3] == u"Win" or self.profile[:5] == u"Vista":
-            self.systype = u"Windows"
+        # logger.info("从虚拟机" + name + "获取数据中...")
+
+        if VmConf.localMonitor:
+            self.name = name
+            # 虚拟机的完整类型
+            self.profile = vmConf.systype
+            print self.profile
+            logger.info("从local获取数据中...")
+            self.systype = u""
+            if not self.profile:
+                logger.warning("虚拟机" + name + "系统类型为空")
+                return False
+            elif self.profile[:3] == u"Win" or self.profile[:5] == u"Vista":
+                self.systype = u"Windows"
+            else:
+                self.systype = u"linux"
+            vm.platform = self.systype
+
+            volpath = "/home/sqq/PythonProjects/vol/volatility/vol.py"
+            if len(volpath) > 15 and volpath[:15] == "/usr/bin/which:":
+                logger.warning("找不到volatility安装位置")
+            #volpath = volpath.split()[0]
+            #self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
+            self.command = "sudo python " + volpath + " --profile=" + self.profile + " -f /home/sqq/images/ubuntu.lime  "
+            print self.command
         else:
-            self.systype = u"linux"
-        vm.platform = self.systype
+            self.name = name
+            # 虚拟机的完整类型
+            self.profile = vmConf.systype
+            print self.profile
+            logger.info("从虚拟机" + name + "获取数据中...")
+            # 虚拟机的简要类型
+            self.systype = u""
+            if not self.profile:
+                logger.warning("虚拟机" + name + "系统类型为空")
+                return False
+            elif self.profile[:3] == u"Win" or self.profile[:5] == u"Vista":
+                self.systype = u"Windows"
+            else:
+                self.systype = u"linux"
+            vm.platform = self.systype
 
-        # 如果虚拟机未在启动状态，则先启动虚拟机
-        vm.state = subprocess.Popen("sudo virsh domstate " + name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
-        if (vm.state[:7] != "running"):
-            logger.debug("state:" + vm.state)
-            logger.warning("虚拟机" + name + "未启动，自动启动中")
-            subprocess.Popen("sudo virsh start " + name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            time.sleep(60)
+            # 如果虚拟机未在启动状态，则先启动虚拟机
+            vm.state = subprocess.Popen("sudo virsh domstate " + name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
+            if (vm.state[:7] != "running"):
+                logger.debug("state:" + vm.state)
+                logger.warning("虚拟机" + name + "未启动，自动启动中")
+                subprocess.Popen("sudo virsh start " + name, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+                time.sleep(60)
 
 
-        # self.kvm_host = kvm.KVM(unix.Local())
-        # if (self.kvm_host.state(name) != kvm.RUNNING):
-        #     logger.warning("虚拟机" + name + "未启动，自动启动中")
-        #     self.kvm_host.start(name)
-        #     time.sleep(60)
+            # self.kvm_host = kvm.KVM(unix.Local())
+            # if (self.kvm_host.state(name) != kvm.RUNNING):
+            # logger.warning("虚拟机" + name + "未启动，自动启动中")
+            # self.kvm_host.start(name)
+            # time.sleep(60)
 
-        # volpath = subprocess.Popen("which vol.py", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
-        volpath = "/home/sqq/IdeaProjects/JavaMemory/volatility-2.6/vol.py"
-        if len(volpath) > 15 and volpath[:15] == "/usr/bin/which:":
-            logger.warning("找不到volatility安装位置")
+            # volpath = subprocess.Popen("which vol.py", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read()
+            volpath = "/home/sqq/IdeaProjects/JavaMemory/volatility-2.6/vol.py"
+            if len(volpath) > 15 and volpath[:15] == "/usr/bin/which:":
+                    logger.warning("找不到volatility安装位置")
+            #volpath = volpath.split()[0]
+            #self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
+            self.command = "sudo python " + volpath + " --profile=" + self.profile + " -l vmi://" + name + " "
 
-        #volpath = volpath.split()[0]
-        #self.command = "vol.py profile" + self.profile + " -f /lab/winxp.raw "
-        self.command = "sudo python " + volpath + " --profile=" + self.profile + " -l vmi://" + name + " "
+
 
         # 根据虚拟机的简要类型来选择不同的插件
         try:
@@ -89,7 +121,7 @@ class VmInspection(object):
                     vm.ports = self.getData("linux_netstat")
                     vm.serials = self.getData("linux_check_tty")    #只有tty设备，无ttyS设备，即无串口信息
                 if vmConf.checkRootkit:
-                    vm.ssdt = self.getData("linux_check_syscall")   #xu yao hen jiu
+                    vm.ssdt = self.getData("linux_check_syscall")   #need long time
                     vm.mbr = self.getMbr()
         except PopenError, e:
             logger.warning("调用volatility时未获取到数据 " + str(e))

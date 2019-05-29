@@ -30,6 +30,8 @@ from modules.vmHistory import VmHistory
 from vmInspection import VmInspection
 from vmAnalysis import VmAnalysis
 from vmExecution import VmExecute
+from localExecution import LocalExecute
+import userInterfaceController
 
 class VmController(object):
 
@@ -46,6 +48,7 @@ class VmController(object):
         self.vmInsp = VmInspection()
         self.vmAnal = VmAnalysis()
         self.vmExec = VmExecute()
+        self.localExec = LocalExecute()
 
     def startMonitor(self):
         """
@@ -104,7 +107,11 @@ class VmController(object):
                 # 没有通知关闭线程，立刻释放锁
                 breakLock.release()
                 # 根据历史操作和策略对vm执行相应的操作，并记录在历史操作中
-                self.vmExec.execute(self.name, self.vmConf.ip, self.vm, self.vmHist, self.policy)
+                if VmConf.localMonitor:
+                    self.localExec.execute(self.vmHist, self.policy)
+                else:
+                    self.vmExec.execute(self.name, self.vmConf.ip, self.vm, self.vmHist, self.policy)
+
             else:
                 # 如果通知关闭线程，释放锁后跳出循环
                 ebList[self.name] = False

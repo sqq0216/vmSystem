@@ -20,7 +20,7 @@ import time
 import paramiko
 from varconfig import vconf
 logger = logging.getLogger()
-
+# add policy execution for local process (can add a localExecution.py to implement) TODO
 
 def sshCmd(hostname, port, username, password, cmd):
     client = paramiko.SSHClient()

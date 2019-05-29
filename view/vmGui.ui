@@ -26,7 +26,7 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>虚拟机安全监控系统</string>
+   <string>安全监控系统</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -93,7 +93,7 @@
      <x>0</x>
      <y>0</y>
      <width>770</width>
-     <height>23</height>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

@@ -83,8 +83,12 @@ class UserInterfaceController(object):
         # self.vmtypes = ["CentOS65x64", "WinXPSP3x86", "Win7SP1x64"]
         # return self.vmtypes
 
-        logger.debug("从volatility中获取可用的虚拟机类型")
-        command = "python /home/sqq/IdeaProjects/JavaMemory/volatility-2.6/vol.py --info"
+        if VmConf.localMonitor:
+            logger.debug("从volatility中获取可用的profile")
+            command = "python /home/sqq/PythonProjects/vol/volatility/vol.py --info"
+        else:
+            logger.debug("从volatility中获取可用的虚拟机类型")
+            command = "python /home/sqq/IdeaProjects/JavaMemory/volatility-2.6/vol.py --info"
         # info = os.popen(command)
         info = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).stdout.read().split("\n")
         profiles = []
@@ -111,6 +115,17 @@ class UserInterfaceController(object):
         return profiles
 
 
+    def setVmsConfs(self, vmname, **kwargs):
+        """
+        #当界面更新配置时调用此方法
+        #利用关键字参数传入所有configure属性
+        :return:
+        """
+        # 将配置保存到文件
+        self.vmsConfs[vmname].setConfToFile()
+        # 将配置信息更新
+        self.vmsConfs[vmname].setConf(kwargs)
+
 
     def getVmsConfs(self, vmname):
         """
@@ -121,16 +136,16 @@ class UserInterfaceController(object):
         self.vmsConfs[vmname].getConfFromFile()
         return self.vmsConfs[vmname].getConf()
 
-    def setVmsConfs(self, vmname, **kwargs):
-        """
-        #当界面更新配置时调用此方法
-        #利用关键字参数传入所有configure属性
-        :return:
-        """
-        # 将配置信息更新
-        self.vmsConfs[vmname].setConf(kwargs)
-        #将配置保存到文件
-        self.vmsConfs[vmname].setConfToFile()
+    # def setVmsConfs(self, vmname, **kwargs):
+    #     """
+    #     #当界面更新配置时调用此方法
+    #     #利用关键字参数传入所有configure属性
+    #     :return:
+    #     """
+    #     # 将配置信息更新
+    #     self.vmsConfs[vmname].setConf(kwargs)
+    #     #将配置保存到文件
+    #     self.vmsConfs[vmname].setConfToFile()
 
     def startMonitorVm(self, vmname):
         """
